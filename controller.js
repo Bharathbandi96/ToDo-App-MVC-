@@ -10,6 +10,7 @@ var onEmptyInputFiled = 'You must write something!'
 var completedText = 'Completed tasks in your list : '
 var allText = 'Total number of tasks in your list : '
 var pendingText = 'Pending tasks in your list : '
+var selectedStorage;
 
 function init(){
   attachEventListners();
@@ -25,6 +26,11 @@ function attachEventListners(){
   document.getElementById('completedTaskButton').addEventListener('click', displayCompletedItemsCount,false);
   document.getElementById('allTaskButton').addEventListener('click', displayTotalItemsCount,false);
   document.getElementById('pendingTaskButton').addEventListener('click', displayPendingItemsCount,false);
+  //document.getElementById('selectStorage').addEventListener('onchange',changeDataStorage);
+}
+
+function changeDataStorage(){
+  selectedStorage = document.getElementById("selectStorage").value;
 }
 
 function addItemOnEnter() {

@@ -1,7 +1,12 @@
 // <script src = 'controller.js'></script>
 
 function addItemToLocalStorage(){
+  if(selectedStorage == 'LocalStorage'){
   localStorage.setItem('myTodoItems', JSON.stringify(todos));
+  }
+  else if(selectedStorage == 'SessionStorage'){
+    sessionStorage.setItem('myTodoItems', JSON.stringify(todos));
+  }
 }
 
 function renderItemsFromLocalStorage(){

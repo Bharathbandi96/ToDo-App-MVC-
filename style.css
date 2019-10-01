@@ -27,6 +27,8 @@ h1, h2 {
 }
 
 #displayArea{
+  overflow-y: scroll;
+  height: 330px;
   margin-top:125px;
   padding:2px;
 }
@@ -44,6 +46,15 @@ input {
   float: left;
   font-size: 16px;
 }
+
+/* #selectStorage{
+  position: relative;
+  cursor: pointer;
+  top:20px;
+  float: left;
+  width: 25px;
+  height: 50px;
+} */
 
 .addButton {
   position: relative;
@@ -69,7 +80,7 @@ input {
   padding: 5px;
 }
 
-.allTaskButton,.completedTaskButton,.pendingTaskButton{
+.allTaskButton,.completedTaskButton,.pendingTaskButton,.selectStorage{
   padding:5px;
   width:100px;
   background: #d9d9d9;

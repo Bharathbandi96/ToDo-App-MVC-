@@ -27,7 +27,7 @@ function displayTodoListItems(){
 
 function displayCompletedItemsCount(){
   var check = document.getElementsByClassName('checked');
-  alert(completedText + check.length); 
+  alert(completedText + check.length);
 }
 
 function displayTotalItemsCount(){
