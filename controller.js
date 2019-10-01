@@ -18,13 +18,13 @@ function init(){
 }
 
 function attachEventListners(){
-  document.getElementById('addButton').addEventListener('click', displayNewItem);
-  document.getElementById('myInput').addEventListener('keypress',addItemOnEnter);
-  document.getElementById('addButton').addEventListener('click', deleteItemFromList );
-  ulList.addEventListener('click',changeItemState);
-  document.getElementById('completedTaskButton').addEventListener('click', displayCompletedItemsCount);
-  document.getElementById('allTaskButton').addEventListener('click', displayTotalItemsCount);
-  document.getElementById('pendingTaskButton').addEventListener('click', displayPendingItemsCount);
+  document.getElementById('addButton').addEventListener('click', displayNewItem,false);
+  document.getElementById('myInput').addEventListener('keypress',addItemOnEnter,false);
+  document.getElementById('addButton').addEventListener('click', deleteItemFromList,false);
+  ulList.addEventListener('click',changeItemState,false);
+  document.getElementById('completedTaskButton').addEventListener('click', displayCompletedItemsCount,false);
+  document.getElementById('allTaskButton').addEventListener('click', displayTotalItemsCount,false);
+  document.getElementById('pendingTaskButton').addEventListener('click', displayPendingItemsCount,false);
 }
 
 function addItemOnEnter() {
