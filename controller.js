@@ -1,4 +1,4 @@
-<script src = 'model.js'></script>
+// <script src = 'model.js'></script>
 
 var close = document.getElementsByClassName("close");
 var ulList = document.querySelector('ul');
@@ -64,7 +64,6 @@ function inputFieldReset(){
   document.getElementById('myInput').focus();
 }
 
-
 function isEmpty(){
   var hasItems = document.getElementById("displayArea").hasChildNodes();
   if(!hasItems){
@@ -95,7 +94,5 @@ function deleteItemFromArray(deletedText){
   var itemIndex = todos.indexOf(itemDeleted);
   todos.splice(itemIndex,1)
 }
-
-
 
 init();

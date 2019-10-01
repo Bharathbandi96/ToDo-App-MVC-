@@ -1,5 +1,5 @@
 //import './controller.js'
-<script src = 'controller.js'></script>
+// <script src = './controller.js'></script>
 
 function display(item){
   var li = document.createElement("li");
@@ -25,7 +25,7 @@ function displayTodoListItems(){
   }
 }
 
-function displayCompletedItemsCount(){
+var a = function displayCompletedItemsCount(){
   var check = document.getElementsByClassName('checked');
   alert(completedText + check.length); 
 }

@@ -1,4 +1,4 @@
-<script src = 'controller.js'></script>
+// <script src = 'controller.js'></script>
 
 function addItemToLocalStorage(){
   localStorage.setItem('myTodoItems', JSON.stringify(todos));
