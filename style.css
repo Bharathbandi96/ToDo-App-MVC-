@@ -1,21 +1,23 @@
 h1, h2 {
-  font-family: Lato;
+  font-family: 'Times New Roman', Times, serif;
 }
+
 #name{
   text-align: center;
   position: fixed;
   
 }
+
 #app{
   height:500px;
   position: fixed;
-  overflow-y: scroll;
+  margin-top: 30px;
   box-align: center;
-  margin-left:50px;
+  margin-left:30px;
   border:2px solid gray;
   width:450px;
-  /* background-color:red */
 }
+
 #myDIV{
   position: fixed;
   padding:0px;
@@ -32,12 +34,14 @@ h1, h2 {
   margin-top:125px;
   padding:2px;
 }
+
 #myInput{
   padding-left:5px;
   margin-top: 0px;
   border-bottom: 2px solid black;
   caret-color: coral
 }
+
 input {
   position: relative;
   border: none;
@@ -46,15 +50,6 @@ input {
   float: left;
   font-size: 16px;
 }
-
-/* #selectStorage{
-  position: relative;
-  cursor: pointer;
-  top:20px;
-  float: left;
-  width: 25px;
-  height: 50px;
-} */
 
 .addButton {
   position: relative;
@@ -72,10 +67,9 @@ input {
   background-color: #bbb;
 }
 
-
 .taskButton{
   position: fixed;
-  top: 457px;
+  top: 487px;
   float:left;
   padding: 5px;
 }
@@ -98,18 +92,15 @@ body {
   min-width: 250px;
 }
 
-/* Include the padding and border in an element's total width and height */
 * {
   box-sizing: border-box;
 }
 
-/* Remove margins and padding from the list */
 ul {
   margin: 0;
   padding: 0;
 }
 
-/* Style the list items */
 ul li {
   cursor: pointer;
   position: relative;
@@ -119,31 +110,22 @@ ul li {
   font-size: 18px;
   transition: 0.2s;
   
-  /* make the list items unselectable */
-  /* -webkit-user-select: none;
-  -moz-user-select: none;
-  -ms-user-select: none;
-  user-select: none; */
 }
 
-/* Set all odd list items to a different color (zebra-stripes) */
 ul li:nth-child(odd) {
   background: #f9f9f9;
 }
 
-/* Darker background-color on hover */
 ul li:hover {
   background: #ddd;
 }
 
-/* When clicked on, add a background color and strike out text */
 ul li.checked {
   background: #888;
   color: #fff;
   text-decoration: line-through;
 }
 
-/* Add a "checked" mark when clicked on */
 ul li.checked::before {
   content: '';
   position: absolute;
@@ -157,7 +139,6 @@ ul li.checked::before {
   width: 7px;
 }
 
-/* Style the close button */
 .close {
   border-collapse: collapse;
   position: absolute;
@@ -171,7 +152,6 @@ ul li.checked::before {
   color: white;
 }
 
-/* Style the header */
 .header {
   background-color: #f44336;
   padding: 30px 40px;
@@ -179,7 +159,6 @@ ul li.checked::before {
   text-align: center;
 }
 
-/* Clear floats after the header */
 .header:after {
   content: "";
   display: table;
