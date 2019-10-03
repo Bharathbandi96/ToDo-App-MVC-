@@ -2,6 +2,7 @@
 function addItemToLocalStorage(){
   localStorage.setItem(myTodoItems, JSON.stringify(localStorageArray));
 }
+
 function renderItemsFromLocalStorage(){
   var todoItems = localStorage.getItem(myTodoItems);
   if(todoItems!=null){
@@ -13,6 +14,7 @@ function renderItemsFromLocalStorage(){
 function addItemToSessionStorage(){
   sessionStorage.setItem(myTodoItems, JSON.stringify(sessionStorageArray));
 }
+
 function renderItemsFromSessionStorage(){
   var todoItems = sessionStorage.getItem(myTodoItems);
   if(todoItems!=null){

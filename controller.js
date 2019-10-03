@@ -43,6 +43,7 @@ function changeDataStorage(){
   selectedStorage = document.getElementById("selectStorage").value;
   displayTodoListItems();
 }
+
 function displayTodoListItems(){
   renderItemsFromSelectedStorage();
   if(selectedStorage == localStorageValue){
@@ -57,6 +58,7 @@ function displayTodoListItems(){
     addItemsToSelectedStorage();
     deleteItemFromList();
 }
+
 function renderItemsFromSelectedStorage(){
   if(selectedStorage == localStorageValue){
     renderItemsFromLocalStorage();
@@ -82,6 +84,7 @@ function displaySessionStorageItems(){
     display(sessionStorageArray[i]);
   }
 }
+
 function addItemOnEnter() {
   var input = document.getElementById(inputFieldId).value;
     if (event.keyCode === enterKeyCode) {
@@ -99,6 +102,7 @@ function addItemOnEnter() {
       }
   }
 }
+
 function displayNewItem() {
   var input = document.getElementById(inputFieldId).value;
   if (input === '') {
@@ -120,6 +124,7 @@ function inputFieldReset(){
   document.getElementById(inputFieldId).value = "";
   document.getElementById(inputFieldId).focus();
 }
+
 function addItemsToSelectedStorage(){
   if(selectedStorage == localStorageValue){
     addItemToLocalStorage();
@@ -128,6 +133,7 @@ function addItemsToSelectedStorage(){
     addItemToSessionStorage();
   }
 }
+
 function addItemToSelectedArray(item){
   if(selectedStorage == localStorageValue){
     localStorageArray.push(item);
@@ -149,6 +155,7 @@ function changeItemCheckState(ev){
     ev.target.classList.toggle('checked');
   }
 }
+
 function deleteItemFromList(){
   renderItemsFromSelectedStorage();
   for (var i = 0; i < close.length; i++) {
@@ -160,6 +167,7 @@ function deleteItemFromList(){
     }
   }
 }
+
 function deleteItemFromSelectedArray(item){
   if(selectedStorage == localStorageValue){
     deleteItemFromArray(item);
@@ -180,6 +188,7 @@ function deleteItemFromArray1(deletedText){
   itemIndex = sessionStorageArray.indexOf(itemDeleted);
   sessionStorageArray.splice(itemIndex,1);
 }
+
 function alertTotalItemsCont(){
   if(selectedStorage == localStorageValue){
     displayItemsCountFromLocalStorage();
@@ -188,6 +197,7 @@ function alertTotalItemsCont(){
     displayItemsCountFromSessionStorage();
   }
 }
+
 function alertpendingItemsCount(){
   if(selectedStorage == localStorageValue){
     displayPendingItemsCountFromLocalStorage();
