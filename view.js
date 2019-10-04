@@ -1,14 +1,20 @@
 
+var completedText = 'Completed tasks in your list : ';
+var allText = 'Total number of tasks in your list : ';
+var pendingText = 'Pending tasks in your list : ';
+var pending;
+var check = document.getElementsByClassName('checked');
+var li;
+var span;
+
 function display(item){
-  var li = document.createElement("li");
-  var textNode = document.createTextNode(item);
-  li.appendChild(textNode);
-  document.getElementById(displayAreaId).appendChild(li);
-  var span = document.createElement("SPAN");
-  var cancel = document.createTextNode("\u00D7");
+  li = document.createElement("li");
+  li.appendChild(document.createTextNode(item));
+  span = document.createElement("SPAN");
   span.className = "close";
-  span.appendChild(cancel);
+  span.appendChild(document.createTextNode("\u00D7"));
   li.appendChild(span);
+  appendItemToList(li);
 }
 
 function displayCompletedItemsCount(){

@@ -1,24 +1,23 @@
 
-function addItemToLocalStorage(){
+var localStorageArray = [];
+var sessionStorageArray = [];
+var myTodoItems = 'myTodoItems';
+var todoItems;
+
+function setItemToLocalStorage(){
   localStorage.setItem(myTodoItems, JSON.stringify(localStorageArray));
 }
 
-function renderItemsFromLocalStorage(){
-  var todoItems = localStorage.getItem(myTodoItems);
-  if(todoItems!=null){
-    localStorageArray = JSON.parse(todoItems);
-  }
+function getItemsFromLocalStorage(){
+  localStorageArray = JSON.parse(localStorage.getItem(myTodoItems)) || [];
   return localStorageArray;
 }
 
-function addItemToSessionStorage(){
+function setItemToSessionStorage(){
   sessionStorage.setItem(myTodoItems, JSON.stringify(sessionStorageArray));
 }
 
-function renderItemsFromSessionStorage(){
-  var todoItems = sessionStorage.getItem(myTodoItems);
-  if(todoItems!=null){
-    sessionStorageArray = JSON.parse(todoItems);
-  }
+function getItemsFromSessionStorage(){
+  sessionStorageArray = JSON.parse(sessionStorage.getItem(myTodoItems)) || [];
   return sessionStorageArray;
 }
