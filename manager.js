@@ -1,8 +1,22 @@
 
-var set;
-var get;
+function storageManager(selectedStorage) {
+    function getStorageType(){
+        switch (selectedStorage) {
+            case 'LocalStorage':
+                return new LocalStorage();
+    
+            case 'SessionStorage':
+                return new SessionStorage();
+            
+            default : alert(storageMessage);
+        }
+    }
 
-class localStorage {
-    set = setItemToLocalStorage();
-    get = getItemsFromLocalStorage();
-  }
+    function setItems() {
+        return this.getStorageType.setItem();
+    }
+    
+    function getItems() {
+        return this.getStorageType.getItem();
+    }
+}

@@ -20,6 +20,7 @@ var itemIndex;
 function init(){
   attachEventListners();
   displayTodoListItems();
+  //storageManager(selectedStorage);
 }
 
 function attachEventListners(){
@@ -33,16 +34,19 @@ function attachEventListners(){
 
 function changeDataStorage(){
   selectedStorage = document.getElementById("selectStorage").value;
+  storageManager(selectedStorage);
   displayTodoListItems();
 }
 
 function displayTodoListItems(){
-  renderItemsFromSelectedStorage();
+  //renderItemsFromSelectedStorage();
   if(selectedStorage === localStorageValue){
-    displayLocalStorageItems();
+    //displayLocalStorageItems();
+    //setItems();
   }
   else if(selectedStorage === sessionStorageValue){
-    displaySessionStorageItems();
+    //displaySessionStorageItems();
+    //setItems();
   }
   else{
     ulList.innerHTML = storageMessage;
@@ -50,14 +54,14 @@ function displayTodoListItems(){
     deleteItemFromList();
 }
 
-function renderItemsFromSelectedStorage(){
-  if(selectedStorage === localStorageValue){
-    getItemsFromLocalStorage();
-  }
-  else if(selectedStorage === sessionStorageValue){
-    getItemsFromSessionStorage();
-  }
-}
+// function renderItemsFromSelectedStorage(){
+//   if(selectedStorage === localStorageValue){
+//     getItemsFromLocalStorage();
+//   }
+//   else if(selectedStorage === sessionStorageValue){
+//     getItemsFromSessionStorage();
+//   }
+// }
 
 function displayLocalStorageItems(){
   ulList.innerHTML = '';
@@ -72,13 +76,6 @@ function displaySessionStorageItems(){
     display(sessionStorageArray[i]);
   }
 }
-
-// function displayMessageWhenListIsEmpty(){
-//   renderItemsFromSelectedStorage();
-//   if(localStorageArray || sessionStorageArray === []){
-//     ulList.innerHTML = onEmptyListShowMessage;
-//   }
-// }
 
 function addItemOnEnter() {
   var input = inputFieldId.value;
@@ -108,6 +105,7 @@ function displayNewItem() {
     deleteItemFromList();
   }
   inputFieldReset();
+  //console.log(a);
 }
 
 function alertOnEmptyInputField(){
@@ -126,6 +124,7 @@ function appendItemToList(item){
 function addItemsToSelectedStorage(){
   if(selectedStorage === localStorageValue){
     setItemToLocalStorage();
+    // setItems();
   }
   else if(selectedStorage === sessionStorageValue){
     setItemToSessionStorage();
@@ -146,18 +145,6 @@ function changeItemCheckState(ev){
     ev.target.classList.toggle('checked');
   }
 }
-
-// function deleteItemFromList(){
-//   for (i = 0; i < close.length; i++) {
-//     close[i].onclick = deleteItem(this.parentElement);
-//   }
-// }
-
-// function deleteItem(div){
-//   deleteItemFromSelectedArray(div.textContent);
-//   div.remove();
-//   addItemsToSelectedStorage();
-// }
 
 function deleteItemFromList(){
   for (i = 0; i < close.length; i++) {
