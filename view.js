@@ -17,24 +17,15 @@ function display(item){
   appendItemToList(li);
 }
 
-function displayCompletedItemsCount(){
+function displayCompletedItemsCountFromSelectedStorage(){
   alert(completedText + check.length);
 }
 
-function displayItemsCountFromLocalStorage(){
-  alert(allText + localStorageArray.length);
+function displayTotalItemsCountFromSelectedStorage(){
+  alert(allText + storageData.length);
 }
 
-function displayPendingItemsCountFromLocalStorage(){
-  pending = localStorageArray.length-check.length
-  alert(pendingText + pending);
-}
-
-function displayItemsCountFromSessionStorage(){
-  alert(allText + sessionStorageArray.length);
-}
-
-function displayPendingItemsCountFromSessionStorage(){
-  pending = sessionStorageArray.length-check.length
+function displayPendingItemsCountFromselectedStorage(){
+  pending = storageData.length-check.length
   alert(pendingText + pending);
 }

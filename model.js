@@ -1,29 +1,16 @@
 
-var localStorageArray = [];
-var sessionStorageArray = [];
-var myTodoItems = 'myTodoItems';
-var todoItems;
-
-function LocalStorage(){
-
-  function setItem(){
-    localStorage.setItem(myTodoItems, JSON.stringify(localStorageArray));
+function LocalStorage(key) {
+  return {
+  key: key,
+  getData: function () { return JSON.parse(localStorage.getItem(this.key)); },
+  setData: function (data) { localStorage.setItem(this.key, JSON.stringify(data)); }
   }
-
-  function getItem(){
-    localStorageArray = JSON.parse(localStorage.getItem(myTodoItems)) || [];
-    return localStorageArray;
+ }
+  
+  function SessionStorage(key) {
+  return {
+  key: key,
+  getData: function () { return JSON.parse(sessionStorage.getItem(this.key)); },
+  setData: function (data) { sessionStorage.setItem(this.key, JSON.stringify(data)); }
   }
-}
-
-function SessionStorage(){
-
-  function setItem(){
-    sessionStorage.setItem(myTodoItems, JSON.stringify(sessionStorageArray));
   }
-
-  function getItem(){
-    sessionStorageArray = JSON.parse(sessionStorage.getItem(myTodoItems)) || [];
-    return sessionStorageArray;
-  }
-}

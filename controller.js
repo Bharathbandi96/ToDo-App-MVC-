@@ -13,69 +13,70 @@ var getAddButtonId = document.getElementById('addButton');
 var displayAreaId = document.getElementById('displayArea');
 var keypressEvent = 'keypress';
 var clickEvent = 'click';
+var myTodoItems = 'myTodoItems';
+var storageManagerInstance;
 var i;
 var itemDeleted;
 var itemIndex;
+var storageData;
 
 function init(){
   attachEventListners();
-  displayTodoListItems();
-  //storageManager(selectedStorage);
+  default1();
+}
+
+function default1(){
+  if(selectedStorage==='SelectStorage' ||selectedStorage === undefined){
+    ulList.innerHTML = storageMessage;
+  }
 }
 
 function attachEventListners(){
   getAddButtonId.addEventListener(clickEvent, displayNewItem);
   inputFieldId.addEventListener(keypressEvent,addItemOnEnter);
   ulList.addEventListener(clickEvent,changeItemCheckState);
-  document.getElementById('completedTaskButton').addEventListener(clickEvent, displayCompletedItemsCount);
-  document.getElementById('allTaskButton').addEventListener(clickEvent, alertTotalItemsCount);
-  document.getElementById('pendingTaskButton').addEventListener(clickEvent, alertpendingItemsCount);
+  document.getElementById('completedTaskButton').addEventListener(clickEvent, displayCompletedItemsCountFromSelectedStorage);
+  document.getElementById('allTaskButton').addEventListener(clickEvent, displayTotalItemsCountFromSelectedStorage);
+  document.getElementById('pendingTaskButton').addEventListener(clickEvent, displayPendingItemsCountFromselectedStorage);
 }
 
 function changeDataStorage(){
   selectedStorage = document.getElementById("selectStorage").value;
-  storageManager(selectedStorage);
   displayTodoListItems();
 }
 
 function displayTodoListItems(){
-  //renderItemsFromSelectedStorage();
-  if(selectedStorage === localStorageValue){
-    //displayLocalStorageItems();
-    //setItems();
-  }
-  else if(selectedStorage === sessionStorageValue){
-    //displaySessionStorageItems();
-    //setItems();
+  createStorageManagerInstance();
+  displaySelectedStorageItems();
+  deleteItemFromList();
+}
+
+function createStorageManagerInstance(){
+    storageManagerInstance = new StorageManager(selectedStorage,myTodoItems);
+}
+
+function renderItemsFromSelectedStorage(){
+  storageData = storageManagerInstance.getData();
+}
+
+function displaySelectedStorageItems(){
+  if(selectedStorage === localStorageValue || selectedStorage === sessionStorageValue){
+    renderItemsFromSelectedStorage();
+    ulList.innerHTML = '';
+    for(i=0; i<storageData.length; i++){
+      display(storageData[i]);
+    }
   }
   else{
-    ulList.innerHTML = storageMessage;
+    default1();
   }
-    deleteItemFromList();
 }
 
-// function renderItemsFromSelectedStorage(){
-//   if(selectedStorage === localStorageValue){
-//     getItemsFromLocalStorage();
-//   }
-//   else if(selectedStorage === sessionStorageValue){
-//     getItemsFromSessionStorage();
+// function isEmpty(){
+//   if(!ulList.hasChildNodes){
+//     alert('hello')
 //   }
 // }
-
-function displayLocalStorageItems(){
-  ulList.innerHTML = '';
-  for(i=0; i<localStorageArray.length; i++){
-    display(localStorageArray[i]);
-  }
-}
-
-function displaySessionStorageItems(){
-  ulList.innerHTML = '';
-  for(i=0; i<sessionStorageArray.length; i++){
-    display(sessionStorageArray[i]);
-  }
-}
 
 function addItemOnEnter() {
   var input = inputFieldId.value;
@@ -105,7 +106,6 @@ function displayNewItem() {
     deleteItemFromList();
   }
   inputFieldReset();
-  //console.log(a);
 }
 
 function alertOnEmptyInputField(){
@@ -122,22 +122,11 @@ function appendItemToList(item){
 }
 
 function addItemsToSelectedStorage(){
-  if(selectedStorage === localStorageValue){
-    setItemToLocalStorage();
-    // setItems();
-  }
-  else if(selectedStorage === sessionStorageValue){
-    setItemToSessionStorage();
-  }
+    storageManagerInstance.setData(storageData);
 }
 
 function addItemToSelectedArray(item){
-  if(selectedStorage === localStorageValue){
-    localStorageArray.push(item);
-  }
-  else if(selectedStorage === sessionStorageValue){
-    sessionStorageArray.push(item);
-  }
+    storageData.push(item);
 }
 
 function changeItemCheckState(ev){
@@ -158,42 +147,9 @@ function deleteItemFromList(){
 }
 
 function deleteItemFromSelectedArray(item){
-  if(selectedStorage === localStorageValue){
-    deleteItemFromLocalStorageArray(item);
-  }
-  else if(selectedStorage === sessionStorageValue){
-    deleteItemFromSessionStorageArray(item);
-  }
-}
-
-function deleteItemFromLocalStorageArray(deletedText){
-  itemDeleted = deletedText.substr(0,deletedText.length-1);
-  itemIndex = localStorageArray.indexOf(itemDeleted);
-  localStorageArray.splice(itemIndex,1);
-}
-
-function deleteItemFromSessionStorageArray(deletedText){
-  itemDeleted = deletedText.substr(0,deletedText.length-1);
-  itemIndex = sessionStorageArray.indexOf(itemDeleted);
-  sessionStorageArray.splice(itemIndex,1);
-}
-
-function alertTotalItemsCount(){
-  if(selectedStorage === localStorageValue){
-    displayItemsCountFromLocalStorage();
-  }
-  else if(selectedStorage === sessionStorageValue){
-    displayItemsCountFromSessionStorage();
-  }
-}
-
-function alertpendingItemsCount(){
-  if(selectedStorage === localStorageValue){
-    displayPendingItemsCountFromLocalStorage();
-  }
-  else if(selectedStorage === sessionStorageValue){
-    displayPendingItemsCountFromSessionStorage();
-  }
+  itemDeleted = item.substr(0,item.length-1);
+  itemIndex = storageData.indexOf(itemDeleted);
+  storageData.splice(itemIndex,1);
 }
 
 init();
