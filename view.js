@@ -10,15 +10,34 @@ var span;
 
 function display(item){
   li = document.createElement("li");
+  createCheckButton();
+  createTextContent(item);
+  createDeleteButton();
+  appendItemToList(li);
+}
+
+function appendItemToList(item){
+  displayAreaId.appendChild(item);
+  span.addEventListener(clickEvent,deleteItemFromList);
+}
+
+function createCheckButton(){
   span = document.createElement("SPAN");
   span.id = "close1";
   li.appendChild(span)
-  li.appendChild(document.createTextNode(item));
+}
+
+function createTextContent(item){
+  span = document.createElement("SPAN");
+  span.appendChild(document.createTextNode(item));
+  li.appendChild(span);
+}
+
+function createDeleteButton(){
   span = document.createElement("SPAN");
   span.className = "close";
   span.appendChild(document.createTextNode("\u00D7"));
   li.appendChild(span);
-  appendItemToList(li);
 }
 
 function displayCompletedItemsCountFromSelectedStorage(){

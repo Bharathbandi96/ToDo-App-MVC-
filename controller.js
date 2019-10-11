@@ -19,6 +19,8 @@ var i;
 var itemDeleted;
 var itemIndex;
 var storageData;
+var div;
+var item;
 
 function init(){
   attachEventListners();
@@ -85,9 +87,9 @@ function addItemOnEnter() {
         addItemToSelectedArray(input);
         addItemsToSelectedStorage();
         display(input);
+        inputFieldReset();
         deleteItemFromList();
       }
-      inputFieldReset();
   }
 }
 
@@ -99,9 +101,9 @@ function displayNewItem() {
     addItemToSelectedArray(input);
     addItemsToSelectedStorage();
     display(input);
+    inputFieldReset();
     deleteItemFromList();
   }
-  inputFieldReset();
 }
 
 function alertOnEmptyInputField(){
@@ -111,10 +113,6 @@ function alertOnEmptyInputField(){
 function inputFieldReset(){
   inputFieldId.value = "";
   inputFieldId.focus();
-}
-
-function appendItemToList(item){
-  displayAreaId.appendChild(item);
 }
 
 function addItemsToSelectedStorage(){
@@ -133,19 +131,14 @@ function changeItemCheckState(ev){
 }
 
 function deleteItemFromList(){
-  for (i = 0; i < close.length; i++) {
-    close[i].onclick = function(){
-      var div = this.parentElement;
-      deleteItemFromSelectedArray(div.textContent);
-      div.remove();
-      addItemsToSelectedStorage();
-    }
-  }
+  div = this.parentElement;
+  deleteItemFromSelectedArray(this.previousSibling.textContent);
+  div.remove();
+  addItemsToSelectedStorage();
 }
 
 function deleteItemFromSelectedArray(item){
-  itemDeleted = item.substr(0,item.length-1);
-  itemIndex = storageData.indexOf(itemDeleted);
+  itemIndex = storageData.indexOf(item);
   storageData.splice(itemIndex,1);
 }
 
