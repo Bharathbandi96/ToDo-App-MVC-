@@ -6,9 +6,13 @@ var pending;
 var check = document.getElementsByClassName('checked');
 var li;
 var span;
+// var span1
 
 function display(item){
   li = document.createElement("li");
+  span = document.createElement("SPAN");
+  span.id = "close1";
+  li.appendChild(span)
   li.appendChild(document.createTextNode(item));
   span = document.createElement("SPAN");
   span.className = "close";

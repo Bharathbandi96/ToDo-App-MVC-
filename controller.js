@@ -22,10 +22,10 @@ var storageData;
 
 function init(){
   attachEventListners();
-  default1();
+  displayDefaultMessage();
 }
 
-function default1(){
+function displayDefaultMessage(){
   if(selectedStorage==='SelectStorage' ||selectedStorage === undefined){
     ulList.innerHTML = storageMessage;
   }
@@ -52,7 +52,9 @@ function displayTodoListItems(){
 }
 
 function createStorageManagerInstance(){
+  if(selectedStorage === localStorageValue || selectedStorage === sessionStorageValue){
     storageManagerInstance = new StorageManager(selectedStorage,myTodoItems);
+  }
 }
 
 function renderItemsFromSelectedStorage(){
@@ -68,15 +70,9 @@ function displaySelectedStorageItems(){
     }
   }
   else{
-    default1();
+    displayDefaultMessage();
   }
 }
-
-// function isEmpty(){
-//   if(!ulList.hasChildNodes){
-//     alert('hello')
-//   }
-// }
 
 function addItemOnEnter() {
   var input = inputFieldId.value;
@@ -130,8 +126,9 @@ function addItemToSelectedArray(item){
 }
 
 function changeItemCheckState(ev){
-  if (ev.target.tagName === 'LI'){
-    ev.target.classList.toggle('checked');
+  if (ev.target.tagName === 'SPAN'){
+    ev.target.parentElement.classList.toggle('checked');
+    // ev.target.parentElement.remove();
   }
 }
 
