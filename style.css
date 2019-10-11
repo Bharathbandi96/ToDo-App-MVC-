@@ -152,7 +152,7 @@ ul li.checked::before {
   color: white;
 }
 
-#close1 {
+.check {
   border-collapse: collapse;
   position: absolute;
   left: 0;
@@ -160,7 +160,7 @@ ul li.checked::before {
   padding: 22px 19px 22px 19px;
 }
 
-#close1:hover {
+.check:hover {
   color: white;
 }
 

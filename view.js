@@ -18,12 +18,12 @@ function display(item){
 
 function appendItemToList(item){
   displayAreaId.appendChild(item);
-  span.addEventListener(clickEvent,deleteItemFromList);
+  attachEventListnerToCreatedItem();
 }
 
 function createCheckButton(){
   span = document.createElement("SPAN");
-  span.id = "close1";
+  span.className = "check";
   li.appendChild(span)
 }
 

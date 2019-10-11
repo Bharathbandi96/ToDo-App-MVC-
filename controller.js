@@ -50,7 +50,6 @@ function changeDataStorage(){
 function displayTodoListItems(){
   createStorageManagerInstance();
   displaySelectedStorageItems();
-  deleteItemFromList();
 }
 
 function createStorageManagerInstance(){
@@ -88,7 +87,6 @@ function addItemOnEnter() {
         addItemsToSelectedStorage();
         display(input);
         inputFieldReset();
-        deleteItemFromList();
       }
   }
 }
@@ -102,7 +100,6 @@ function displayNewItem() {
     addItemsToSelectedStorage();
     display(input);
     inputFieldReset();
-    deleteItemFromList();
   }
 }
 
@@ -124,10 +121,13 @@ function addItemToSelectedArray(item){
 }
 
 function changeItemCheckState(ev){
-  if (ev.target.tagName === 'SPAN'){
+  if (ev.target.className === 'check'){
     ev.target.parentElement.classList.toggle('checked');
-    // ev.target.parentElement.remove();
   }
+}
+
+function attachEventListnerToCreatedItem(){
+  span.addEventListener(clickEvent,deleteItemFromList);  
 }
 
 function deleteItemFromList(){
