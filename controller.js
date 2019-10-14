@@ -1,45 +1,60 @@
 
-var close = document.getElementsByClassName("close");
-var ulList = document.querySelector('ul');
 var enterKeyCode = 13;
-var onEmptyListShowMessage = 'OOPS... Your List Is Empty';
-var onEmptyInputFiled = 'You must write something!';
-var storageMessage = 'Please select your required storage to store data...';
 var selectedStorage;
-var localStorageValue = 'LocalStorage';
-var sessionStorageValue = 'SessionStorage';
-var inputFieldId = document.getElementById('myInput');
-var getAddButtonId = document.getElementById('addButton');
-var displayAreaId = document.getElementById('displayArea');
-var keypressEvent = 'keypress';
-var clickEvent = 'click';
-var myTodoItems = 'myTodoItems';
 var storageManagerInstance;
 var i;
-var itemDeleted;
-var itemIndex;
 var storageData;
 var div;
-var item;
+// var status = false;
+var myTodoItems = 'myTodoItems';
+var onEmptyListShowMessage,onEmptyInputFiled,storageMessage;
+var localStorageValue,sessionStorageValue;
+var keypressEvent,clickEvent;
+var close,ulList,inputFieldId,getAddButtonId,displayAreaId;
+var completedTask,allTask,pendingTask;
+var inputText;
 
 function init(){
+  onClickTextMessages();
+  getRequiredElements();
   attachEventListners();
   displayDefaultMessage();
+}
+
+function onClickTextMessages(){
+  keypressEvent = 'keypress';
+  clickEvent = 'click';
+  localStorageValue = 'localStorage';
+  sessionStorageValue = 'sessionStorage';
+  onEmptyListShowMessage = 'OOPS... Your List Is Empty';
+  onEmptyInputFiled = 'You must write something!';
+  storageMessage = 'Please select your required storage to store data...';
+}
+
+function getRequiredElements(){
+  inputFieldId = document.getElementById('myInput');
+  getAddButtonId = document.getElementById('addButton');
+  displayAreaId = document.getElementById('displayArea');
+  close = document.getElementsByClassName("close");
+  ulList = document.querySelector('ul');
+  completedTask = document.getElementById('completedTaskButton')
+  allTask = document.getElementById('allTaskButton')
+  pendingTask = document.getElementById('pendingTaskButton')
+}
+
+function attachEventListners(){
+  getAddButtonId.addEventListener(clickEvent, displayItemOnAddButton);
+  inputFieldId.addEventListener(keypressEvent,displayItemOnEnter);
+  ulList.addEventListener(clickEvent,changeItemCheckState);
+  completedTask.addEventListener(clickEvent, displayCompletedItemsCountFromSelectedStorage);
+  allTask.addEventListener(clickEvent, displayTotalItemsCountFromSelectedStorage);
+  pendingTask.addEventListener(clickEvent, displayPendingItemsCountFromselectedStorage);
 }
 
 function displayDefaultMessage(){
   if(selectedStorage==='SelectStorage' ||selectedStorage === undefined){
     ulList.innerHTML = storageMessage;
   }
-}
-
-function attachEventListners(){
-  getAddButtonId.addEventListener(clickEvent, displayNewItem);
-  inputFieldId.addEventListener(keypressEvent,addItemOnEnter);
-  ulList.addEventListener(clickEvent,changeItemCheckState);
-  document.getElementById('completedTaskButton').addEventListener(clickEvent, displayCompletedItemsCountFromSelectedStorage);
-  document.getElementById('allTaskButton').addEventListener(clickEvent, displayTotalItemsCountFromSelectedStorage);
-  document.getElementById('pendingTaskButton').addEventListener(clickEvent, displayPendingItemsCountFromselectedStorage);
 }
 
 function changeDataStorage(){
@@ -54,12 +69,8 @@ function displayTodoListItems(){
 
 function createStorageManagerInstance(){
   if(selectedStorage === localStorageValue || selectedStorage === sessionStorageValue){
-    storageManagerInstance = new StorageManager(selectedStorage,myTodoItems);
+    storageManagerInstance = StorageManager(selectedStorage,myTodoItems);
   }
-}
-
-function renderItemsFromSelectedStorage(){
-  storageData = storageManagerInstance.getData();
 }
 
 function displaySelectedStorageItems(){
@@ -67,7 +78,7 @@ function displaySelectedStorageItems(){
     renderItemsFromSelectedStorage();
     ulList.innerHTML = '';
     for(i=0; i<storageData.length; i++){
-      display(storageData[i]);
+      display(storageData[i].name);
     }
   }
   else{
@@ -75,30 +86,30 @@ function displaySelectedStorageItems(){
   }
 }
 
-function addItemOnEnter() {
-  var input = inputFieldId.value;
-    if (event.keyCode === enterKeyCode) {
-      if (input === '') {
-        alertOnEmptyInputField();
-      } 
-      else 
-      {
-        addItemToSelectedArray(input);
-        addItemsToSelectedStorage();
-        display(input);
-        inputFieldReset();
-      }
+
+function renderItemsFromSelectedStorage(){
+  storageData = storageManagerInstance.getData();
+}
+
+function displayItemOnEnter() {
+  inputText = inputFieldId.value;
+  if (event.keyCode === enterKeyCode) {
+    displayItem();
   }
 }
 
-function displayNewItem() {
-  var input = inputFieldId.value;
-  if (input === '') {
+function displayItemOnAddButton() {
+  inputText = inputFieldId.value;
+  displayItem();
+}
+
+function displayItem(){
+  if (inputText === '') {
     alertOnEmptyInputField();
   } else {
-    addItemToSelectedArray(input);
+    addItemToAnArray(inputText);
     addItemsToSelectedStorage();
-    display(input);
+    display(inputText);
     inputFieldReset();
   }
 }
@@ -112,21 +123,37 @@ function inputFieldReset(){
   inputFieldId.focus();
 }
 
-function addItemsToSelectedStorage(){
-    storageManagerInstance.setData(storageData);
+function addItemToAnArray(item){
+  storageData.push({id:Date.now(),name:item,status:status});
 }
 
-function addItemToSelectedArray(item){
-    storageData.push(item);
+function addItemsToSelectedStorage(){
+  storageManagerInstance.setData(storageData);
 }
 
 function changeItemCheckState(ev){
   if (ev.target.className === 'check'){
     ev.target.parentElement.classList.toggle('checked');
+    // status = true;
   }
 }
 
-function attachEventListnerToCreatedItem(){
+// function attachEventListnerToCheckItem(){
+//   span.addEventListener(clickEvent,checkItemState);
+//   addItemsToSelectedStorage();
+// }
+
+// function checkItemState(){
+//   div = this.parentElement;
+//   if(div.className !=='checked'){
+//     status = true;
+//   }
+//   else{
+//     status = false;
+//   }
+// }
+
+function attachEventListnerToDeleteItem(){
   span.addEventListener(clickEvent,deleteItemFromList);  
 }
 
@@ -138,8 +165,8 @@ function deleteItemFromList(){
 }
 
 function deleteItemFromSelectedArray(item){
-  itemIndex = storageData.indexOf(item);
-  storageData.splice(itemIndex,1);
+  // storageData.splice(storageData.findIndex(x => x.name === item),1);
+  storageData.splice(storageData.indexOf(item),1);
 }
 
 init();

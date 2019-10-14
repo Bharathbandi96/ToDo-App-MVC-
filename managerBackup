@@ -14,9 +14,9 @@ function StorageManager(storageType, key) {
 
 function getStorageInstance(storageType,key) {
     var test = {
-        'localStorage' : function () { return new LocalStorage(key) },
+        'LocalStorage' : function () { return new LocalStorage(key) },
 
-        'sessionStorage' : function () { return new SessionStorage(key) }
+        'SessionStorage' : function () { return new SessionStorage(key) }
     }
     return test[storageType]();
 }

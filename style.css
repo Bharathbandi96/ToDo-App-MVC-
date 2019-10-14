@@ -153,15 +153,15 @@ ul li.checked::before {
 }
 
 .check {
-  border-collapse: collapse;
   position: absolute;
-  left: 0;
-  top: 0;
-  padding: 22px 19px 22px 19px;
+  left: 5;
+  top: 7;
+  padding: 15px 15px;
+  background-color: rgba(167, 166, 166, 0.2)
 }
 
 .check:hover {
-  color: white;
+  background-color: rgb(136, 133, 133,0.3);
 }
 
 .header {

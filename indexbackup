@@ -1,4 +1,3 @@
-
 <head>
   <link rel="stylesheet" href="style.css">
 </head>
@@ -17,9 +16,9 @@
     <button class="pendingTaskButton" id='pendingTaskButton'>Pending</button>
 
     <select id='selectStorage' onchange="changeDataStorage()">
-      <option value="SelectStorage">Select Storage</option>
-      <option id="localStorage" value="localStorage">Local Storage</option>
-      <option id="selectStorage" value="sessionStorage">Session Storage</option>
+      <option>Select Storage</option>
+      <option id="localStorage" value="LocalStorage">Local Storage</option>
+      <option id="selectStorage" value="SessionStorage">Session Storage</option>
     </select>
   </div>
 </div>
