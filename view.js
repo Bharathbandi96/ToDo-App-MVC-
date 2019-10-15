@@ -13,13 +13,13 @@ function appendItemToList(item){
 }
 
 function displayCompletedItemsCountFromSelectedStorage(){
-var check = getElementsByClassName('checked');
-var completedText = 'Completed tasks in your list : ';
-alert(completedText + check.length);
+  var check = getElementsByClassName('checked');
+  var completedText = 'Completed tasks in your list : ';
+  alert(completedText + check.length);
 }
 
 function displayTotalItemsCountFromSelectedStorage(){
-var allText = 'Total number of tasks in your list : ';  
+  var allText = 'Total number of tasks in your list : ';  
   alert(allText + storageData.length);
 }
 
