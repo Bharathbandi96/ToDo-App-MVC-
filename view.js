@@ -1,28 +1,19 @@
 
-// var completedText = 'Completed tasks in your list : ';
-// var allText = 'Total number of tasks in your list : ';
-// var pendingText = 'Pending tasks in your list : ';
-// var pending;
-// var check = document.getElementsByClassName('checked');
-// var li;
-// var span;
-
 function display(item){
   var li = document.createElement("li");
   createCheckButton(li);
-  //attachEventListnerToCheckItem();
   createTextContent(li,item);
   createDeleteButton(li);
   appendItemToList(li);
 }
 
 function appendItemToList(item){
-  var displayAreaId = document.getElementById('displayArea');
+  var displayAreaId = getElementById('displayArea');
   displayAreaId.appendChild(item);
 }
 
 function displayCompletedItemsCountFromSelectedStorage(){
-var check = document.getElementsByClassName('checked');
+var check = getElementsByClassName('checked');
 var completedText = 'Completed tasks in your list : ';
 alert(completedText + check.length);
 }
@@ -34,7 +25,7 @@ var allText = 'Total number of tasks in your list : ';
 
 function displayPendingItemsCountFromselectedStorage(){
   var pendingText = 'Pending tasks in your list : ';
-  var check = document.getElementsByClassName('checked');
+  var check = getElementsByClassName('checked');
   var pending = storageData.length-check.length
   alert(pendingText + pending);
 }

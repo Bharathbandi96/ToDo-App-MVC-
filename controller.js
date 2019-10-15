@@ -1,49 +1,36 @@
 
-// var enterKeyCode = 13;
 var selectedStorage;
 var storageManagerInstance;
-// var i;
 var storageData;
-// var div;
-// var status = false;
-// var myTodoItems = 'myTodoItems';
-// var onEmptyListShowMessage,onEmptyInputFiled,storageMessage;
-// var localStorageValue,sessionStorageValue;
-// var keypressEvent,clickEvent;
-var ulList,inputFieldId;//,getAddButtonId,displayAreaId;
-// var completedTask,allTask,pendingTask;
+var ulList,inputFieldId;
 var inputText;
 
 function init(){
-  //onClickTextMessages();
   getRequiredElements();
   attachEventListners();
   displayDefaultMessage();
 }
 
-function onClickTextMessages(){
-  // onEmptyListShowMessage = 'OOPS... Your List Is Empty';
-  // onEmptyInputFiled = 'You must write something!';
-  // storageMessage = 'Please select your required storage to store data...';
+function getElementById(idSelector){
+ return document.getElementById(idSelector);
+}
+
+function getElementsByClassName(classSelector){
+  return document.getElementsByClassName(classSelector);
 }
 
 function getRequiredElements(){
   inputFieldId = document.getElementById('myInput');
-  // getAddButtonId = document.getElementById('addButton');
-  // displayAreaId = document.getElementById('displayArea');
   ulList = document.querySelector('ul');
-  // completedTask = document.getElementById('completedTaskButton')
-  // allTask = document.getElementById('allTaskButton')
-  // pendingTask = document.getElementById('pendingTaskButton')
 }
 
 function attachEventListners(){
-  document.getElementById('addButton').addEventListener('click', displayItemOnAddButton);
+  getElementById('addButton').addEventListener('click', displayItemOnAddButton);
   inputFieldId.addEventListener('keypress',displayItemOnEnter);
   ulList.addEventListener('click',changeItemCheckState);
-  document.getElementById('completedTaskButton').addEventListener('click', displayCompletedItemsCountFromSelectedStorage);
-  document.getElementById('allTaskButton').addEventListener('click', displayTotalItemsCountFromSelectedStorage);
-  document.getElementById('pendingTaskButton').addEventListener('click', displayPendingItemsCountFromselectedStorage);
+  getElementById('completedTaskButton').addEventListener('click', displayCompletedItemsCountFromSelectedStorage);
+  getElementById('allTaskButton').addEventListener('click', displayTotalItemsCountFromSelectedStorage);
+  getElementById('pendingTaskButton').addEventListener('click', displayPendingItemsCountFromselectedStorage);
 }
 
 function displayDefaultMessage(){
@@ -152,24 +139,8 @@ function addItemsToSelectedStorage(){
 function changeItemCheckState(ev){
   if (ev.target.className === 'check'){
     ev.target.parentElement.classList.toggle('checked');
-    // status = true;
   }
 }
-
-// function attachEventListnerToCheckItem(){
-//   span.addEventListener(clickEvent,checkItemState);
-//   addItemsToSelectedStorage();
-// }
-
-// function checkItemState(){
-//   div = this.parentElement;
-//   if(div.className !=='checked'){
-//     status = true;
-//   }
-//   else{
-//     status = false;
-//   }
-// }
 
 function attachEventListnerToDeleteItem(span){
   span.addEventListener('click',deleteItemFromList);  
