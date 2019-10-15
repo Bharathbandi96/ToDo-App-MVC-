@@ -1,58 +1,54 @@
 
-var enterKeyCode = 13;
+// var enterKeyCode = 13;
 var selectedStorage;
 var storageManagerInstance;
-var i;
+// var i;
 var storageData;
-var div;
+// var div;
 // var status = false;
-var myTodoItems = 'myTodoItems';
-var onEmptyListShowMessage,onEmptyInputFiled,storageMessage;
-var localStorageValue,sessionStorageValue;
-var keypressEvent,clickEvent;
-var close,ulList,inputFieldId,getAddButtonId,displayAreaId;
-var completedTask,allTask,pendingTask;
+// var myTodoItems = 'myTodoItems';
+// var onEmptyListShowMessage,onEmptyInputFiled,storageMessage;
+// var localStorageValue,sessionStorageValue;
+// var keypressEvent,clickEvent;
+var ulList,inputFieldId;//,getAddButtonId,displayAreaId;
+// var completedTask,allTask,pendingTask;
 var inputText;
 
 function init(){
-  onClickTextMessages();
+  //onClickTextMessages();
   getRequiredElements();
   attachEventListners();
   displayDefaultMessage();
 }
 
 function onClickTextMessages(){
-  keypressEvent = 'keypress';
-  clickEvent = 'click';
-  localStorageValue = 'localStorage';
-  sessionStorageValue = 'sessionStorage';
-  onEmptyListShowMessage = 'OOPS... Your List Is Empty';
-  onEmptyInputFiled = 'You must write something!';
-  storageMessage = 'Please select your required storage to store data...';
+  // onEmptyListShowMessage = 'OOPS... Your List Is Empty';
+  // onEmptyInputFiled = 'You must write something!';
+  // storageMessage = 'Please select your required storage to store data...';
 }
 
 function getRequiredElements(){
   inputFieldId = document.getElementById('myInput');
-  getAddButtonId = document.getElementById('addButton');
-  displayAreaId = document.getElementById('displayArea');
-  close = document.getElementsByClassName("close");
+  // getAddButtonId = document.getElementById('addButton');
+  // displayAreaId = document.getElementById('displayArea');
   ulList = document.querySelector('ul');
-  completedTask = document.getElementById('completedTaskButton')
-  allTask = document.getElementById('allTaskButton')
-  pendingTask = document.getElementById('pendingTaskButton')
+  // completedTask = document.getElementById('completedTaskButton')
+  // allTask = document.getElementById('allTaskButton')
+  // pendingTask = document.getElementById('pendingTaskButton')
 }
 
 function attachEventListners(){
-  getAddButtonId.addEventListener(clickEvent, displayItemOnAddButton);
-  inputFieldId.addEventListener(keypressEvent,displayItemOnEnter);
-  ulList.addEventListener(clickEvent,changeItemCheckState);
-  completedTask.addEventListener(clickEvent, displayCompletedItemsCountFromSelectedStorage);
-  allTask.addEventListener(clickEvent, displayTotalItemsCountFromSelectedStorage);
-  pendingTask.addEventListener(clickEvent, displayPendingItemsCountFromselectedStorage);
+  document.getElementById('addButton').addEventListener('click', displayItemOnAddButton);
+  inputFieldId.addEventListener('keypress',displayItemOnEnter);
+  ulList.addEventListener('click',changeItemCheckState);
+  document.getElementById('completedTaskButton').addEventListener('click', displayCompletedItemsCountFromSelectedStorage);
+  document.getElementById('allTaskButton').addEventListener('click', displayTotalItemsCountFromSelectedStorage);
+  document.getElementById('pendingTaskButton').addEventListener('click', displayPendingItemsCountFromselectedStorage);
 }
 
 function displayDefaultMessage(){
-  if(selectedStorage==='SelectStorage' ||selectedStorage === undefined){
+  var storageMessage = 'Please select your required storage to store data...';
+  if(selectedStorage ==='SelectStorage' || selectedStorage === undefined){
     ulList.innerHTML = storageMessage;
   }
 }
@@ -68,16 +64,16 @@ function displayTodoListItems(){
 }
 
 function createStorageManagerInstance(){
-  if(selectedStorage === localStorageValue || selectedStorage === sessionStorageValue){
-    storageManagerInstance = StorageManager(selectedStorage,myTodoItems);
+  if(selectedStorage === 'localStorage' || selectedStorage === 'sessionStorage'){
+    storageManagerInstance = StorageManager(selectedStorage,'myTodoItems');
   }
 }
 
 function displaySelectedStorageItems(){
-  if(selectedStorage === localStorageValue || selectedStorage === sessionStorageValue){
+  if(selectedStorage === 'localStorage' || selectedStorage === 'sessionStorage'){
     renderItemsFromSelectedStorage();
     ulList.innerHTML = '';
-    for(i=0; i<storageData.length; i++){
+    for(var i = 0; i < storageData.length; i++){
       display(storageData[i].name);
     }
   }
@@ -92,6 +88,7 @@ function renderItemsFromSelectedStorage(){
 }
 
 function displayItemOnEnter() {
+  var enterKeyCode = 13;
   inputText = inputFieldId.value;
   if (event.keyCode === enterKeyCode) {
     displayItem();
@@ -114,7 +111,28 @@ function displayItem(){
   }
 }
 
+function createCheckButton(li){
+  var span = document.createElement("SPAN");
+  span.className = "check";
+  li.appendChild(span)
+}
+
+function createTextContent(li,item){
+  var span = document.createElement("SPAN");
+  span.appendChild(document.createTextNode(item));
+  li.appendChild(span);
+}
+
+function createDeleteButton(li){
+  var span = document.createElement("SPAN");
+  span.className = "close";
+  span.appendChild(document.createTextNode("\u00D7"));
+  li.appendChild(span);
+  attachEventListnerToDeleteItem(span);
+}
+
 function alertOnEmptyInputField(){
+  var onEmptyInputFiled = 'You must write something!';
   alert(onEmptyInputFiled);
 }
 
@@ -153,12 +171,12 @@ function changeItemCheckState(ev){
 //   }
 // }
 
-function attachEventListnerToDeleteItem(){
-  span.addEventListener(clickEvent,deleteItemFromList);  
+function attachEventListnerToDeleteItem(span){
+  span.addEventListener('click',deleteItemFromList);  
 }
 
 function deleteItemFromList(){
-  div = this.parentElement;
+  var div = this.parentElement;
   deleteItemFromSelectedArray(this.previousSibling.textContent);
   div.remove();
   addItemsToSelectedStorage();

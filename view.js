@@ -1,54 +1,40 @@
 
-var completedText = 'Completed tasks in your list : ';
-var allText = 'Total number of tasks in your list : ';
-var pendingText = 'Pending tasks in your list : ';
-var pending;
-var check = document.getElementsByClassName('checked');
-var li;
-var span;
+// var completedText = 'Completed tasks in your list : ';
+// var allText = 'Total number of tasks in your list : ';
+// var pendingText = 'Pending tasks in your list : ';
+// var pending;
+// var check = document.getElementsByClassName('checked');
+// var li;
+// var span;
 
 function display(item){
-  li = document.createElement("li");
-  createCheckButton();
+  var li = document.createElement("li");
+  createCheckButton(li);
   //attachEventListnerToCheckItem();
-  createTextContent(item);
-  createDeleteButton();
+  createTextContent(li,item);
+  createDeleteButton(li);
   appendItemToList(li);
-  attachEventListnerToDeleteItem();
 }
 
 function appendItemToList(item){
+  var displayAreaId = document.getElementById('displayArea');
   displayAreaId.appendChild(item);
 }
 
-function createCheckButton(){
-  span = document.createElement("SPAN");
-  span.className = "check";
-  li.appendChild(span)
-}
-
-function createTextContent(item){
-  span = document.createElement("SPAN");
-  span.appendChild(document.createTextNode(item));
-  li.appendChild(span);
-}
-
-function createDeleteButton(){
-  span = document.createElement("SPAN");
-  span.className = "close";
-  span.appendChild(document.createTextNode("\u00D7"));
-  li.appendChild(span);
-}
-
 function displayCompletedItemsCountFromSelectedStorage(){
-  alert(completedText + check.length);
+var check = document.getElementsByClassName('checked');
+var completedText = 'Completed tasks in your list : ';
+alert(completedText + check.length);
 }
 
 function displayTotalItemsCountFromSelectedStorage(){
+var allText = 'Total number of tasks in your list : ';  
   alert(allText + storageData.length);
 }
 
 function displayPendingItemsCountFromselectedStorage(){
-  pending = storageData.length-check.length
+  var pendingText = 'Pending tasks in your list : ';
+  var check = document.getElementsByClassName('checked');
+  var pending = storageData.length-check.length
   alert(pendingText + pending);
 }
