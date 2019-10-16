@@ -120,20 +120,20 @@ ul li:hover {
   background: #ddd;
 }
 
-ul li.checked {
-  background: #888;
-  color: #fff;
+ul li span.checked + span {
+  /* background: #888; */
+  color: rgb(0, 0, 0);
   text-decoration : line-through;
 }
 
-ul li.checked::before {
+ul li span.checked::before {
   content: '';
   position: absolute;
-  border-color: #fff;
+  border-color: rgb(0, 0, 0);
   border-style: solid;
   border-width: 0 2px 2px 0;
-  top: 10px;
-  left: 16px;
+  top: 5px;
+  left: 10px;
   transform: rotate(45deg);
   height: 15px;
   width: 7px;
@@ -152,7 +152,7 @@ ul li.checked::before {
   color: white;
 }
 
-.check {
+#check {
   position: absolute;
   left: 5;
   top: 7;
@@ -160,7 +160,7 @@ ul li.checked::before {
   background-color: rgba(167, 166, 166, 0.2)
 }
 
-.check:hover {
+#check:hover {
   background-color: rgb(136, 133, 133,0.3);
 }
 
