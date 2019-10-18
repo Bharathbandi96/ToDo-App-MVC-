@@ -46,6 +46,7 @@ function getItemsFromStorageToDisplay(){
   } else {
     displayDefaultMessage();
   }
+  displayItemsCount(storageData.length);
 }
 
 function createStorageManagerInstance(){
@@ -64,23 +65,25 @@ function renderItemsFromStorage(){
 function getItemToBeDisplayedOnEnter() {
   var enterKeyCode = 13;
   var inputText = getAnElementByItsId('myInput').value;
-  if (event.keyCode === enterKeyCode && inputText !== '' && (selectedStorage === ('localStorage' || 'sessionStorage'))) {
+  if (event.keyCode === enterKeyCode && inputText !== '' && (selectedStorage === 'localStorage'|| selectedStorage === 'sessionStorage')) {
     displayTotalItemsFromStorage();
     addItemToAnArray(inputText);
     addItemsToStorage();
     displayItem(inputText);
     inputFieldReset();
+    displayItemsCount(storageData.length)
   }
 }
 
 function getItemToBeDisplayedOnAddButton() {
   var inputText = getAnElementByItsId('myInput').value;
-  if(inputText !== '' && (selectedStorage === ('localStorage' || 'sessionStorage'))){
+  if(inputText !== '' && (selectedStorage === 'localStorage' || selectedStorage === 'sessionStorage')){
     displayTotalItemsFromStorage()
     addItemToAnArray(inputText);
     addItemsToStorage();
     displayItem(inputText);
     inputFieldReset();
+    displayItemsCount(storageData.length)
   }
 }
 
@@ -150,6 +153,7 @@ function deleteItemFromList(){
   deleteItemFromAnArray();
   this.parentElement.remove();
   addItemsToStorage();
+  displayItemsCount(storageData.length)
 }
 
 function deleteItemFromAnArray(){
@@ -177,28 +181,45 @@ function clearDisplayArea(){
 }
 
 function displayCompletedItemsFromStorage(){
-  clearDisplayArea();
-  for(var i = 0; i < storageData.length; i++){
-    if(storageData[i].status === true){
-      displayItem(storageData[i].name,storageData[i].status);
+  if(selectedStorage === 'localStorage' || selectedStorage === 'sessionStorage'){
+    var count = 0;
+    clearDisplayArea();
+    for(var i = 0; i < storageData.length; i++){
+      if(storageData[i].status === true){
+        displayItem(storageData[i].name,storageData[i].status);
+        count++;
+      }
     }
+    displayItemsCount(count);
   }
 }
 
 function displayTotalItemsFromStorage(){
   if(selectedStorage === 'localStorage' || selectedStorage === 'sessionStorage'){
     clearDisplayArea();
+    var count = 0;
     for(var i = 0; i < storageData.length; i++){
       displayItem(storageData[i].name,storageData[i].status);
+      count++;
     }
+    displayItemsCount(count);
   }
 }
 
 function displayPendingItemsFromStorage(){
-  clearDisplayArea();
-  for(var i = 0; i < storageData.length; i++){
-    if(storageData[i].status === false){
-      displayItem(storageData[i].name,storageData[i].status);
+    if(selectedStorage === 'localStorage' || selectedStorage === 'sessionStorage'){
+    clearDisplayArea();
+    var count = 0;
+    for(var i = 0; i < storageData.length; i++){
+      if(storageData[i].status === false){
+        displayItem(storageData[i].name,storageData[i].status);
+        count++;
+      }
     }
+    displayItemsCount(count);
   }
+}
+
+function displayItemsCount(count){
+ getAnElementByItsId('myCount').innerHTML = count;
 }

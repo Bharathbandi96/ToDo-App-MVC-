@@ -5,7 +5,6 @@ h1, h2 {
 #name{
   text-align: center;
   position: fixed;
-  
 }
 
 #app{
@@ -15,14 +14,14 @@ h1, h2 {
   box-align: center;
   margin-left:30px;
   border:2px solid gray;
-  width:600px;
+  width:610px;
 }
 
 #myDIV{
   position: fixed;
   padding:0px;
   height:60px;
-  width:585px;
+  width:595px;
   padding-left:2px;
   margin-top: 5px;
   margin-left: 5px;
@@ -39,7 +38,7 @@ h1, h2 {
 #myInput{
   padding-left:5px;
   margin-top: 0px;
-  width:450px;
+  width:465px;
   border-bottom: 2px solid black;
   caret-color: coral;
 }
@@ -80,7 +79,12 @@ input {
   padding: 5px;
 }
 
+#mycount{
+width: 10px;
+}
+
 .allTaskButton,.completedTaskButton,.pendingTaskButton,.selectStorage{
+  position: relative;
   padding:5px;
   width:100px;
   margin-left: 2px;
@@ -109,14 +113,13 @@ ul {
 }
 
 ul li {
-  cursor: pointer;
   position: relative;
   padding: 12px 8px 12px 40px;
   list-style-type: none;
   background: #eee;
   font-size: 18px;
   transition: 0.2s;
-  
+  font-size: 26px;
 }
 
 ul li:nth-child(odd) {
@@ -133,24 +136,21 @@ ul li span.checked + span {
   text-decoration : line-through;
 }
 
-/* ul li{
-  background: rgb(88, 16, 16);
-} */
-
 ul li span.checked::before {
   content: '';
   position: absolute;
   border-color: rgb(0, 0, 0);
   border-style: solid;
   border-width: 0 2px 2px 0;
-  top: 5px;
-  left: 10px;
+  top: 2px;
+  left: 8px;
   transform: rotate(45deg);
   height: 15px;
   width: 7px;
 }
 
 .close {
+  cursor: pointer;
   border-collapse: collapse;
   position: absolute;
   right: 0;
@@ -165,10 +165,12 @@ ul li span.checked::before {
 
 #check {
   position: absolute;
+  cursor: pointer;
   left: 5;
-  top: 7;
-  padding: 15px 15px;
-  background-color: rgba(167, 166, 166, 0.2)
+  top: 12;
+  padding: 12px 12px;
+  background-color: white;
+  border: 2px solid gray;
 }
 
 #check:hover {
