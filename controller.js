@@ -71,19 +71,19 @@ function getItemToBeDisplayedOnEnter() {
     addItemsToStorage();
     displayItem(inputText);
     inputFieldReset();
-    displayItemsCount(storageData.length)
+    displayItemsCount(storageData.length);;
   }
 }
 
 function getItemToBeDisplayedOnAddButton() {
   var inputText = getAnElementByItsId('myInput').value;
   if(inputText !== '' && (selectedStorage === 'localStorage' || selectedStorage === 'sessionStorage')){
-    displayTotalItemsFromStorage()
+    displayTotalItemsFromStorage();
     addItemToAnArray(inputText);
     addItemsToStorage();
     displayItem(inputText);
     inputFieldReset();
-    displayItemsCount(storageData.length)
+    displayItemsCount(storageData.length);
   }
 }
 
@@ -153,7 +153,7 @@ function deleteItemFromList(){
   deleteItemFromAnArray();
   this.parentElement.remove();
   addItemsToStorage();
-  displayItemsCount(storageData.length)
+  displayItemsCount(storageData.length);
 }
 
 function deleteItemFromAnArray(){
