@@ -15,16 +15,17 @@ h1, h2 {
   box-align: center;
   margin-left:30px;
   border:2px solid gray;
-  width:450px;
+  width:600px;
 }
 
 #myDIV{
   position: fixed;
   padding:0px;
   height:60px;
-  width:440px;
+  width:585px;
   padding-left:2px;
   margin-top: 5px;
+  margin-left: 5px;
   background-color: coral
 }
 
@@ -38,8 +39,9 @@ h1, h2 {
 #myInput{
   padding-left:5px;
   margin-top: 0px;
+  width:450px;
   border-bottom: 2px solid black;
-  caret-color: coral
+  caret-color: coral;
 }
 
 input {
@@ -51,11 +53,15 @@ input {
   font-size: 16px;
 }
 
+.itemCount{
+  margin-right: 25px;
+}
+
 .addButton {
   position: relative;
   margin-left:8px;
   padding: 10px;
-  width: 25%;
+  width: 20%;
   background: #d9d9d9;
   color: #555;
   float: left;
@@ -77,6 +83,7 @@ input {
 .allTaskButton,.completedTaskButton,.pendingTaskButton,.selectStorage{
   padding:5px;
   width:100px;
+  margin-left: 2px;
   background: #d9d9d9;
   color: #555;
   text-align: center;
@@ -125,6 +132,10 @@ ul li span.checked + span {
   color: rgb(0, 0, 0);
   text-decoration : line-through;
 }
+
+/* ul li{
+  background: rgb(88, 16, 16);
+} */
 
 ul li span.checked::before {
   content: '';

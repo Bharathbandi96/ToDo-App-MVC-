@@ -10,35 +10,39 @@ var item;
 })();
 
 function attachEventListners(){
-  toGetElementById('addButton').addEventListener('click', displayItemOnAddButton);
-  toGetElementById('myInput').addEventListener('keypress',displayItemOnEnter);
-  toGetElementById('displayArea').addEventListener('click',changeItemCheckState);
-  toGetElementById('completedTaskButton').addEventListener('click', toDisplayCompletedItemsFromSelectedStorage);
-  toGetElementById('allTaskButton').addEventListener('click', toDisplayTotalItemsFromSelectedStorage);
-  toGetElementById('pendingTaskButton').addEventListener('click', toDisplayPendingItemsFromselectedStorage);
+  getAnElementByItsId('addButton').addEventListener('click', getItemToBeDisplayedOnAddButton);
+  getAnElementByItsId('myInput').addEventListener('keypress',getItemToBeDisplayedOnEnter);
+  getAnElementByItsId('displayArea').addEventListener('click',changeItemCheckState);
+  getAnElementByItsId('completedTaskButton').addEventListener('click', displayCompletedItemsFromStorage);
+  getAnElementByItsId('allTaskButton').addEventListener('click', displayTotalItemsFromStorage);
+  getAnElementByItsId('pendingTaskButton').addEventListener('click', displayPendingItemsFromStorage);
 }
 
-function toGetElementById(id){
+function getAnElementByItsId(id){
   return document.getElementById(id);
 }
 
 function displayDefaultMessage(){
   var storageMessage = 'Please select your required storage to store data...';
   if(selectedStorage ==='SelectStorage' || selectedStorage === undefined){
-    toGetElementById('displayArea').innerHTML = storageMessage;
+    getAnElementByItsId('displayArea').innerHTML = storageMessage;
   }
 }
 
 function changeStorageToDisplayData(){
-  selectedStorage = toGetElementById("selectStorage").value;
-  toDisplaySelectedStorageItems();
+  selectedStorage = getAnElementByItsId("selectStorage").value;
+  console.log(selectedStorage);
+  getItemsFromStorageToDisplay();
 }
 
-function toDisplaySelectedStorageItems(){
+function getItemsFromStorageToDisplay(){
   createStorageManagerInstance();
   if(selectedStorage === 'localStorage' || selectedStorage === 'sessionStorage'){
-    renderItemsFromSelectedStorage();
-    displayItem();
+    renderItemsFromStorage();
+    clearDisplayArea();
+    for(var i = 0; i < storageData.length; i++){
+      displayItem(storageData[i].name,storageData[i].status);
+    }
   } else {
     displayDefaultMessage();
   }
@@ -48,72 +52,65 @@ function createStorageManagerInstance(){
   if(selectedStorage === 'localStorage' || selectedStorage === 'sessionStorage'){
     storageManagerInstance = new StorageManager(selectedStorage,'myTodoItems');
   }
+  else{
+    storageManagerInstance = '';
+  }
 }
 
-function renderItemsFromSelectedStorage(){
+function renderItemsFromStorage(){
   storageData = storageManagerInstance.getData();
 }
 
-function displayItem(){
-  toGetElementById('displayArea').innerHTML = '';
-  for(var i = 0; i < storageData.length; i++){
-    display(storageData[i].name,storageData[i].status);
-  }
-}
-
-function displayItemOnEnter() {
+function getItemToBeDisplayedOnEnter() {
   var enterKeyCode = 13;
-  if (event.keyCode === enterKeyCode) {
-    toDisplayTotalItemsFromSelectedStorage()
-    displayItemOnEventPerformed(toGetElementById('myInput').value);
-  }
-}
-
-function displayItemOnAddButton() {
-  toDisplayTotalItemsFromSelectedStorage()
-  displayItemOnEventPerformed(toGetElementById('myInput').value);
-}
-
-function displayItemOnEventPerformed(inputText){
-  if (inputText === '') {
-    alertOnEmptyInputField();
-  } else {
+  var inputText = getAnElementByItsId('myInput').value;
+  if (event.keyCode === enterKeyCode && inputText !== '' && (selectedStorage === ('localStorage' || 'sessionStorage'))) {
+    displayTotalItemsFromStorage();
     addItemToAnArray(inputText);
-    addItemsToSelectedStorage();
-    display(inputText);
+    addItemsToStorage();
+    displayItem(inputText);
     inputFieldReset();
   }
 }
 
-function alertOnEmptyInputField(){
-  alert('You must write something!');
+function getItemToBeDisplayedOnAddButton() {
+  var inputText = getAnElementByItsId('myInput').value;
+  if(inputText !== '' && (selectedStorage === ('localStorage' || 'sessionStorage'))){
+    displayTotalItemsFromStorage()
+    addItemToAnArray(inputText);
+    addItemsToStorage();
+    displayItem(inputText);
+    inputFieldReset();
+  }
 }
 
 function addItemToAnArray(item){
   storageData.push({id:Date.now(),name:item,status:false});
 }
 
-function addItemsToSelectedStorage(){
-  storageManagerInstance.setData(storageData);
+function addItemsToStorage(){
+  if(selectedStorage === 'localStorage' || selectedStorage === 'sessionStorage'){
+    storageManagerInstance.setData(storageData);
+  }
 }
 
 function createCheckButton(li,status){
   var span = document.createElement("SPAN");
   span.id = "check";
-  attachEventListnerToChangeCheckStatus(span);
-  setClassListValue(span,status);
+  attachEventToChangeStatus(span);
+  setClassValueOfAnItem(span,status);
   li.appendChild(span);
 }
 
-function attachEventListnerToChangeCheckStatus(span){
-  span.addEventListener('click',toChangeCheckStatusInStorage);
+function attachEventToChangeStatus(span){
+  span.addEventListener('click',getItemToChangeStatus);
 }
 
-function toChangeCheckStatusInStorage(){
+function getItemToChangeStatus(){
   item = this.nextSibling.textContent;
   var currentItem = storageData.find(findTheCurrentElement);
   setStatusValueInStorage(this.classList.value,storageData.indexOf(currentItem));
-  addItemsToSelectedStorage();
+  addItemsToStorage();
 }
 
 function setStatusValueInStorage(classValue,itemIndex){
@@ -124,7 +121,7 @@ function setStatusValueInStorage(classValue,itemIndex){
   }
 }
 
-function setClassListValue(span,status){
+function setClassValueOfAnItem(span,status){
   if(status === true){
     span.classList = 'checked';
   }
@@ -141,21 +138,21 @@ function createDeleteButton(li){
   span.className = "close";
   span.appendChild(document.createTextNode("\u00D7"));
   li.appendChild(span);
-  attachEventListnerToDeleteItem(span);
+  attachEventToDeleteItem(span);
 }
 
-function attachEventListnerToDeleteItem(span){
+function attachEventToDeleteItem(span){
   span.addEventListener('click',deleteItemFromList);
 }
 
 function deleteItemFromList(){
   item = this.previousSibling.textContent;
-  deleteItemFromSelectedArray();
+  deleteItemFromAnArray();
   this.parentElement.remove();
-  addItemsToSelectedStorage();
+  addItemsToStorage();
 }
 
-function deleteItemFromSelectedArray(){
+function deleteItemFromAnArray(){
   var currentItem = storageData.find(findTheCurrentElement);
   storageData.splice(storageData.indexOf(currentItem),1);
 }
@@ -165,8 +162,8 @@ function findTheCurrentElement(array){
 }
 
 function inputFieldReset(){
-  toGetElementById('myInput').value = "";
-  toGetElementById('myInput').focus();
+  getAnElementByItsId('myInput').value = "";
+  getAnElementByItsId('myInput').focus();
 }
 
 function changeItemCheckState(ev){
@@ -175,27 +172,33 @@ function changeItemCheckState(ev){
   }
 }
 
-function toDisplayCompletedItemsFromSelectedStorage(){
-  toGetElementById('displayArea').innerHTML = '';
+function clearDisplayArea(){
+  getAnElementByItsId('displayArea').innerHTML = '';
+}
+
+function displayCompletedItemsFromStorage(){
+  clearDisplayArea();
   for(var i = 0; i < storageData.length; i++){
     if(storageData[i].status === true){
-      display(storageData[i].name,storageData[i].status);
+      displayItem(storageData[i].name,storageData[i].status);
     }
   }
 }
 
-function toDisplayTotalItemsFromSelectedStorage(){
-  toGetElementById('displayArea').innerHTML = '';
-  for(var i = 0; i < storageData.length; i++){
-    display(storageData[i].name,storageData[i].status);
+function displayTotalItemsFromStorage(){
+  if(selectedStorage === 'localStorage' || selectedStorage === 'sessionStorage'){
+    clearDisplayArea();
+    for(var i = 0; i < storageData.length; i++){
+      displayItem(storageData[i].name,storageData[i].status);
+    }
   }
 }
 
-function toDisplayPendingItemsFromselectedStorage(){
-  toGetElementById('displayArea').innerHTML = '';
+function displayPendingItemsFromStorage(){
+  clearDisplayArea();
   for(var i = 0; i < storageData.length; i++){
     if(storageData[i].status === false){
-      display(storageData[i].name,storageData[i].status);
+      displayItem(storageData[i].name,storageData[i].status);
     }
   }
 }

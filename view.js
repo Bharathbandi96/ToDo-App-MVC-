@@ -1,5 +1,5 @@
 
-function display(item,status){
+function displayItem(item,status){
   var li = document.createElement("li");
   createCheckButton(li,status);
   createTextContent(li,item);
@@ -8,6 +8,6 @@ function display(item,status){
 }
 
 function appendItemToList(item){
-  var displayAreaId = toGetElementById('displayArea');
+  var displayAreaId = getAnElementByItsId('displayArea');
   displayAreaId.appendChild(item);
 }

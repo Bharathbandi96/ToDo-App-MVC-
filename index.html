@@ -1,4 +1,3 @@
-
 <head>
   <link rel="stylesheet" href="style.css">
 </head>
@@ -12,11 +11,12 @@
 
   <ul id="displayArea"></ul>
   <div class='taskButton'>
+    <span class="itemCount" id='itemCount'>Items count:</span>
     <button class="allTaskButton" id='allTaskButton'>All Tasks</button>
     <button class="completedTaskButton" id='completedTaskButton'>Completed</button>
     <button class="pendingTaskButton" id='pendingTaskButton'>Pending</button>
 
-    <select id='selectStorage' onchange="changeDataStorage()">
+    <select id='selectStorage' onchange="changeStorageToDisplayData()">
       <option value="SelectStorage">Select Storage</option>
       <option id="localStorage" value="localStorage">Local Storage</option>
       <option id="selectStorage" value="sessionStorage">Session Storage</option>
