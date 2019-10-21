@@ -31,7 +31,6 @@ function displayDefaultMessage(){
 
 function changeStorageToDisplayData(){
   selectedStorage = getAnElementByItsId("selectStorage").value;
-  console.log(selectedStorage);
   getItemsFromStorageToDisplay();
 }
 
