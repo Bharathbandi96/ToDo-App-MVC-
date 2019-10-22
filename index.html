@@ -1,30 +1,34 @@
-<head>
-  <link rel="stylesheet" href="style.css">
-</head>
+<html>
+  <head>
+    <link rel="stylesheet" href="style.css">
+  </head>
 
-<div id="app">
-  <div id="myDIV" class="header">
-    <h2>My  To-Do  List</h2>
-    <input type="text" id="myInput" placeholder="Add your list items here...">
-    <button id='addButton' type="button" class="addButton" >Add</button>
-  </div>
+  <body>
+    <div id="app">
+      <div id="myDIV" class="header">
+        <h2>My  To-Do  List</h2>
+        <input type="text" id="myInput" placeholder="Add your list items here...">
+        <button id='addButton' type="button" class="addButton" >Add</button>
+      </div>
 
-  <ul id="displayArea"></ul>
-  <div class='taskButton'>
-    <span class="itemCount" id='itemCount'>No. of Item(s) left: <span id="myCount"></span></span>
-    <button class="allTaskButton" id='allTaskButton'>All Tasks</button>
-    <button class="completedTaskButton" id='completedTaskButton'>Completed</button>
-    <button class="pendingTaskButton" id='pendingTaskButton'>Pending</button>
+      <ul id="displayArea"></ul>
+      <div class='taskButton'>
+        <span class="itemCount" id='itemCount'>No. of Item(s) left: <span id="myCount">0</span></span>
+        <button class="allTaskButton" id='allTaskButton'>All Tasks</button>
+        <button class="completedTaskButton" id='completedTaskButton'>Completed</button>
+        <button class="pendingTaskButton" id='pendingTaskButton'>Pending</button>
 
-    <select id='selectStorage' onchange="changeStorageToDisplayData()">
-      <option value="SelectStorage">Select Storage</option>
-      <option id="localStorage" value="localStorage">Local Storage</option>
-      <option id="selectStorage" value="sessionStorage">Session Storage</option>
-    </select>
-  </div>
-</div>
+        <select id='selectStorage' class="selectStorage" onchange="changeStorageToDisplayData()">
+          <option value="SelectStorage">Select Storage</option>
+          <option id="localStorage" value="localStorage">Local Storage</option>
+          <option id="selectStorage" value="sessionStorage">Session Storage</option>
+        </select>
+      </div>
+    </div>
 
-<script src= './model.js'></script>
-<script src = './view.js'></script>
-<script src = './controller.js'></script>
-<script src = './manager.js'></script>
+    <script src= './model.js'></script>
+    <script src = './view.js'></script>
+    <script src = './controller.js'></script>
+    <script src = './manager.js'></script>
+  </body>
+</html>

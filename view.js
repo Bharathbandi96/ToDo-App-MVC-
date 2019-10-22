@@ -11,3 +11,4 @@ function appendItemToList(item){
   var displayAreaId = getAnElementByItsId('displayArea');
   displayAreaId.appendChild(item);
 }
+

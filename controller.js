@@ -1,40 +1,43 @@
 
-var selectedStorage;
-var storageManagerInstance;
 var storageData;
-var item;
 
-(function init(){
-  attachEventListners();
-  displayDefaultMessage();
-})();
-
-function attachEventListners(){
+(function attachEventListners(){
   getAnElementByItsId('addButton').addEventListener('click', getItemToBeDisplayedOnAddButton);
   getAnElementByItsId('myInput').addEventListener('keypress',getItemToBeDisplayedOnEnter);
   getAnElementByItsId('displayArea').addEventListener('click',changeItemCheckState);
   getAnElementByItsId('completedTaskButton').addEventListener('click', displayCompletedItemsFromStorage);
   getAnElementByItsId('allTaskButton').addEventListener('click', displayTotalItemsFromStorage);
   getAnElementByItsId('pendingTaskButton').addEventListener('click', displayPendingItemsFromStorage);
-}
+  getAnElementByItsId('selectStorage').addEventListener('change',getItemsFromStorageToDisplay);
+})();
+
+displayMessageOnInvalidStorage();
 
 function getAnElementByItsId(id){
   return document.getElementById(id);
 }
 
-function displayDefaultMessage(){
+function displayMessageOnInvalidStorage(){
   var storageMessage = 'Please select your required storage to store data...';
+  var selectedStorage = changeStorageToDisplayData();
   if(selectedStorage ==='SelectStorage' || selectedStorage === undefined){
     getAnElementByItsId('displayArea').innerHTML = storageMessage;
   }
 }
 
 function changeStorageToDisplayData(){
-  selectedStorage = getAnElementByItsId("selectStorage").value;
-  getItemsFromStorageToDisplay();
+  return getAnElementByItsId("selectStorage").value;
+}
+
+function displayCountOnInvalidStorage(){
+  var selectedStorage = changeStorageToDisplayData();
+  if(selectedStorage ==='SelectStorage' || selectedStorage === undefined){
+    displayItemsCount(0);
+  }
 }
 
 function getItemsFromStorageToDisplay(){
+  var selectedStorage = changeStorageToDisplayData();
   createStorageManagerInstance();
   if(selectedStorage === 'localStorage' || selectedStorage === 'sessionStorage'){
     renderItemsFromStorage();
@@ -43,26 +46,32 @@ function getItemsFromStorageToDisplay(){
       displayItem(storageData[i].name,storageData[i].status);
     }
   } else {
-    displayDefaultMessage();
+    displayMessageOnInvalidStorage();
   }
   displayItemsCount(storageData.length);
 }
 
+function clearDisplayArea(){
+  getAnElementByItsId('displayArea').innerHTML = '';
+}
+
 function createStorageManagerInstance(){
+  var selectedStorage = changeStorageToDisplayData();
   if(selectedStorage === 'localStorage' || selectedStorage === 'sessionStorage'){
-    storageManagerInstance = new StorageManager(selectedStorage,'myTodoItems');
+    return new StorageManager(selectedStorage,'myTodoItems');
   }
   else{
-    storageManagerInstance = '';
+    return '';
   }
 }
 
 function renderItemsFromStorage(){
-  storageData = storageManagerInstance.getData();
+   storageData = createStorageManagerInstance().getData();
 }
 
 function getItemToBeDisplayedOnEnter() {
   var enterKeyCode = 13;
+  var selectedStorage = changeStorageToDisplayData();
   var inputText = getAnElementByItsId('myInput').value;
   if (event.keyCode === enterKeyCode && inputText !== '' && (selectedStorage === 'localStorage'|| selectedStorage === 'sessionStorage')) {
     displayTotalItemsFromStorage();
@@ -75,6 +84,7 @@ function getItemToBeDisplayedOnEnter() {
 }
 
 function getItemToBeDisplayedOnAddButton() {
+  var selectedStorage = changeStorageToDisplayData();  
   var inputText = getAnElementByItsId('myInput').value;
   if(inputText !== '' && (selectedStorage === 'localStorage' || selectedStorage === 'sessionStorage')){
     displayTotalItemsFromStorage();
@@ -91,8 +101,9 @@ function addItemToAnArray(item){
 }
 
 function addItemsToStorage(){
+  var selectedStorage = changeStorageToDisplayData();
   if(selectedStorage === 'localStorage' || selectedStorage === 'sessionStorage'){
-    storageManagerInstance.setData(storageData);
+    createStorageManagerInstance().setData(storageData);
   }
 }
 
@@ -109,8 +120,10 @@ function attachEventToChangeStatus(span){
 }
 
 function getItemToChangeStatus(){
-  item = this.nextSibling.textContent;
-  var currentItem = storageData.find(findTheCurrentElement);
+  var item = this.nextSibling.textContent;
+  var currentItem = storageData.find(function(array){
+    return array.name === item;
+  });
   setStatusValueInStorage(this.classList.value,storageData.indexOf(currentItem));
   addItemsToStorage();
 }
@@ -148,20 +161,18 @@ function attachEventToDeleteItem(span){
 }
 
 function deleteItemFromList(){
-  item = this.previousSibling.textContent;
-  deleteItemFromAnArray();
+  var item = this.previousSibling.textContent;
+  deleteItemFromAnArray(item);
   this.parentElement.remove();
   addItemsToStorage();
   displayItemsCount(storageData.length);
 }
 
-function deleteItemFromAnArray(){
-  var currentItem = storageData.find(findTheCurrentElement);
+function deleteItemFromAnArray(item){
+  var currentItem = storageData.find(function(array){
+    return array.name === item;
+  });
   storageData.splice(storageData.indexOf(currentItem),1);
-}
-
-function findTheCurrentElement(array){
-  return array.name === item;
 }
 
 function inputFieldReset(){
@@ -175,11 +186,8 @@ function changeItemCheckState(ev){
   }
 }
 
-function clearDisplayArea(){
-  getAnElementByItsId('displayArea').innerHTML = '';
-}
-
 function displayCompletedItemsFromStorage(){
+  var selectedStorage = changeStorageToDisplayData();
   if(selectedStorage === 'localStorage' || selectedStorage === 'sessionStorage'){
     var count = 0;
     clearDisplayArea();
@@ -194,6 +202,7 @@ function displayCompletedItemsFromStorage(){
 }
 
 function displayTotalItemsFromStorage(){
+  var selectedStorage = changeStorageToDisplayData();
   if(selectedStorage === 'localStorage' || selectedStorage === 'sessionStorage'){
     clearDisplayArea();
     var count = 0;
@@ -206,6 +215,7 @@ function displayTotalItemsFromStorage(){
 }
 
 function displayPendingItemsFromStorage(){
+  var selectedStorage = changeStorageToDisplayData();
     if(selectedStorage === 'localStorage' || selectedStorage === 'sessionStorage'){
     clearDisplayArea();
     var count = 0;
