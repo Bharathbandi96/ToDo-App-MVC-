@@ -1,10 +1,8 @@
 
 function displayItem(item,status){
-  var li = document.createElement("li");
-  createCheckButton(li,status);
-  createTextContent(li,item);
-  createDeleteButton(li);
-  appendItemToList(li);
+  this.item = item;
+  this.status = status;
+  this.createItem = function(){ createAnItem(this.item,this.status); }
 }
 
 function appendItemToList(item){

@@ -67,16 +67,16 @@ input {
   margin-left:8px;
   padding: 10px;
   width: 20%;
-  background: #d9d9d9;
-  color: #555;
+  background: #999;
+  color: #000;
   float: left;
   text-align: center;
   font-size: 16px;
 }
 
-.addButton:hover {
+/* .addButton:hover {
   background-color: #bbb;
-}
+} */
 
 .taskButton{
   position: fixed;
@@ -94,8 +94,8 @@ width: 10px;
   padding:5px;
   width:100px;
   margin-left: 0%;
-  background: #d9d9d9;
-  color: #555;
+  background: #bdbcbc;
+  color: #000;
   text-align: center;
   font-size: 16px;
 }
@@ -105,8 +105,8 @@ width: 10px;
   padding:5px;
   width:100px;
   margin-left: 105px;
-  background: #d9d9d9;
-  color: #555;
+  background: #bdbcbc;
+  color: #000;
   text-align: center;
   font-size: 16px;
 }
@@ -116,8 +116,8 @@ width: 10px;
   padding:5px;
   width:100px;
   margin-left: 210;
-  background: #d9d9d9;
-  color: #555;
+  background: #bdbcbc;
+  color: #000;
   text-align: center;
   font-size: 16px;
 }
@@ -127,12 +127,19 @@ width: 10px;
   padding:5px;
   width:140px;
   margin-left: 315px;;
-  /* background: #d9d9d9; */
-  /* color: #555; */
   text-align: center;
   font-size: 16px;
 }
 
+button:hover{
+  background-color: rgb(148, 143, 143);
+  color:black;
+}
+
+.pendingTaskButton:focus,.allTaskButton:focus,.completedTaskButton:focus{
+  background: gray;
+  color:white
+}
 #toDoList{
   float:left;
 }

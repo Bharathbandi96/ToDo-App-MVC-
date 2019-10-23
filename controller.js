@@ -3,24 +3,23 @@ displayMessageOnInvalidStorage();
 attachEventListners();
 
 function attachEventListners(){
-  getAnElementByItsId('addButton').addEventListener('click', getItemToBeDisplayedOnAddButton);
-  getAnElementByItsId('myInput').addEventListener('keypress',getItemToBeDisplayedOnEnter);
+  var buttonsIds = document.getElementsByTagName('button');
+  buttonsIds[0].addEventListener('click', getItemOnAddButtonClick);
+  buttonsIds[2].addEventListener('click', getCompletedItems);
+  buttonsIds[1].addEventListener('click', getAllItems);
+  buttonsIds[3].addEventListener('click', getPendingItems);
+  getAnElementByItsId('myInput').addEventListener('keypress',getItemOnEnter);
   getAnElementByItsId('displayArea').addEventListener('click',changeItemCheckState);
-  getAnElementByItsId('completedTaskButton').addEventListener('click', displayCompletedItemsFromStorage);
-  getAnElementByItsId('allTaskButton').addEventListener('click', displayTotalItemsFromStorage);
-  getAnElementByItsId('pendingTaskButton').addEventListener('click', displayPendingItemsFromStorage);
-  getAnElementByItsId('selectStorage').addEventListener('change',getItemsFromStorageToDisplay);
+  getAnElementByItsId('selectStorage').addEventListener('change',getStorageItems);
 }
 
 function getAnElementByItsId(id){
-  this.id = id;
-  return document.getElementById(this.id);
+  return document.getElementById(id);
 }
 
-function displayMessageOnInvalidStorage(){
+function displayMessageOnInvalidStorage(selectedStorage){
   var storageMessage = 'Please select your required storage to store data...';
-  var selectedStorage = getStorageType();
-  if(selectedStorage ==='SelectStorage'){
+  if(selectedStorage ==='SelectStorage'||'undefined'){
     getAnElementByItsId('displayArea').innerHTML = storageMessage;
   }
 }
@@ -29,27 +28,28 @@ function getStorageType(){
   return getAnElementByItsId("selectStorage").value;
 }
 
-function getItemsFromStorageToDisplay(){
-  var selectedStorage = getStorageType();
+function getStorageItems(){
+  this.selectedStorage = getStorageType();
   createStorageManagerInstance();
-  if(selectedStorage === 'localStorage' || selectedStorage === 'sessionStorage'){
+  if(this.selectedStorage === 'localStorage' || this.selectedStorage === 'sessionStorage'){
     var storageData = getItemsFromStorage();
-    clearDisplayArea();
-    for(var i = 0; i < storageData.length; i++){
-      displayItem(storageData[i].name,storageData[i].status);
-    }
-  displayItemsCount(storageData.length);
+    renderStorageItems(storageData);
   } else {
-    displayMessageOnInvalidStorage();
-    displayCountOnInvalidStorage();
+    displayMessageOnInvalidStorage(this.selectedStorage);
+    displayItemsCount(0);
   }
 }
 
-function displayCountOnInvalidStorage(){
-  var selectedStorage = getStorageType();
-  if(selectedStorage ==='SelectStorage'){
-    displayItemsCount(0);
+function renderStorageItems(storageData){
+  clearDisplayArea(getAnElementByItsId('displayArea'));
+  for(var i = 0; i < storageData.length; i++){
+    createDisplayItemInstance(storageData[i].name,storageData[i].status);
   }
+  displayItemsCount(storageData.length);
+}
+
+function createDisplayItemInstance(item,status){
+  return new displayItem(item,status).createItem();
 }
 
 function createStorageManagerInstance(){
@@ -66,30 +66,34 @@ function getItemsFromStorage(){
    return createStorageManagerInstance().getData();
   }
 
-function clearDisplayArea(){
-  return new getAnElementByItsId('displayArea');
+function clearDisplayArea(displayAreaId){
+  displayAreaId.innerHTML = '';
 }
 
-function getItemToBeDisplayedOnEnter() {
+function getItemOnEnter() {
   var enterKeyCode = 13;
-  var selectedStorage = getStorageType();
   var inputText = getAnElementByItsId('myInput');
-  if (event.keyCode === enterKeyCode && inputText.value !== '' && (selectedStorage === 'localStorage'|| selectedStorage === 'sessionStorage')) {
-    displayTotalItemsFromStorage();
-    addItemToAnArray(inputText.value);
-    displayItem(inputText.value);
-    inputFieldReset(inputText);
-    displayItemsCount(getItemsFromStorage().length);;
+  // var required = {
+  //   enterKeyCode : 13,
+  //   inputText : function(){getAnElementByItsId('myInput')},
+  //   selectedStorage : function (){getStorageType()}
+  // }
+  if (event.keyCode === enterKeyCode){
+  displayTask(inputText);
   }
 }
 
-function getItemToBeDisplayedOnAddButton() {
-  var selectedStorage = getStorageType();  
+function getItemOnAddButtonClick() {
   var inputText = getAnElementByItsId('myInput');
+  displayTask(inputText);
+}
+
+function displayTask(inputText){
+  var selectedStorage = getStorageType();  
   if(inputText.value !== '' && (selectedStorage === 'localStorage' || selectedStorage === 'sessionStorage')){
-    displayTotalItemsFromStorage();
+    getAllItems();
     addItemToAnArray(inputText.value);
-    displayItem(inputText.value);
+    createDisplayItemInstance(inputText.value);
     inputFieldReset(inputText);
     displayItemsCount(getItemsFromStorage().length);
   }
@@ -108,15 +112,23 @@ function addItemsToStorage(storageData){
   }
 }
 
+function createAnItem(item,status){
+  var li = document.createElement("li");
+  createCheckButton(li,status);
+  createTextContent(li,item);
+  createDeleteButton(li);
+  appendItemToList(li);
+}
+
 function createCheckButton(li,status){
   var span = document.createElement("SPAN");
   span.id = "check";
-  attachEventToChangeStatus(span);
-  setClassValueOfAnItem(span,status);
+  attachEventToCheckButton(span);
+  setClassValue(span,status);
   li.appendChild(span);
 }
 
-function attachEventToChangeStatus(span){
+function attachEventToCheckButton(span){
   span.addEventListener('click',getItemToChangeStatus);
 }
 
@@ -126,16 +138,16 @@ function getItemToChangeStatus(){
   var currentItem = storageData.find(function(array){
     return array.name === item;
   });
-  setStatusValueInStorage(this.classList.value,storageData.indexOf(currentItem));
+  setStatusValue(this.classList.value,storageData.indexOf(currentItem));
 }
 
-function setStatusValueInStorage(classValue,itemIndex){
+function setStatusValue(classValue,itemIndex){
   var storageData = getItemsFromStorage();
   (classValue === '') ? storageData[itemIndex].status = true : storageData[itemIndex].status = false;
   addItemsToStorage(storageData);
 }
 
-function setClassValueOfAnItem(span,status){
+function setClassValue(span,status){
   if(status === true){
     span.classList = 'checked';
   }
@@ -161,8 +173,8 @@ function attachEventToDeleteItem(span){
 
 function deleteItemFromList(){
   var item = this.previousSibling.textContent;
-  deleteItemFromAnArray(item);
   this.parentElement.remove();
+  deleteItemFromAnArray(item);
   displayItemsCount(getItemsFromStorage().length);
 }
 
@@ -175,7 +187,14 @@ function deleteItemFromAnArray(item){
   addItemsToStorage(storageData);
 }
 
+// function inputFieldReset(inputText){
+//   this.inputText = inputText;
+//   this.inputText.value = '';
+//   this.inputText.focus();
+// }
+
 function inputFieldReset(inputText){
+  var a = {}
   inputText.value = '';
   inputText.focus();
 }
@@ -186,50 +205,40 @@ function changeItemCheckState(ev){
   }
 }
 
-function displayCompletedItemsFromStorage(){
+function getAllItems(){
   var selectedStorage = getStorageType();
   if(selectedStorage === 'localStorage' || selectedStorage === 'sessionStorage'){
-  var storageData = getItemsFromStorage();
-    var count = 0;
-    clearDisplayArea();
-    for(var i = 0; i < storageData.length; i++){
-      if(storageData[i].status === true){
-        displayItem(storageData[i].name,storageData[i].status);
-        count++;
-      }
-    }
-    displayItemsCount(count);
+    var storageData = getItemsFromStorage();
+    renderStorageItems(storageData);
   }
 }
 
-function displayTotalItemsFromStorage(){
+function getCompletedItems(){
   var selectedStorage = getStorageType();
   if(selectedStorage === 'localStorage' || selectedStorage === 'sessionStorage'){
-  var storageData = getItemsFromStorage();
-    clearDisplayArea();
-    var count = 0;
-    for(var i = 0; i < storageData.length; i++){
-      displayItem(storageData[i].name,storageData[i].status);
+    var storageData = getItemsFromStorage();
+    renderItemsOnStatus(storageData,true);
+  }
+}
+
+function getPendingItems(){
+  var selectedStorage = getStorageType();
+  if(selectedStorage === 'localStorage' || selectedStorage === 'sessionStorage'){
+    var storageData = getItemsFromStorage();
+    renderItemsOnStatus(storageData,false);
+  }
+}
+
+function renderItemsOnStatus(storageData,itemStatus){
+  clearDisplayArea(getAnElementByItsId('displayArea'));
+  var count = 0;
+  for(var i = 0; i < storageData.length; i++){
+    if(storageData[i].status === itemStatus){
+      createDisplayItemInstance(storageData[i].name,storageData[i].status);
       count++;
     }
-    displayItemsCount(count);
   }
-}
-
-function displayPendingItemsFromStorage(){
-  var selectedStorage = getStorageType();
-    if(selectedStorage === 'localStorage' || selectedStorage === 'sessionStorage'){
-      var storageData = getItemsFromStorage();
-    clearDisplayArea();
-    var count = 0;
-    for(var i = 0; i < storageData.length; i++){
-      if(storageData[i].status === false){
-        displayItem(storageData[i].name,storageData[i].status);
-        count++;
-      }
-    }
-    displayItemsCount(count);
-  }
+  displayItemsCount(count);
 }
 
 function displayItemsCount(count){
