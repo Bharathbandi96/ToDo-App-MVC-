@@ -1,64 +1,103 @@
 
-displayMessageOnInvalidStorage();
+invalidStorageMessage();
 attachEventListners();
 createAddTaskButton();
+createAllTaskButton();
+createCompletedTaskButton();
+createPendingTaskButton();
 
 function attachEventListners(){
-  // getAnElementByItsId('addButton').addEventListener('click', getItemOnAddButtonClick);
-  getAnElementByItsId('completedTaskButton').addEventListener('click', getCompletedItems);
-  getAnElementByItsId('allTaskButton').addEventListener('click', getAllItems);
-  getAnElementByItsId('pendingTaskButton').addEventListener('click', getPendingItems);
-  getAnElementByItsId('myInput').addEventListener('keypress',getItemOnEnter);
-  getAnElementByItsId('displayArea').addEventListener('click',changeItemCheckState);
-  getAnElementByItsId('selectStorage').addEventListener('change',getStorageItems);
+  document.getElementById('myInput').addEventListener('keypress',getItemOnEnter);
+  document.getElementById('selectStorage').addEventListener('change',getStorageItems);
 }
 
 function createAddTaskButton(){
- var myDiv = document.getElementById('myDiv');
- var button = document.createElement("BUTTON")
+ var button = document.createElement("BUTTON");
  button.id = 'addButton';
  button.appendChild(document.createTextNode("Add"));
- myDiv.appendChild(button);
+ appendAddButton(button);
  attachEventToAddButton(button);
 }
 
+//addButtonEvent
 function attachEventToAddButton(button){
   button.addEventListener('click', getItemOnAddButtonClick);
 }
 
 function createAllTaskButton(){
-  
+  var button = document.createElement("BUTTON");
+  button.id = 'allTaskButton';
+  button.appendChild(document.createTextNode("All Tasks"));
+  appendTaskButtons(button);
+  attachEventToAllTaskButton(button);
 }
 
-function getAnElementByItsId(id){
-  return document.getElementById(id);
+//AllTaskButtonEvent
+function attachEventToAllTaskButton(button){
+  button.addEventListener('click', getAllItems);
 }
 
-function displayMessageOnInvalidStorage(selectedStorage){
+function createCompletedTaskButton(){
+  var button = document.createElement("BUTTON");
+  button.id = 'completedTaskButton';
+  button.appendChild(document.createTextNode("Completed"));
+  appendTaskButtons(button);
+  attachEventToCompletedTaskButton(button);
+}
+
+//completedButtonEvent
+function attachEventToCompletedTaskButton(button){
+  button.addEventListener('click', getCompletedItems);
+}
+
+function createPendingTaskButton(){
+  var button = document.createElement("BUTTON");
+  button.id = 'pendingTaskButton';
+  button.appendChild(document.createTextNode("Pending"));
+  appendTaskButtons(button);
+  attachEventToPendingTaskButton(button);
+}
+
+//pendingButtonEvent 
+function attachEventToPendingTaskButton(button){
+  button.addEventListener('click', getPendingItems);
+}
+
+//showInvalidStorageMessage
+function invalidStorageMessage(selectedStorage){
   var storageMessage = 'Please select your required storage to store data...';
   if(selectedStorage ==='SelectStorage'||'undefined'){
-    getAnElementByItsId('displayArea').innerHTML = storageMessage;
+    document.getElementById('displayArea').innerHTML = storageMessage;
   }
 }
 
 function getStorageType(){
-  return getAnElementByItsId("selectStorage").value;
+  return document.getElementById("selectStorage").value;
 }
 
 function getStorageItems(){
-  this.selectedStorage = getStorageType();
-  createStorageManagerInstance();
-  if(this.selectedStorage === 'localStorage' || this.selectedStorage === 'sessionStorage'){
+  var selectedStorage = getStorageType();
+  // createStorageManagerInstance();
+  if(selectedStorage === 'localStorage' || selectedStorage === 'sessionStorage'){
     var storageData = getItemsFromStorage();
-    renderStorageItems(storageData);
+    createRenderStorageItemsInstance(storageData).renderItems();
   } else {
-    displayMessageOnInvalidStorage(this.selectedStorage);
+    invalidStorageMessage(selectedStorage);
     displayItemsCount(0);
   }
 }
 
-function renderStorageItems(storageData){
-  clearDisplayArea(getAnElementByItsId('displayArea'));
+function createRenderStorageItemsInstance(storageData){
+  return new RenderStorageItems(storageData);
+}
+
+function RenderStorageItems(storageData){
+  this.storageData = storageData;
+  this.renderItems = function(){renderStorageData(this.storageData)}
+}
+
+function renderStorageData(storageData){
+  clearDisplayArea(document.getElementById('displayArea'));
   for(var i = 0; i < storageData.length; i++){
     createDisplayItemInstance(storageData[i].name,storageData[i].status);
   }
@@ -66,7 +105,7 @@ function renderStorageItems(storageData){
 }
 
 function createDisplayItemInstance(item,status){
-  return new displayItem(item,status).createItem();
+  return new DisplayItem(item,status).createItem();
 }
 
 function createStorageManagerInstance(){
@@ -89,22 +128,18 @@ function clearDisplayArea(displayAreaId){
 
 function getItemOnEnter() {
   var enterKeyCode = 13;
-  var inputText = getAnElementByItsId('myInput');
-  // var required = {
-  //   enterKeyCode : 13,
-  //   inputText : function(){getAnElementByItsId('myInput')},
-  //   selectedStorage : function (){getStorageType()}
-  // }
+  var inputText = document.getElementById('myInput');
   if (event.keyCode === enterKeyCode){
   displayTask(inputText);
   }
 }
 
 function getItemOnAddButtonClick() {
-  var inputText = getAnElementByItsId('myInput');
+  var inputText = document.getElementById('myInput');
   displayTask(inputText);
 }
 
+//tasksToPerform
 function displayTask(inputText){
   var selectedStorage = getStorageType();  
   if(inputText.value !== '' && (selectedStorage === 'localStorage' || selectedStorage === 'sessionStorage')){
@@ -152,6 +187,7 @@ function attachEventToCheckButton(span){
 function getItemToChangeStatus(){
   var storageData = getItemsFromStorage();
   var item = this.nextSibling.textContent;
+  this.classList.toggle('checked')
   var currentItem = storageData.find(function(array){
     return array.name === item;
   });
@@ -160,7 +196,7 @@ function getItemToChangeStatus(){
 
 function setStatusValue(classValue,itemIndex){
   var storageData = getItemsFromStorage();
-  (classValue === '') ? storageData[itemIndex].status = true : storageData[itemIndex].status = false;
+  (classValue === '') ? storageData[itemIndex].status = false : storageData[itemIndex].status = true;
   addItemsToStorage(storageData);
 }
 
@@ -204,29 +240,16 @@ function deleteItemFromAnArray(item){
   addItemsToStorage(storageData);
 }
 
-// function inputFieldReset(inputText){
-//   this.inputText = inputText;
-//   this.inputText.value = '';
-//   this.inputText.focus();
-// }
-
 function inputFieldReset(inputText){
-  var a = {}
   inputText.value = '';
   inputText.focus();
-}
-
-function changeItemCheckState(ev){
-  if (ev.target.id === 'check'){
-    ev.target.classList.toggle('checked');
-  }
 }
 
 function getAllItems(){
   var selectedStorage = getStorageType();
   if(selectedStorage === 'localStorage' || selectedStorage === 'sessionStorage'){
     var storageData = getItemsFromStorage();
-    renderStorageItems(storageData);
+    createRenderStorageItemsInstance(storageData).renderItems();
   }
 }
 
@@ -234,7 +257,7 @@ function getCompletedItems(){
   var selectedStorage = getStorageType();
   if(selectedStorage === 'localStorage' || selectedStorage === 'sessionStorage'){
     var storageData = getItemsFromStorage();
-    renderItemsOnStatus(storageData,true);
+    createGetItemStatusInstance(storageData,true).renderItems();
   }
 }
 
@@ -242,12 +265,22 @@ function getPendingItems(){
   var selectedStorage = getStorageType();
   if(selectedStorage === 'localStorage' || selectedStorage === 'sessionStorage'){
     var storageData = getItemsFromStorage();
-    renderItemsOnStatus(storageData,false);
+    createGetItemStatusInstance(storageData,false).renderItems();
   }
 }
 
-function renderItemsOnStatus(storageData,itemStatus){
-  clearDisplayArea(getAnElementByItsId('displayArea'));
+function createGetItemStatusInstance(storageData,itemStatus){
+  return new GetItemStatus(storageData,itemStatus);
+}
+
+function GetItemStatus(storageData,itemStatus){
+  this.storageData = storageData;
+  this.itemStatus = itemStatus;
+  this.renderItems = function(){renderItems(this.storageData,this.itemStatus);}
+}
+
+function renderItems(storageData,itemStatus){
+  clearDisplayArea(document.getElementById('displayArea'));
   var count = 0;
   for(var i = 0; i < storageData.length; i++){
     if(storageData[i].status === itemStatus){
@@ -259,5 +292,5 @@ function renderItemsOnStatus(storageData,itemStatus){
 }
 
 function displayItemsCount(count){
- getAnElementByItsId('myCount').innerHTML = count;
+  document.getElementById('myCount').innerHTML = count;
 }

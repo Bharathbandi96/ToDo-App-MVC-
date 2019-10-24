@@ -5,19 +5,14 @@
 
   <body>
     <div id="app">
-      <div id="myDiv" class="header">
+      <div id="header" class="header">
         <h2>My  To-Do  List</h2>
         <input type="text" id="myInput" placeholder="Add your list items here..." />
-        <!-- <button id='addButton' type="button">Add</button> -->
       </div>
 
       <ul id="displayArea"></ul>
-      <div class='taskButton'>
+      <div id='footer'>
         <span class="itemCount" id='itemCount'>No. of Item(s) left: <span id="myCount">0</span></span>
-        <button id='allTaskButton'>All Tasks</button>
-        <button id='completedTaskButton'>Completed</button>
-        <button id='pendingTaskButton'>Pending</button>
-
         <select id='selectStorage' class="selectStorage">
           <option value="SelectStorage">Select Storage</option>
           <option id="localStorage" value="localStorage">Local Storage</option>

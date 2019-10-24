@@ -18,7 +18,7 @@
   font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
 }
 
-#myDiv{
+#header{
   position: fixed;
   padding:0px;
   height:60px;
@@ -78,7 +78,7 @@ input {
   background-color: #bbb;
 } */
 
-.taskButton{
+#footer{
   position: fixed;
   top: 487px;
   float:left;
