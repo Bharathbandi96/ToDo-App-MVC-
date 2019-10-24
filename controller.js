@@ -1,16 +1,33 @@
 
 displayMessageOnInvalidStorage();
 attachEventListners();
+createAddTaskButton();
 
 function attachEventListners(){
-  var buttonsIds = document.getElementsByTagName('button');
-  buttonsIds[0].addEventListener('click', getItemOnAddButtonClick);
-  buttonsIds[2].addEventListener('click', getCompletedItems);
-  buttonsIds[1].addEventListener('click', getAllItems);
-  buttonsIds[3].addEventListener('click', getPendingItems);
+  // getAnElementByItsId('addButton').addEventListener('click', getItemOnAddButtonClick);
+  getAnElementByItsId('completedTaskButton').addEventListener('click', getCompletedItems);
+  getAnElementByItsId('allTaskButton').addEventListener('click', getAllItems);
+  getAnElementByItsId('pendingTaskButton').addEventListener('click', getPendingItems);
   getAnElementByItsId('myInput').addEventListener('keypress',getItemOnEnter);
   getAnElementByItsId('displayArea').addEventListener('click',changeItemCheckState);
   getAnElementByItsId('selectStorage').addEventListener('change',getStorageItems);
+}
+
+function createAddTaskButton(){
+ var myDiv = document.getElementById('myDiv');
+ var button = document.createElement("BUTTON")
+ button.id = 'addButton';
+ button.appendChild(document.createTextNode("Add"));
+ myDiv.appendChild(button);
+ attachEventToAddButton(button);
+}
+
+function attachEventToAddButton(button){
+  button.addEventListener('click', getItemOnAddButtonClick);
+}
+
+function createAllTaskButton(){
+  
 }
 
 function getAnElementByItsId(id){

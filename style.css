@@ -18,7 +18,7 @@
   font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
 }
 
-#myDIV{
+#myDiv{
   position: fixed;
   padding:0px;
   height:60px;
@@ -62,7 +62,7 @@ input {
   font-size: 16px;
 }
 
-.addButton {
+#addButton {
   position: relative;
   margin-left:8px;
   padding: 10px;
@@ -89,7 +89,7 @@ input {
 width: 10px;
 }
 
-.allTaskButton{
+#allTaskButton{
   position: absolute;
   padding:5px;
   width:100px;
@@ -100,7 +100,7 @@ width: 10px;
   font-size: 16px;
 }
 
-.completedTaskButton{
+#completedTaskButton{
   position: absolute;
   padding:5px;
   width:100px;
@@ -111,7 +111,7 @@ width: 10px;
   font-size: 16px;
 }
 
-.pendingTaskButton{
+#pendingTaskButton{
   position: absolute;
   padding:5px;
   width:100px;
@@ -122,7 +122,7 @@ width: 10px;
   font-size: 16px;
 }
 
-.selectStorage{
+#selectStorage{
   position: absolute;
   padding:5px;
   width:140px;
@@ -136,7 +136,7 @@ button:hover{
   color:black;
 }
 
-.pendingTaskButton:focus,.allTaskButton:focus,.completedTaskButton:focus{
+#pendingTaskButton:focus,#allTaskButton:focus,#completedTaskButton:focus{
   background: gray;
   color:white
 }
