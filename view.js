@@ -1,20 +1,45 @@
-  function DisplayItem(item,status){
-    this.item = item;
-    this.status = status;
-    this.createItem = function(){ createAnItem(this.item,this.status); }
-  }
 
-  function appendItemToList(item){
-    var displayAreaId = document.getElementById('displayArea');
-    displayAreaId.appendChild(item);
-  }
+function DisplayItem(id,item,status){
+  this.id = id;
+  this.item = item;
+  this.status = status;
+  this.createItem = function(){ createAnItem(this.id,this.item,this.status); }
+}
 
-  function appendAddButton(button){
-    var headerId = document.getElementById('header');
-    headerId.appendChild(button);
-  }
+function appendItemToList(item){
+  var displayAreaId = document.getElementById('displayArea');
+  displayAreaId.appendChild(item);
+}
 
-  function appendTaskButtons(button){
-    var footerId = document.getElementById('footer');
-    footerId.appendChild(button);
-  }
+function appendAddButton(button){
+  var headerId = document.getElementById('header');
+  headerId.appendChild(button);
+}
+
+function appendTaskButtons(button){
+  var footerId = document.getElementById('footer');
+  footerId.appendChild(button);
+}
+
+// var display = {
+//   DisplayItem : function(item,status){
+//     this.item = item;
+//     this.status = status;
+//     this.createItem = function(){ createAnItem(this.item,this.status); }
+//   },
+
+//   appendItemToList : function(item){
+//     var displayAreaId = document.getElementById('displayArea');
+//     displayAreaId.appendChild(item);
+//   },
+
+//   appendAddButton : function(button){
+//     var headerId = document.getElementById('header');
+//     headerId.appendChild(button);
+//   },
+
+//   appendTaskButtons : function(button){
+//     var footerId = document.getElementById('footer');
+//     footerId.appendChild(button);
+//   }
+// }
