@@ -1,13 +1,4 @@
 
-function createViewInstance(){
-  return new View();
-}
-
-createViewInstance().createAddTaskButton();
-createViewInstance().createAllTaskButton();
-createViewInstance().createCompletedTaskButton();
-createViewInstance().createPendingTaskButton();
-
 function View(){
 
   var self = this;
@@ -22,11 +13,11 @@ function View(){
   }
 
   this.createCheckButton = function(li,status){
-    var checkButton = document.createElement("SPAN");
-    checkButton.id = "check";
-    createControllerInstance().setItemClassValue(checkButton,status);
-    createControllerInstance().attachEventToCheckButton(checkButton);
-    li.appendChild(checkButton);
+    var checkBox = document.createElement("SPAN");
+    checkBox.id = "check";
+    controllerInstance.setItemClassValue(checkBox,status);
+    controllerInstance.attachEventToButton(checkBox,controllerInstance.setItemStatus);
+    li.appendChild(checkBox);
   }
 
   this.createTextContent = function(li,item){
@@ -40,7 +31,7 @@ function View(){
     deleteButton.className = "close";
     deleteButton.appendChild(document.createTextNode("\u00D7"));
     li.appendChild(deleteButton);
-    createControllerInstance().attachEventToDeleteButton(deleteButton);
+    controllerInstance.attachEventToButton(deleteButton,controllerInstance.deleteItemFromList);
   }
 
   this.appendItemToList = function(item){
@@ -63,7 +54,7 @@ function View(){
     button.id = 'addButton';
     button.appendChild(document.createTextNode("Add"));
     self.appendAddButton(button);
-    createControllerInstance().attachEventToAddTaskButton(button);
+    controllerInstance.attachEventToButton(button,controllerInstance.getItemOnAddClick);
   }
 
   this.createAllTaskButton = function(){
@@ -71,7 +62,7 @@ function View(){
     button.id = 'allTaskButton';
     button.appendChild(document.createTextNode("All Tasks"));
     self.appendTaskButtons(button);
-    createControllerInstance().attachEventToAllTaskButton(button);
+    controllerInstance.attachEventToButton(button,controllerInstance.onAllTasksClick);
   }
 
   this.createCompletedTaskButton = function(){
@@ -79,7 +70,7 @@ function View(){
     button.id = 'completedTaskButton';
     button.appendChild(document.createTextNode("Completed"));
     self.appendTaskButtons(button);
-    createControllerInstance().attachEventToCompletedTaskButton(button);
+    controllerInstance.attachEventToButton(button,controllerInstance.onCompletedClick);
   }
 
   this.createPendingTaskButton = function(){
@@ -87,7 +78,18 @@ function View(){
     button.id = 'pendingTaskButton';
     button.appendChild(document.createTextNode("Pending"));
     self.appendTaskButtons(button);
-    createControllerInstance().attachEventToPendingTaskButton(button);
+    controllerInstance.attachEventToButton(button,controllerInstance.onPendingClick);
   }
 }
 
+
+function createViewInstance(){
+  return new View();
+}
+
+(function(){
+  createViewInstance().createAddTaskButton();
+  createViewInstance().createAllTaskButton();
+  createViewInstance().createCompletedTaskButton();
+  createViewInstance().createPendingTaskButton();
+})();

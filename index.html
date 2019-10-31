@@ -5,19 +5,19 @@
 
   <body>
     <div id="app">
-      <div id="header" class="header">
+      <div id="header">
         <h2>My  To-Do  List</h2>
-        <input type="text" id="myInput" placeholder="Add your list items here..." />
+        <input type="text" id="myInputField" placeholder="Add your list items here..." />
       </div>
 
       <ul id="displayArea"></ul>
       <div id='footer'>
-        <span class="itemCount" id='itemCount'>No. of Item(s) left: <span id="myCount">0</span></span>
+        <span id='itemCount'>No. of Item(s) left: <span id="myCount">0</span></span>
 
-        <select id='selectStorage' class="selectStorage">
+        <select id='selectStorage'>
           <option value="SelectStorage">Select Storage</option>
-          <option id="localStorage" value="localStorage">Local Storage</option>
-          <option id="selectStorage" value="sessionStorage">Session Storage</option>
+          <option value="localStorage">Local Storage</option>
+          <option value="sessionStorage">Session Storage</option>
         </select>
       </div>
     </div>
