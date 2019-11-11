@@ -36,7 +36,7 @@
   padding:2px;
 }
 
-#myInputField{
+#taskInputField{
   padding-left:5px;
   margin-top: 0px;
   width:475px;
@@ -53,9 +53,10 @@ input {
   font-size: 16px;
 }
 
-#itemCount{
-  position: relative;
-  margin-right: 8px;
+#countMessage{
+  position: absolute;
+  margin-left: 5px;
+  margin-top: 5px;
   width: 150px;;
   float: left;
   font-size: 16px;
@@ -80,15 +81,11 @@ input {
   padding: 5px;
 }
 
-#mycount{
-width: 10px;
-}
-
 #allTaskButton{
   position: absolute;
   padding:5px;
   width:100px;
-  margin-left: 0%;
+  margin-left: 155px;
   background: #bdbcbc;
   color: #000;
   text-align: center;
@@ -99,7 +96,7 @@ width: 10px;
   position: absolute;
   padding:5px;
   width:100px;
-  margin-left: 105px;
+  margin-left: 260px;
   background: #bdbcbc;
   color: #000;
   text-align: center;
@@ -110,18 +107,18 @@ width: 10px;
   position: absolute;
   padding:5px;
   width:100px;
-  margin-left: 210;
+  margin-left: 365;
   background: #bdbcbc;
   color: #000;
   text-align: center;
   font-size: 16px;
 }
 
-#selectStorage{
+#storageDropDown{
   position: absolute;
   padding:5px;
   width:140px;
-  margin-left: 315px;;
+  margin-left: 470px;
   text-align: center;
   font-size: 16px;
 }
@@ -217,7 +214,7 @@ ul li span.checked::before {
 }
 
 #header:after {
-  content: "";
+  content: '';
   display: table;
   clear: both;
 }
