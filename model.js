@@ -11,28 +11,41 @@ function SessionStorage(key) {
     this.setData = function (data) { sessionStorage.setItem(this.key, JSON.stringify(data)); }
 }
 
-function Model(){
+function Model(storageKey){
+    var self = this;
+    this.storageKey = storageKey;
 }
 
 Model.prototype.addItemToAnArray = function(id,item){
-    var storageData = controllerInstance.getItemsFromStorage();
+    var storageData = this.getItemsFromStorage();
     storageData.push({id:id,name:item,status:false});
     this.addItemsToStorage(storageData);
 }
 
 Model.prototype.addItemsToStorage = function(storageData){
-    controllerInstance.createStorageManagerInstance(controllerInstance.storageOne).setData(storageData);
-    controllerInstance.createStorageManagerInstance(controllerInstance.storageTwo).setData(storageData);
+    this.createStorageManagerInstance('localStorage').setData(storageData);
+    this.createStorageManagerInstance('sessionStorage').setData(storageData);
 }
 
+Model.prototype.setItemStatus = function(e){
+    // debugger;
+    var storageData = this.getItemsFromStorage();
+    var id = e.target.parentElement.id;
+    e.target.classList.toggle('checked');
+    var currentItem = storageData.find(function(object){
+      return object.id === Number(id);
+    });
+    this.updateStatusValueInStorage(e.target.classList.value,storageData.indexOf(currentItem));
+  }
+
 Model.prototype.updateStatusValueInStorage = function(statusValue,itemIndex){
-    var storageData = controllerInstance.getItemsFromStorage();
+    var storageData = this.getItemsFromStorage();
     storageData[itemIndex].status = (statusValue === '') ?  false : true;
     this.addItemsToStorage(storageData);
 }
 
 Model.prototype.updateStorage = function(id){
-    var storageData = controllerInstance.getItemsFromStorage();
+    var storageData = this.getItemsFromStorage();
     var currentItem = storageData.find(function(object){
         return object.id === Number(id);
     });
@@ -40,4 +53,10 @@ Model.prototype.updateStorage = function(id){
     this.addItemsToStorage(storageData);
 }
 
-// var ModelInstance = new Model();
+Model.prototype.getItemsFromStorage = function(){
+    return this.createStorageManagerInstance('localStorage').getData();
+}
+
+Model.prototype.createStorageManagerInstance = function(storageType){
+    return new StorageManager(storageType,this.storageKey);
+}

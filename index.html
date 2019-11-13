@@ -6,29 +6,28 @@
 
   <body>
     <div id='app'></div>
+    <div id='app1'></div>
+    <div id='app2'></div>
   </body>
-
-  <script src= './model.js'></script>
   <script src = './view.js'></script>
   <script src = './controller.js'></script>
+  <script src= './model.js'></script>
   <script src = './manager.js'></script>
   <!-- <script src = './polyFills.js'></script> -->
   <script>
-  function Todo(){
-    this.viewInstance = new View();
-    this.modelInstance = new Model();
-    this.controllerInstance = new Controller({
-      storageKey : 'myTodoItems',
-      storageOne : 'localStorage',
-      storageTwo : 'sessionStorage'
-    });
-
-    this.init = function(){
-      this.viewInstance.init();
+  (function(){ 
+    function Todo(storageKey,rootId){
+      return new Controller(rootId,storageKey, new View(rootId), new Model(storageKey));
     }
-  }
 
-  var app = new Todo();
-  app.init();
-  </script>
+    var app = new Todo('newTodo','#app');
+    app.init();
+
+    var app1 = new Todo('newTodo2','#app1');
+    app1.init();
+    
+    var app2 = new Todo('newTodo3','#app2');
+    app2.init();
+  })();
+    </script>
 </html>
