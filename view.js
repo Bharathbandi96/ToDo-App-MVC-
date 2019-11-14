@@ -1,6 +1,6 @@
 
 function View(rootId) {
-  // var self = this;
+  
   this.rootId = document.querySelector(rootId);
 
   this.initialize = function(){
@@ -39,10 +39,10 @@ function View(rootId) {
     var button = this.createAnElement('button',{id : 'addButton'});
     button.appendChild(this.createNewTextNode('Add'));
     this.appendHeaderElements(button);
-    button.addEventListener('click',function(){
-      var event = new Event('add');
-      button.dispatchEvent(event);
-    });
+    var event = new Event('add');
+    button.addEventListener('click',(function(){
+      this.rootId.dispatchEvent(event);
+    }).bind(this));
   }
 
   this.createTaskDisplayArea = function () {
@@ -70,30 +70,30 @@ function View(rootId) {
     var button = this.createAnElement('button',{id : 'allTaskButton'});
     button.appendChild(this.createNewTextNode('All Tasks'));
     this.appendFooterElements(button);
-    button.addEventListener('click',function(){
-      var event = new Event('showAllTasks');
-      button.dispatchEvent(event);
-    })
+    var event = new Event('showAllTasks');
+    button.addEventListener('click',(function(){
+      this.rootId.dispatchEvent(event);
+    }).bind(this));
   }
 
   this.createCompletedTaskButton = function () {
     var button = this.createAnElement('button',{id : 'completedTaskButton'});
     button.appendChild(this.createNewTextNode('Completed'));
     this.appendFooterElements(button);
-    button.addEventListener('click',function(){
-      var event = new Event('showCompletedTasks');
-      button.dispatchEvent(event);
-    })
+    var event = new Event('showCompletedTasks');
+    button.addEventListener('click',(function(){
+      this.rootId.dispatchEvent(event);
+    }).bind(this));
   }
 
   this.createPendingTaskButton = function () {
     var button = this.createAnElement('button',{id : 'pendingTaskButton'});
     button.appendChild(this.createNewTextNode('Pending'));
     this.appendFooterElements(button);
-    button.addEventListener('click',function(){
-      var event = new Event('showPendingTasks');
-      button.dispatchEvent(event);
-    })
+    var event = new Event('showPendingTasks');
+    button.addEventListener('click',(function(){
+      this.rootId.dispatchEvent(event);
+    }).bind(this));
   }
 
   this.createSelectElement = function () {
@@ -132,19 +132,20 @@ View.prototype.showMessageOnInvalidStorage = function () {
 
 View.prototype.createItem = function (itemId, item, status) {
   var li = this.createAnElement('li',{id : itemId});
-  this.createCheckButton(li, status);
+  this.createCheckButton(li, status,itemId);
   this.createTextContent(li, item);
-  this.createDeleteButton(li);
+  this.createDeleteButton(li,itemId);
   this.appendItemToList(li);
 }
 
-View.prototype.createCheckButton = function (li, status) {
+View.prototype.createCheckButton = function (li, status, itemId) {
   var checkBox = this.createAnElement('span',{id : 'check'});
   this.setItemClassName(checkBox, status);
-  checkBox.addEventListener('click',function(){
-    var event = new Event('checkBoxEvent', {bubbles:true});
-    checkBox.dispatchEvent(event);
-  });
+  var event = new CustomEvent('checkBoxEvent',{detail :{ id: itemId,name:checkBox.classList}});
+  checkBox.addEventListener('click',(function(){
+    checkBox.classList.toggle('checked');
+    this.rootId.dispatchEvent(event);
+  }).bind(this));
   li.appendChild(checkBox);
 }
 
@@ -154,14 +155,14 @@ View.prototype.createTextContent = function (li, item) {
   li.appendChild(taskNode);
 }
 
-View.prototype.createDeleteButton = function (li) {
+View.prototype.createDeleteButton = function (li,itemId) {
   var deleteButton = this.createAnElement('SPAN',{class : 'close'});
   deleteButton.appendChild(this.createNewTextNode('\u00D7'));
   li.appendChild(deleteButton);
-  deleteButton.addEventListener('click',function(){
-    var event = new Event('deleteButtonEvent', {bubbles:true});
-    deleteButton.dispatchEvent(event);
-  });
+  var event = new CustomEvent('deleteButtonEvent',{detail :{ id: itemId , name:li}});
+  deleteButton.addEventListener('click',(function(){
+    this.rootId.dispatchEvent(event);
+  }).bind(this));
 }
 
 View.prototype.createAnElement = function (elementType, attributes) {
@@ -185,18 +186,6 @@ View.prototype.setItemClassName = function(checkBox,status){
 View.prototype.appendItemToList = function (item) {
   var displayAreaId = this.rootId.querySelector('#displayArea');
   displayAreaId.appendChild(item);
-}
-
-View.prototype.displayItems = function (storageData, itemStatus) {
-  this.clearAllTasks(this.rootId.querySelector('#displayArea'));
-  var items = storageData.filter(function (item) {
-    return item.status === itemStatus;
-  });
-  // for (var i = 0; i < items.length; i++) {
-  //   this.createItem(items[i].id, items[i].name, items[i].status);
-  // }
-  this.displayStorageItems(items);
-  // return items.length;
 }
 
 View.prototype.displayStorageItems = function (storageData) {
