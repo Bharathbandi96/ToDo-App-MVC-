@@ -64,22 +64,12 @@ Controller.prototype.onStorageSelect = function(){
 
 Controller.prototype.getItemOnEnter = function(e){
   var enterKeyCode = 13;
-  // var inputElement = this.rootId.querySelector('#taskInputField').value;
-  // var selectedStorage = this.viewInstance.getStorageType(); 
-  // if(event.keyCode === enterKeyCode && inputElement !== '' && selectedStorage !== 'selectStorage'){
-  //   this.onAddNewItem(inputElement,selectedStorage);
-  // }
   if(event.keyCode === enterKeyCode){
     this.getNewItem();
   }
 }
 
 Controller.prototype.getItemOnAddClick = function(){
-  // var inputElement = this.rootId.querySelector('#taskInputField').value;
-  // var selectedStorage = this.viewInstance.getStorageType(); 
-  // if(inputElement!== '' && selectedStorage !== 'selectStorage'){
-  //   this.onAddNewItem(inputElement,selectedStorage);
-  // }
   this.getNewItem();
 }
 
@@ -114,9 +104,6 @@ Controller.prototype.onDeleteClick = function(e){
   this.viewInstance.deleteItemFromList(e.detail.currentElement);
   this.modelInstance.updateStorage(e.detail.id,selectedStorage);
   this.getItemsCount(selectedStorage);
-  // var count = (this.buttonClicked === 'allTaskButton') ? :
-  // this.viewInstance.displayItemsCount(this.rootId.querySelectorAll('li').length);
-  // this.viewInstance.displayItemsCount(this.modelInstance.itemsCount(true,this.viewInstance.getStorageType()));
 }
 
 Controller.prototype.getItemsCount = function(selectedStorage){
