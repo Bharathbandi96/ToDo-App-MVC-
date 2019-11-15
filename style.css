@@ -1,72 +1,51 @@
 
+h2{
+  font-family: 'Gill Sans', 'Gill Sans MT', 'Calibri', 'Trebuchet MS', sans-serif;
+}
 #name{
   text-align: center;
-  position: fixed;
+  position: relative;
 }
 
-#app{
-  height:500px;
-  position: fixed;
-  margin-top: 30px;
-  box-align: center;
-  margin-left:30px;
-  border:2px solid gray;
-  width:625px;
-  font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
+body>div{
+  height: 520px;
+  width: 625px;
+  padding: 1px;
+  border:1px solid gray;
 }
 
 #header{
-  position: fixed;
-  padding:0px;
+  position: relative;
+  padding:3px;
   height:60px;
   width:610px;
-  padding-left:2px;
-  margin-top: 5px;
-  margin-left: 5px;
+  float: left;
+  top: 15px;
+  left: 5px;
   background-color: coral;
   color: white;
   text-align: center;
 }
 
-#displayArea{
-  overflow-y: scroll;
-  height: 330px;
-  margin-top:125px;
-  margin-left: 5px;
-  padding:2px;
-}
-
 #taskInputField{
+  position: relative;
   padding-left:5px;
-  margin-top: 0px;
+  top: 0px;
+  padding: 10px;
+  border: none;
   width:475px;
+  float: left;
+  font-size: 16px;
   border-bottom: 2px solid black;
   caret-color: coral;
 }
 
-input {
-  position: relative;
-  border: none;
-  width: 70%;
-  padding: 10px;
-  float: left;
-  font-size: 16px;
-}
-
-#countMessage{
-  position: absolute;
-  margin-left: 5px;
-  margin-top: 5px;
-  width: 150px;;
-  float: left;
-  font-size: 16px;
-}
-
 #addButton {
   position: relative;
-  margin-left:8px;
+  left:8px;
+  top : 0px;
   padding: 10px;
-  width: 20%;
+  width: 130px;
   background: #999;
   color: #000;
   float: left;
@@ -74,18 +53,45 @@ input {
   font-size: 16px;
 }
 
-#footer{
-  position: fixed;
-  top: 487px;
-  float:left;
-  padding: 5px;
+
+#displayArea{
+  position: relative;
+  overflow-y: scroll;
+  float: left;
+  left: 5px;
+  height: 320px;
+  top:70px;
+  width:610px;
+  padding:2px;
+}
+
+ #footer{
+  position: relative;
+  height: 50px;
+  top: 80px;
+  width: 620px;
+  float: left;
+  /* background-color: rgb(102, 101, 102); */
+  /* background-color: coral; */
+  /* border-top: 1px solid gray;
+  border-bottom: 1px solid gray; */
+}  
+
+#countMessage{
+  position: absolute;
+  left: 5px;
+  top: 10px;
+  width: 150px;
+  float: left;
+  font-size: 16px;
 }
 
 #allTaskButton{
   position: absolute;
   padding:5px;
   width:100px;
-  margin-left: 155px;
+  left: 160px;
+  top: 5px;
   background: #bdbcbc;
   color: #000;
   text-align: center;
@@ -96,7 +102,8 @@ input {
   position: absolute;
   padding:5px;
   width:100px;
-  margin-left: 260px;
+  left: 265px;
+  top: 5px;
   background: #bdbcbc;
   color: #000;
   text-align: center;
@@ -107,7 +114,8 @@ input {
   position: absolute;
   padding:5px;
   width:100px;
-  margin-left: 365;
+  left: 370px;
+  top: 5px;
   background: #bdbcbc;
   color: #000;
   text-align: center;
@@ -118,13 +126,14 @@ input {
   position: absolute;
   padding:5px;
   width:140px;
-  margin-left: 470px;
+  left: 475px;
+  top: 5px;
   text-align: center;
   font-size: 16px;
 }
 
-button:hover{
-  background-color: rgb(148, 143, 143);
+#addButton:hover,#pendingTaskButton:hover,#allTaskButton:hover,#completedTaskButton:hover{
+  background-color:rgb(148, 143, 143);
   color:black;
 }
 
@@ -132,17 +141,19 @@ button:hover{
   background: gray;
   color:white
 }
-#toDoList{
-  float:left;
-}
 
-body {
+ul {
   margin: 0;
-  min-width: 250px;
+  padding: 0;
 }
 
-* {
-  box-sizing: border-box;
+ul li {
+  position: relative;
+  padding: 12px 8px 12px 40px;
+  list-style-type: none;
+  background: #eee;
+  transition: 0.2s;
+  font-size: 26px;
 }
 
 ul {
@@ -185,6 +196,7 @@ ul li span.checked::before {
   width: 7px;
 }
 
+
 .close {
   cursor: pointer;
   border-collapse: collapse;
@@ -218,5 +230,3 @@ ul li span.checked::before {
   display: table;
   clear: both;
 }
-
-
