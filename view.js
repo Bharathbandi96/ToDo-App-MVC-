@@ -1,27 +1,22 @@
 
 function View(rootId) {
+  // this.me = this;
   this.rootId = document.querySelector(rootId);
 }
 
 View.prototype.initialize = function(){
   this.createHeader();
-  this.createAppTitle();
-  this.createInputField();
-  this.createAddTaskButton();
   this.createTaskDisplayArea();
   this.createFooter();
-  this.createItemCountView();
-  this.createAllTaskButton();
-  this.createCompletedTaskButton();
-  this.createPendingTaskButton();
-  this.createSelectElement();
   this.showMessageOnInvalidStorage();
   }
 
 View.prototype.createHeader = function () {
   var header = this.createAnElement('div', { id: 'header' });
   this.rootId.appendChild(header);
-  return header;
+  this.createAppTitle();
+  this.createInputField();
+  this.createAddButton();
 }
 
 View.prototype.createAppTitle = function () {
@@ -35,81 +30,89 @@ View.prototype.createInputField = function () {
   this.appendHeaderElements(inputField);
 }
 
-View.prototype.createAddTaskButton = function () {
-  var button = this.createAnElement('button',{id : 'addButton'});
-  button.appendChild(this.createNewTextNode('Add'));
-  this.appendHeaderElements(button);
-  var event = new Event('add');
-  button.addEventListener('click',(function(){
-    this.rootId.dispatchEvent(event);
-  }).bind(this));
+View.prototype.createAddButton = function () {
+  var me = this;
+  var addButton = me.createAnElement('button',{id : 'addButton'});
+  addButton.innerText = 'Add';
+  me.appendHeaderElements(addButton);
+  var addEvent = new Event('onAddItem');
+  addButton.addEventListener('click',function(){
+    me.rootId.dispatchEvent(addEvent);
+  });
 }
 
 View.prototype.createTaskDisplayArea = function () {
   var displayArea = this.createAnElement('ul', { id: 'displayArea' });
   this.rootId.appendChild(displayArea);
-  return displayArea;
 }
 
 View.prototype.createFooter = function () {
   var footer = this.createAnElement('div', { id: 'footer' });
   this.rootId.appendChild(footer);
-  return footer;
+  this.createItemCountView();
+  this.createAllTaskButton();
+  this.createCompletedTaskButton();
+  this.createPendingTaskButton();
+  this.createSelectElement();
 }
 
 View.prototype.createItemCountView = function () {
   var countMessage = this.createAnElement('span', { id: 'countMessage' });
   var taskCount = this.createAnElement('span', { id: 'taskCount' });
-  countMessage.appendChild(this.createNewTextNode('No. of Item(s) left: '));
+  countMessage.innerText = 'No. of Item(s) left: ';
   taskCount.innerText = 0;
   countMessage.appendChild(taskCount);
   this.appendFooterElements(countMessage);
 }
 
 View.prototype.createAllTaskButton = function () {
-  var button = this.createAnElement('button',{id : 'allTaskButton'});
-  button.appendChild(this.createNewTextNode('All Tasks'));
-  this.appendFooterElements(button);
-  var event = new Event('showAllTasks');
-  button.addEventListener('click',(function(){
-    this.rootId.dispatchEvent(event);
-  }).bind(this));
+  var me = this;
+  var allTaskButton = me.createAnElement('button',{id : 'allTaskButton'});
+  allTaskButton.innerText = 'All Tasks';
+  me.appendFooterElements(allTaskButton);
+  var allTaskEvent = new Event('showAllTasks');
+  allTaskButton.addEventListener('click',function(){
+    me.rootId.dispatchEvent(allTaskEvent);
+  });
 }
 
 View.prototype.createCompletedTaskButton = function () {
-  var button = this.createAnElement('button',{id : 'completedTaskButton'});
-  button.appendChild(this.createNewTextNode('Completed'));
-  this.appendFooterElements(button);
-  var event = new Event('showCompletedTasks');
-  button.addEventListener('click',(function(){
-    this.rootId.dispatchEvent(event);
-  }).bind(this));
+  var me = this;
+  var completedTaskButton = me.createAnElement('button',{id : 'completedTaskButton'});
+  completedTaskButton.innerText = 'Completed';
+  me.appendFooterElements(completedTaskButton);
+  var completedEvent = new Event('showCompletedTasks');
+  completedTaskButton.addEventListener('click',function(){
+    me.rootId.dispatchEvent(completedEvent);
+  });
 }
 
 View.prototype.createPendingTaskButton = function () {
-  var button = this.createAnElement('button',{id : 'pendingTaskButton'});
-  button.appendChild(this.createNewTextNode('Pending'));
-  this.appendFooterElements(button);
-  var event = new Event('showPendingTasks');
-  button.addEventListener('click',(function(){
-    this.rootId.dispatchEvent(event);
-  }).bind(this));
+  var me = this;
+  var pendingTaskButton = me.createAnElement('button',{id : 'pendingTaskButton'});
+  pendingTaskButton.innerText = 'Pending';
+  me.appendFooterElements(pendingTaskButton);
+  var pendingEvent = new Event('showPendingTasks');
+  pendingTaskButton.addEventListener('click',function(){
+    me.rootId.dispatchEvent(pendingEvent);
+  });
 }
 
 View.prototype.createSelectElement = function () {
-  var selectElement = this.createAnElement('select', { id: 'storageDropDown' });
-  var option1 = this.createAnElement('option', { value: 'selectStorage' });
+  var me = this;
+  var selectElement = me.createAnElement('select', { id: 'storageDropDown' });
+  var option1 = me.createAnElement('option', { value: 'selectStorage' });
   option1.innerText = 'Select Storage';
-  var option2 = this.createAnElement('option', { value: 'localStorage' });
+  var option2 = me.createAnElement('option', { value: 'localStorage'}); //,selected : "selected" 
   option2.innerText = 'Local Storage';
-  var option3 = this.createAnElement('option', { value: 'sessionStorage' });
+  var option3 = me.createAnElement('option', { value: 'sessionStorage' });
   option3.innerText = 'Session Storage';
-  this.appendOptions(selectElement, [option1, option2, option3]);
-  this.appendFooterElements(selectElement);
-    var event = new Event('storageEvent');
-  selectElement.addEventListener('change',(function(){
-    this.rootId.dispatchEvent(event);
-  }).bind(this));
+  me.appendOptions(selectElement, [option1, option2, option3]);
+  me.appendFooterElements(selectElement);
+    var selectEvent = new Event('onStorageChange');
+  selectElement.addEventListener('change',function(){
+    me.rootId.dispatchEvent(selectEvent);
+  });
 }
 
 View.prototype.appendOptions = function (select, array) {
@@ -129,8 +132,7 @@ View.prototype.appendFooterElements = function (element) {
 }
 
 View.prototype.showMessageOnInvalidStorage = function () {
-  var storageMessage = 'Please select your required storage to store data...';
-  this.rootId.querySelector('#displayArea').innerHTML = storageMessage;
+  this.rootId.querySelector('#displayArea').innerHTML = 'Please select your required storage to store data...';
 }
 
 View.prototype.createItem = function (itemId, item, status) {
@@ -142,30 +144,32 @@ View.prototype.createItem = function (itemId, item, status) {
 }
 
 View.prototype.createCheckButton = function (li, status, itemId) {
-  var checkBox = this.createAnElement('span',{id : 'check'});
-  this.setItemClassName(checkBox, status);
-  var event = new CustomEvent('checkBoxEvent',{detail :{ id: itemId,currentElement:li}});
-  checkBox.addEventListener('click',(function(){
+  var me = this;
+  var checkBox = me.createAnElement('span',{id : 'check'});
+  me.setItemClassName(checkBox, status);
+  var checkBoxEvent = new CustomEvent('onCheckBoxChange',{detail :{ id: itemId,currentElement:li}});
+  checkBox.addEventListener('click',function(){
     checkBox.classList.toggle('checked');
-    this.rootId.dispatchEvent(event);
-  }).bind(this));
+    me.rootId.dispatchEvent(checkBoxEvent);
+  });
   li.appendChild(checkBox);
 }
 
 View.prototype.createTextContent = function (li, item) {
   var taskNode = this.createAnElement('SPAN',{});
-  taskNode.appendChild(this.createNewTextNode(item));
+  taskNode.innerText = item;
   li.appendChild(taskNode);
 }
 
 View.prototype.createDeleteButton = function (li,itemId) {
-  var deleteButton = this.createAnElement('SPAN',{class : 'close'});
-  deleteButton.appendChild(this.createNewTextNode('\u00D7'));
+  var me = this;
+  var deleteButton = me.createAnElement('SPAN',{class : 'close'});
+  deleteButton.innerText = '\u00D7';
   li.appendChild(deleteButton);
-  var event = new CustomEvent('deleteButtonEvent',{detail :{ id: itemId , currentElement:li}});
-  deleteButton.addEventListener('click',(function(){
-    this.rootId.dispatchEvent(event);
-  }).bind(this));
+  var deleteEvent = new CustomEvent('deleteButtonEvent',{detail :{ id: itemId , currentElement:li}});
+  deleteButton.addEventListener('click',function(){
+    me.rootId.dispatchEvent(deleteEvent);
+  });
 }
 
 View.prototype.createAnElement = function (elementType, attributes) {
@@ -174,10 +178,6 @@ View.prototype.createAnElement = function (elementType, attributes) {
     element.setAttribute(key, attributes[key]);
   }
   return element;
-}
-
-View.prototype.createNewTextNode = function(text){
-  return document.createTextNode(text);
 }
 
 View.prototype.setItemClassName = function(checkBox,status){
@@ -196,7 +196,6 @@ View.prototype.displayStorageItems = function (storageData) {
   for (var i = 0; i < storageData.length; i++) {
     this.createItem(storageData[i].id, storageData[i].name, storageData[i].status);
   }
-  this.displayItemsCount(storageData.length);
 }
 
 View.prototype.deleteItemFromList = function(item){

@@ -10,24 +10,36 @@ function Controller(view,model){
 Controller.prototype.init = function(){
   this.viewInstance.initialize();
   this.addTaskEvent();
+  // this.myCustomEvents();
   this.allTaskEvent();
   this.completedTasksEvent();
   this.checkBoxEvent();
   this.deleteEvent();
   this.storageEvent();
   this.pendingTasksEvent();
-  this.keyPressEvents();
+  this.keyPressEvent();
+  // this.onStorageSelect();
+  // this.attachEvent(this.myCustomEvents);
+}
+
+
+
+Controller.prototype.attachEvent = function(object){
+  debugger
+  for (var key in object) {
+    this.rootId.addEventListener(`${key}`, `${object[key]}`);
+  }
 }
 
 Controller.prototype.addTaskEvent = function(){
-  this.rootId.addEventListener('add',this.getItemOnAddClick.bind(this));
+  this.rootId.addEventListener('onAddItem',this.getItemOnAddClick.bind(this));
 }
 
 Controller.prototype.storageEvent = function(){
-  this.rootId.addEventListener('storageEvent',this.onStorageSelect.bind(this));
+  this.rootId.addEventListener('onStorageChange',this.onStorageSelect.bind(this));
 }
 
-Controller.prototype.keyPressEvents = function(){
+Controller.prototype.keyPressEvent = function(){
   this.rootId.querySelector('#taskInputField').addEventListener('keypress',this.getItemOnEnter.bind(this));
 }
 
@@ -44,21 +56,27 @@ Controller.prototype.pendingTasksEvent = function(){
 }
 
 Controller.prototype.checkBoxEvent = function(){
-  this.rootId.addEventListener('checkBoxEvent',this.onCheckBoxClick.bind(this));
+  this.rootId.addEventListener('onCheckBoxChange',this.onCheckBoxClick.bind(this));
 }
 
 Controller.prototype.deleteEvent = function(){
   this.rootId.addEventListener('deleteButtonEvent',this.onDeleteClick.bind(this));
 }
 
+// Controller.prototype.myCustomEvents = {
+//   onAddItem : this.getItemOnAddClick.bind(this),
+// }
+
 Controller.prototype.onStorageSelect = function(){
-  var selectedStorage = this.viewInstance.getStorageType();
+  var myViewInstance = this.viewInstance;
+  var selectedStorage = myViewInstance.getStorageType();
   if(selectedStorage !== 'selectStorage'){
     var storageData = this.modelInstance.getItemsFromStorage(selectedStorage);
-    this.viewInstance.displayStorageItems(storageData);
+    myViewInstance.displayStorageItems(storageData);
+    this.getItemsCount(selectedStorage);
   }else {
-    this.viewInstance.showMessageOnInvalidStorage();
-    this.viewInstance.displayItemsCount(0);
+    myViewInstance.showMessageOnInvalidStorage();
+    myViewInstance.displayItemsCount(0);
   }
 }
 
@@ -82,48 +100,47 @@ Controller.prototype.getNewItem = function(){
 }
 
 Controller.prototype.onAddNewItem = function(inputElement,selectedStorage){
-  var id = this.modelInstance.addItemToAnArray(inputElement,selectedStorage);
+  var myViewInstance = this.viewInstance;
+  var myModelInstance = this.modelInstance;
+  var id;
+  id = myModelInstance.addItemToAnArray(inputElement,'localStorage');
+  id = myModelInstance.addItemToAnArray(inputElement,'sessionStorage');
   if(this.buttonClicked !== 'completedButton'){
-    this.viewInstance.createItem(id,inputElement);
+    myViewInstance.createItem(id,inputElement);
   }
-  this.viewInstance.inputFieldReset();
-  this.viewInstance.displayItemsCount(this.modelInstance.getItemsFromStorage(selectedStorage).length);
+  myViewInstance.inputFieldReset();
+  myViewInstance.displayItemsCount(myModelInstance.itemsCount(false,selectedStorage));
 }
 
 Controller.prototype.onCheckBoxClick = function(e){
-  var selectedStorage = this.viewInstance.getStorageType();
+  var myViewInstance = this.viewInstance;
+  var selectedStorage = myViewInstance.getStorageType();
   if(this.buttonClicked === 'completedButton' || this.buttonClicked === 'pendingButton'){
-    this.viewInstance.deleteItemFromList(e.detail.currentElement);
+    myViewInstance.deleteItemFromList(e.detail.currentElement);
   }
   this.modelInstance.setItemStatus(e.detail.id,selectedStorage);
   this.getItemsCount(selectedStorage);
 }
 
 Controller.prototype.onDeleteClick = function(e){
-  var selectedStorage = this.viewInstance.getStorageType();
-  this.viewInstance.deleteItemFromList(e.detail.currentElement);
+  var myViewInstance = this.viewInstance;
+  var selectedStorage = myViewInstance.getStorageType();
+  myViewInstance.deleteItemFromList(e.detail.currentElement);
   this.modelInstance.updateStorage(e.detail.id,selectedStorage);
   this.getItemsCount(selectedStorage);
 }
 
 Controller.prototype.getItemsCount = function(selectedStorage){
-  if(this.buttonClicked === 'completedButton'){
-    this.viewInstance.displayItemsCount(this.modelInstance.itemsCount(true,this.viewInstance.getStorageType()));
-  }
-  else if(this.buttonClicked === 'pendingButton'){
-    this.viewInstance.displayItemsCount(this.modelInstance.itemsCount(false,this.viewInstance.getStorageType()));
-  }
-  else{
-    this.viewInstance.displayItemsCount(this.modelInstance.getItemsFromStorage(selectedStorage).length);
-  }
+    this.viewInstance.displayItemsCount(this.modelInstance.itemsCount(false,selectedStorage));
 }
 
 Controller.prototype.onAllTasksClick = function(){
-  var selectedStorage = this.viewInstance.getStorageType();
-  if(selectedStorage !== 'undefined' && selectedStorage !== 'selectStorage'){
+  var myViewInstance = this.viewInstance;
+  var selectedStorage = myViewInstance.getStorageType();
+  if(selectedStorage !== 'selectStorage'){
     this.buttonClicked = 'allTaskButton';
     var storageData = this.modelInstance.getItemsFromStorage(selectedStorage);
-    this.viewInstance.displayStorageItems(storageData);
+    myViewInstance.displayStorageItems(storageData);
   }
 }
 
@@ -138,9 +155,11 @@ Controller.prototype.onPendingClick = function(){
 }
 
 Controller.prototype.getStorageItems = function(buttonClicked,status){
-  var selectedStorage = this.viewInstance.getStorageType();
-  if(selectedStorage !== 'undefined' && selectedStorage !== 'selectStorage'){
+  var myViewInstance = this.viewInstance;
+  var selectedStorage = myViewInstance.getStorageType();
+  if(selectedStorage !== 'selectStorage'){
     this.buttonClicked = buttonClicked;
-    this.viewInstance.displayStorageItems(this.modelInstance.getItemsByStatus(status,selectedStorage));
+    myViewInstance.displayStorageItems(this.modelInstance.getItemsByStatus(status,selectedStorage));
+    this.getItemsCount(selectedStorage);
   }
 }

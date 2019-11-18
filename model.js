@@ -16,31 +16,29 @@ function Model(storageKey){
 }
 
 Model.prototype.addItemToAnArray = function(item,selectedStorage){
-    var id = Date.now();
+    var id = Date.now().toString();
     var storageData = this.getItemsFromStorage(selectedStorage);
     storageData.push({id:id,name:item,status:false});
-    this.addItemsToStorage(storageData);
+    this.addItemsToStorage(selectedStorage,storageData);
     return id;
 }
 
-Model.prototype.addItemsToStorage = function(storageData){
-    this.createStorageManagerInstance('localStorage').setData(storageData);
-    this.createStorageManagerInstance('sessionStorage').setData(storageData);
+Model.prototype.addItemsToStorage = function(selectedStorage,storageData){
+    this.createStorageManagerInstance(selectedStorage).setData(storageData);
 }
 
 Model.prototype.setItemStatus = function(id,selectedStorage){
     var storageData = this.getItemsFromStorage(selectedStorage);
-    var id = Number(id);
-    // e.target.classList.toggle('checked')
+    var id = id;
     var itemIndex = storageData.findIndex(function(object){
       return object.id === id;
     });
-    this.updateStatusValueInStorage(itemIndex,storageData);
+    this.updateStatusValueInStorage(itemIndex,storageData,selectedStorage);
   }
 
-Model.prototype.updateStatusValueInStorage = function(itemIndex,storageData){
+Model.prototype.updateStatusValueInStorage = function(itemIndex,storageData,selectedStorage){
     storageData[itemIndex].status = !storageData[itemIndex].status;
-    this.addItemsToStorage(storageData);
+    this.addItemsToStorage(selectedStorage,storageData);
 }
 
 Model.prototype.getItemsByStatus = function (itemStatus,selectedStorage) {
@@ -53,12 +51,12 @@ Model.prototype.getItemsByStatus = function (itemStatus,selectedStorage) {
 
 Model.prototype.updateStorage = function(id,selectedStorage){
     var storageData = this.getItemsFromStorage(selectedStorage);
-    var itemId = Number(id);
+    var itemId = id;
     var itemIndex = storageData.findIndex(function(object){
         return object.id === itemId;
     });
     storageData.splice(itemIndex,1);
-    this.addItemsToStorage(storageData);
+    this.addItemsToStorage(selectedStorage,storageData);
 }
 
 Model.prototype.itemsCount = function(itemStatus,selectedStorage){

@@ -1,6 +1,5 @@
 
 function StorageManager(storageType, key) {
-    // debugger
     this.storageType = storageType,
     this.key = key,
 
