@@ -15,15 +15,15 @@
   <script src = './src/manager.js'></script>
   <script>
     (function(){ 
-      function Todo(storageKey,rootId){
-        return new Controller(new View(rootId), new Model(storageKey));
+      function todo(storageKey,appId){
+        return new Controller(new View(appId), new Model(storageKey));
       }
 
-      Todo('newTodo','#app').init();
+      todo('newTodo','#app').init();
 
-      Todo('newTodo2','#app1').init();
+      todo('newTodo2','#app1').init();
       
-      Todo('newTodo3','#app2').init();
+      todo('newTodo3','#app2').init();
     })();
   </script>
 </html>

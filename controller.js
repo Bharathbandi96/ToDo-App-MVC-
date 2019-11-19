@@ -1,6 +1,6 @@
 
 function Controller(view,model){
-  this.rootId = view.rootId;
+  this.myApp = view.myApp;
   this.key = model.storageKey;
   this.viewInstance = view;
   this.modelInstance = model;
@@ -24,40 +24,40 @@ Controller.prototype.init = function(){
 Controller.prototype.attachEvent = function(object){
   debugger
   for (var key in object) {
-    this.rootId.addEventListener(`${key}`, `${object[key]}`);
+    this.myApp.addEventListener(`${key}`, `${object[key]}`);
   }
 }
 
 Controller.prototype.addTaskEvent = function(){
-  this.rootId.addEventListener('onAddItem',this.getItemOnAddClick.bind(this));
+  this.myApp.addEventListener('onAddItem',this.getItemOnAddClick.bind(this));
 }
 
 Controller.prototype.storageEvent = function(){
-  this.rootId.addEventListener('onStorageChange',this.onStorageSelect.bind(this));
+  this.myApp.addEventListener('onStorageChange',this.onStorageSelect.bind(this));
 }
 
 Controller.prototype.keyPressEvent = function(){
-  this.rootId.querySelector('#taskInputField').addEventListener('keypress',this.getItemOnEnter.bind(this));
+  this.myApp.querySelector('#taskInputField').addEventListener('keypress',this.getItemOnEnter.bind(this));
 }
 
 Controller.prototype.allTaskEvent = function(){
-  this.rootId.addEventListener('showAllTasks',this.onAllTasksClick.bind(this));
+  this.myApp.addEventListener('showAllTasks',this.onAllTasksClick.bind(this));
 }
 
 Controller.prototype.completedTasksEvent = function(){
-  this.rootId.addEventListener('showCompletedTasks',this.onCompletedClick.bind(this));
+  this.myApp.addEventListener('showCompletedTasks',this.onCompletedClick.bind(this));
 }
 
 Controller.prototype.pendingTasksEvent = function(){
-  this.rootId.addEventListener('showPendingTasks',this.onPendingClick.bind(this));
+  this.myApp.addEventListener('showPendingTasks',this.onPendingClick.bind(this));
 }
 
 Controller.prototype.checkBoxEvent = function(){
-  this.rootId.addEventListener('onCheckBoxChange',this.onCheckBoxClick.bind(this));
+  this.myApp.addEventListener('onCheckBoxChange',this.onCheckBoxClick.bind(this));
 }
 
 Controller.prototype.deleteEvent = function(){
-  this.rootId.addEventListener('deleteButtonEvent',this.onDeleteClick.bind(this));
+  this.myApp.addEventListener('deleteButtonEvent',this.onDeleteClick.bind(this));
 }
 
 Controller.prototype.onStorageSelect = function(){
@@ -85,7 +85,7 @@ Controller.prototype.getItemOnAddClick = function(){
 }
 
 Controller.prototype.getNewItem = function(){
-  var inputElement = this.rootId.querySelector('#taskInputField').value;
+  var inputElement = this.myApp.querySelector('#taskInputField').value;
   var selectedStorage = this.viewInstance.getStorageType(); 
   if(inputElement!== '' && selectedStorage !== 'selectStorage'){
     this.onAddNewItem(inputElement,selectedStorage);
@@ -97,7 +97,7 @@ Controller.prototype.onAddNewItem = function(inputElement,selectedStorage){
   var myModelInstance = this.modelInstance;
   var id;
   id = myModelInstance.addItemToAnArray(inputElement,'localStorage');
-  id = myModelInstance.addItemToAnArray(inputElement,'sessionStorage');
+  myModelInstance.addItemToAnArray(inputElement,'sessionStorage');
   if(this.buttonClicked !== 'completedButton'){
     myViewInstance.createItem(id,inputElement);
   }
