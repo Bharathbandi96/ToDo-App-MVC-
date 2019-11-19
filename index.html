@@ -5,9 +5,9 @@
   </head>
 
   <body>
-    <div id='app'></div>
     <div id='app1'></div>
     <div id='app2'></div>
+    <div id='app3'></div>
   </body>
   <script src = './src/view.js'></script>
   <script src = './src/controller.js'></script>
@@ -15,15 +15,15 @@
   <script src = './src/manager.js'></script>
   <script>
     (function(){ 
-      function todo(storageKey,appId){
-        return new Controller(new View(appId), new Model(storageKey));
+      function todo(storageKey,rootId){
+        return new Controller(new View(rootId), new Model(storageKey));
       }
 
-      todo('newTodo','#app').init();
+      todo('newTodo1','#app1').init();
 
-      todo('newTodo2','#app1').init();
+      todo('newTodo2','#app2').init();
       
-      todo('newTodo3','#app2').init();
+      todo('newTodo3','#app3').init();
     })();
   </script>
 </html>
