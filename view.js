@@ -1,6 +1,5 @@
 
 function View(rootId) {
-  // this.me = this;
   this.rootId = document.querySelector(rootId);
 }
 

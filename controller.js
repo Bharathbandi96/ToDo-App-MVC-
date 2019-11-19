@@ -10,7 +10,6 @@ function Controller(view,model){
 Controller.prototype.init = function(){
   this.viewInstance.initialize();
   this.addTaskEvent();
-  // this.myCustomEvents();
   this.allTaskEvent();
   this.completedTasksEvent();
   this.checkBoxEvent();
@@ -18,8 +17,6 @@ Controller.prototype.init = function(){
   this.storageEvent();
   this.pendingTasksEvent();
   this.keyPressEvent();
-  // this.onStorageSelect();
-  // this.attachEvent(this.myCustomEvents);
 }
 
 
@@ -62,10 +59,6 @@ Controller.prototype.checkBoxEvent = function(){
 Controller.prototype.deleteEvent = function(){
   this.rootId.addEventListener('deleteButtonEvent',this.onDeleteClick.bind(this));
 }
-
-// Controller.prototype.myCustomEvents = {
-//   onAddItem : this.getItemOnAddClick.bind(this),
-// }
 
 Controller.prototype.onStorageSelect = function(){
   var myViewInstance = this.viewInstance;
