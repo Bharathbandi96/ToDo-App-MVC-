@@ -7,7 +7,6 @@ View.prototype.initialize = function(){
   this.createHeader();
   this.createTaskDisplayArea();
   this.createFooter();
-  this.showMessageOnInvalidStorage();
   }
 
 View.prototype.createHeader = function () {
@@ -102,7 +101,7 @@ View.prototype.createSelectElement = function () {
   var selectElement = me.createAnElement('select', { id: 'storageDropDown' });
   var option1 = me.createAnElement('option', { value: 'selectStorage' });
   option1.innerText = 'Select Storage';
-  var option2 = me.createAnElement('option', { value: 'localStorage'}); //,selected : "selected" 
+  var option2 = me.createAnElement('option', { value: 'localStorage',selected : "selected"});
   option2.innerText = 'Local Storage';
   var option3 = me.createAnElement('option', { value: 'sessionStorage' });
   option3.innerText = 'Session Storage';

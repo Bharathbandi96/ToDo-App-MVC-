@@ -17,9 +17,8 @@ Controller.prototype.init = function(){
   this.storageEvent();
   this.pendingTasksEvent();
   this.keyPressEvent();
+  this.onStorageSelect();
 }
-
-
 
 Controller.prototype.attachEvent = function(object){
   debugger
