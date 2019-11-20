@@ -218,7 +218,8 @@ View.prototype.clearAllTasks = function (element) {
 }
 
 View.prototype.inputFieldReset = function () {
-  this.rootElement.querySelector('#taskInputField').value = ''
+  this.rootElement.querySelector('#taskInputField').value = '';
+  this.rootElement.querySelector('#taskInputField').focus();
 }
 
 View.prototype.displayItemsCount = function (count) {
