@@ -9,15 +9,43 @@ function Controller(view,model){
 
 Controller.prototype.init = function(){
   this.viewInstance.initialize();
-  this.addTaskEvent();
-  this.allTaskEvent();
-  this.completedTasksEvent();
-  this.checkBoxEvent();
-  this.deleteEvent();
-  this.storageEvent();
-  this.pendingTasksEvent();
-  this.keyPressEvent();
+  // this.addTaskEvent();
+  // this.allTaskEvent();
+  // this.completedTasksEvent();
+  // this.checkBoxEvent();
+  // this.deleteEvent();
+  // this.storageEvent();
+  // this.pendingTasksEvent();
+  // this.keyPressEvent();
   this.onStorageSelect();
+  this.attachEvents(this.customEvents.bind(this));
+}
+
+Controller.prototype.customEvents = {
+  onAddItem : this.getItemOnAddClick.bind(this),
+  onStorageChange : this.onStorageSelect.bind(this),
+  keypress : this.getItemOnEnter.bind(this),
+  showAllTasks : this.onAllTasksClick.bind(this),
+  showCompletedTasks : this.onCompletedClick.bind(this),
+  showPendingTasks : this.onPendingClick.bind(this),
+  onCheckBoxChange : this.onCheckBoxClick.bind(this),
+  deleteButtonEvent : this.onDeleteClick.bind(this)
+}
+
+Controller.prototype.attachEvents = function(){
+  // var obj = {
+  //   onAddItem : this.getItemOnAddClick.bind(this),
+  //   onStorageChange : this.onStorageSelect.bind(this),
+  //   keypress : this.getItemOnEnter.bind(this),
+  //   showAllTasks : this.onAllTasksClick.bind(this),
+  //   showCompletedTasks : this.onCompletedClick.bind(this),
+  //   showPendingTasks : this.onPendingClick.bind(this),
+  //   onCheckBoxChange : this.onCheckBoxClick.bind(this),
+  //   deleteButtonEvent : this.onDeleteClick.bind(this)
+  // }
+  for(var i in obj){
+    this.rootElement.addEventListener(i,obj[i]);
+  }
 }
 
 Controller.prototype.addTaskEvent = function(){
@@ -93,13 +121,12 @@ Controller.prototype.getNewItem = function(){
 Controller.prototype.onAddNewItem = function(inputElement,selectedStorage){
   var myViewInstance = this.viewInstance;
   var myModelInstance = this.modelInstance;
-  var id;
-  id = myModelInstance.addItemToAnArray(inputElement,'localStorage');
+  var id = myModelInstance.addItemToAnArray(inputElement,'localStorage');
   myModelInstance.addItemToAnArray(inputElement,'sessionStorage');
   if(this.buttonClicked !== 'completedButton'){
     myViewInstance.createItem(id,inputElement);
   }
-  myViewInstance.inputFieldReset();
+  myViewInstance.resetInputField();
   myViewInstance.displayItemsCount(myModelInstance.itemsCount(false,selectedStorage));
 }
 
