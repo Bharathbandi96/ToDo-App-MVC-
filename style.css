@@ -71,6 +71,10 @@ body>div{
   top: 80px;
   width: 620px;
   float: left;
+  /* background-color: rgb(102, 101, 102); */
+  /* background-color: coral; */
+  /* border-top: 1px solid gray;
+  border-bottom: 1px solid gray; */
 }  
 
 #countMessage{

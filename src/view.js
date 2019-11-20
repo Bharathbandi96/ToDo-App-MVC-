@@ -114,7 +114,7 @@ View.prototype.createSelectElement = function () {
   option3.innerText = 'Session Storage';
   me.appendOptions(selectElement, [option1, option2, option3]);
   me.appendElementToFooter(selectElement);
-    var selectEvent = new Event('onStorageChange');
+  var selectEvent = new Event('onStorageChange');
   selectElement.addEventListener('change',function(){
     me.rootElement.dispatchEvent(selectEvent);
   });
@@ -191,33 +191,32 @@ View.prototype.createAnElement = function (elementType, attributes) {
   return element;
 }
 
-View.prototype.setItemClassName = function(checkBox,status){
-  if(status === true){
-    checkBox.classList = 'checked';
-  }
-}
-
 View.prototype.appendItemToList = function (item) {
-  var displayAreaId = this.rootElement.querySelector('#displayArea');
-  displayAreaId.appendChild(item);
-}
-
-View.prototype.displayStorageItems = function (storageData) {
-  this.clearAllTasks(this.rootElement.querySelector('#displayArea'));
-  for (var i = 0; i < storageData.length; i++) {
-    this.createItem(storageData[i].id, storageData[i].name, storageData[i].status);
-  }
+  this.rootElement.querySelector('#displayArea').appendChild(item);
 }
 
 View.prototype.deleteItemFromList = function(item){
   item.remove();
 }
 
+View.prototype.setItemClassName = function(checkBox,status){
+  if(status === true){
+    checkBox.classList = 'checked';
+  }
+}
+
+View.prototype.displayStorageItems = function (storageData) {
+  this.clearAllTasks(this.rootElement.querySelector('#displayArea'));
+  for(var key in storageData){
+    this.createItem(storageData[key].id, storageData[key].name, storageData[key].status);
+  }
+}
+
 View.prototype.clearAllTasks = function (element) {
   element.innerHTML = '';
 }
 
-View.prototype.inputFieldReset = function () {
+View.prototype.resetInputField = function () {
   this.rootElement.querySelector('#taskInputField').value = '';
   this.rootElement.querySelector('#taskInputField').focus();
 }

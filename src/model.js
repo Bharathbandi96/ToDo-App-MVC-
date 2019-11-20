@@ -1,12 +1,12 @@
 
-function LocalStorage(key) {
-    this.key = key,
+function LocalStorage(storageKey) {
+    this.key = storageKey,
     this.getData = function () { return JSON.parse(localStorage.getItem(this.key)) || []; },
     this.setData = function (data) { localStorage.setItem(this.key, JSON.stringify(data)); }
- }
+}
   
-function SessionStorage(key) {
-    this.key = key,
+function SessionStorage(storageKey) {
+    this.key = storageKey,
     this.getData = function () { return JSON.parse(sessionStorage.getItem(this.key)) || []; },
     this.setData = function (data) { sessionStorage.setItem(this.key, JSON.stringify(data)); }
 }
@@ -16,11 +16,11 @@ function Model(storageKey){
 }
 
 Model.prototype.addItemToAnArray = function(item,selectedStorage){
-    var id = Date.now().toString();
+    var itemId = Date.now().toString();
     var storageData = this.getItemsFromStorage(selectedStorage);
-    storageData.push({id:id,name:item,status:false});
+    storageData.push({id:itemId,name:item,status:false});
     this.addItemsToStorage(selectedStorage,storageData);
-    return id;
+    return itemId;
 }
 
 Model.prototype.addItemsToStorage = function(selectedStorage,storageData){
@@ -29,9 +29,9 @@ Model.prototype.addItemsToStorage = function(selectedStorage,storageData){
 
 Model.prototype.setItemStatus = function(id,selectedStorage){
     var storageData = this.getItemsFromStorage(selectedStorage);
-    var id = id;
+    var itemId = id;
     var itemIndex = storageData.findIndex(function(object){
-      return object.id === id;
+      return object.id === itemId;
     });
     this.updateStatusValueInStorage(itemIndex,storageData,selectedStorage);
   }
@@ -59,10 +59,10 @@ Model.prototype.updateStorage = function(id,selectedStorage){
     this.addItemsToStorage(selectedStorage,storageData);
 }
 
-Model.prototype.itemsCount = function(itemStatus,selectedStorage){
+Model.prototype.getItemsCount = function(selectedStorage){
     var storageData = this.getItemsFromStorage(selectedStorage);
     var items = storageData.filter(function (item) {
-        return item.status === itemStatus;
+        return item.status === false;
     });
     return items.length;
 }
