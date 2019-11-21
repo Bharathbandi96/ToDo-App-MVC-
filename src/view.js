@@ -4,26 +4,26 @@ function View(rootId) {
 }
 
 View.prototype.initialize = function(){
-  this.createHeader();
-  this.createTaskDisplayArea();
-  this.createFooter();
+  this.renderHeader();
+  this.renderTaskDisplayArea();
+  this.renderFooter();
   }
 
-View.prototype.createHeader = function () {
+View.prototype.renderHeader = function () {
   var header = this.createAnElement('div', { id: 'header' });
   this.rootElement.appendChild(header);
-  this.createAppTitle();
-  this.createInputField();
-  this.createAddButton();
+  this.renderAppTitle();
+  this.renderInputField();
+  this.renderAddButton();
 }
 
-View.prototype.createAppTitle = function () {
+View.prototype.renderAppTitle = function () {
   var title = this.createAnElement('h2', {});
   title.innerText = 'My  To-Do  List';
   this.appendElementToHeader(title);
 }
 
-View.prototype.createInputField = function () {
+View.prototype.renderInputField = function () {
   var inputField = this.createAnElement('input', { 
     type: 'text',
     id: 'taskInputField',
@@ -32,7 +32,7 @@ View.prototype.createInputField = function () {
   this.appendElementToHeader(inputField);
 }
 
-View.prototype.createAddButton = function () {
+View.prototype.renderAddButton = function () {
   var me = this;
   var addButton = me.createAnElement('button',{id : 'addButton'});
   addButton.innerText = 'Add';
@@ -42,23 +42,23 @@ View.prototype.createAddButton = function () {
     me.rootElement.dispatchEvent(addEvent);
   });
 }
-
-View.prototype.createTaskDisplayArea = function () {
+//createTasksViewArea
+View.prototype.renderTaskDisplayArea = function () {
   var displayArea = this.createAnElement('ul', { id: 'displayArea' });
   this.rootElement.appendChild(displayArea);
 }
 
-View.prototype.createFooter = function () {
+View.prototype.renderFooter = function () {
   var footer = this.createAnElement('div', { id: 'footer' });
   this.rootElement.appendChild(footer);
-  this.createItemCountView();
-  this.createAllTaskButton();
-  this.createCompletedTaskButton();
-  this.createPendingTaskButton();
-  this.createSelectElement();
+  this.renderItemCountView();
+  this.renderAllTaskButton();
+  this.renderCompletedTaskButton();
+  this.renderPendingTaskButton();
+  this.renderSelectElement();
 }
 
-View.prototype.createItemCountView = function () {
+View.prototype.renderItemCountView = function () {
   var countMessage = this.createAnElement('span', { id: 'countMessage' });
   var taskCount = this.createAnElement('span', { id: 'taskCount' });
   countMessage.innerText = 'No. of Item(s) left: ';
@@ -67,7 +67,7 @@ View.prototype.createItemCountView = function () {
   this.appendElementToFooter(countMessage);
 }
 
-View.prototype.createAllTaskButton = function () {
+View.prototype.renderAllTaskButton = function () {
   var me = this;
   var allTaskButton = me.createAnElement('button',{id : 'allTaskButton'});
   allTaskButton.innerText = 'All Tasks';
@@ -78,7 +78,7 @@ View.prototype.createAllTaskButton = function () {
   });
 }
 
-View.prototype.createCompletedTaskButton = function () {
+View.prototype.renderCompletedTaskButton = function () {
   var me = this;
   var completedTaskButton = me.createAnElement('button',{id : 'completedTaskButton'});
   completedTaskButton.innerText = 'Completed';
@@ -89,7 +89,7 @@ View.prototype.createCompletedTaskButton = function () {
   });
 }
 
-View.prototype.createPendingTaskButton = function () {
+View.prototype.renderPendingTaskButton = function () {
   var me = this;
   var pendingTaskButton = me.createAnElement('button',{id : 'pendingTaskButton'});
   pendingTaskButton.innerText = 'Pending';
@@ -100,19 +100,12 @@ View.prototype.createPendingTaskButton = function () {
   });
 }
 
-View.prototype.createSelectElement = function () {
+View.prototype.renderSelectElement = function () {
   var me = this;
   var selectElement = me.createAnElement('select', { id: 'storageDropDown' });
-  var option1 = me.createAnElement('option', { value: 'selectStorage' });
-  option1.innerText = 'Select Storage';
-  var option2 = me.createAnElement('option', { 
-    value: 'localStorage',
-    selected : "selected" 
-  });
-  option2.innerText = 'Local Storage';
-  var option3 = me.createAnElement('option', { value: 'sessionStorage' });
-  option3.innerText = 'Session Storage';
-  me.appendOptions(selectElement, [option1, option2, option3]);
+  this.renderOption(selectElement,'Select Storage',{value : 'selectStorage'});
+  this.renderOption(selectElement,'Local Storage',{value : 'localStorage',selected : 'selected'})
+  this.renderOption(selectElement,'Session Storage',{value : 'sessionStorage'})
   me.appendElementToFooter(selectElement);
   var selectEvent = new Event('onStorageChange');
   selectElement.addEventListener('change',function(){
@@ -120,20 +113,25 @@ View.prototype.createSelectElement = function () {
   });
 }
 
-View.prototype.appendOptions = function (select, array) {
-  array.forEach(function (option) {
-    select.appendChild(option);
-  });
+View.prototype.renderOption = function(selectElement,elementName,elementAttributes){
+  var me = this;
+  var option = me.createAnElement('option', elementAttributes);
+  option.innerText = elementName;
+  me.appendOptions(selectElement, option);
+}
+
+View.prototype.appendOptions = function (selectElement, option) {
+    selectElement.appendChild(option);
 }
 
 View.prototype.appendElementToHeader = function (element) {
-  var headerId = this.rootElement.querySelector('#header');
-  headerId.appendChild(element);
+  var headerElement = this.rootElement.querySelector('#header');
+  headerElement.appendChild(element);
 }
 
 View.prototype.appendElementToFooter = function (element) {
-  var footerId = this.rootElement.querySelector('#footer');
-  footerId.appendChild(element);
+  var footerElement = this.rootElement.querySelector('#footer');
+  footerElement.appendChild(element);
 }
 
 View.prototype.showMessageOnInvalidStorage = function () {
@@ -153,8 +151,9 @@ View.prototype.createCheckButton = function (li, status, itemId) {
   var checkBox = me.createAnElement('span',{id : 'check'});
   me.setItemClassName(checkBox, status);
   var checkBoxEvent = new CustomEvent('onCheckBoxChange',{detail :{
-    id: itemId,
-    currentElement:li
+    id : itemId,
+    currentElement : li,
+    storageType : this.getStorageType()
   }});
   checkBox.addEventListener('click',function(){
     checkBox.classList.toggle('checked');
@@ -176,7 +175,8 @@ View.prototype.createDeleteButton = function (li,itemId) {
   li.appendChild(deleteButton);
   var deleteEvent = new CustomEvent('deleteButtonEvent',{detail :{
     id: itemId ,
-    currentElement:li
+    currentElement:li,
+    storageType : this.getStorageType()
   }});
   deleteButton.addEventListener('click',function(){
     me.rootElement.dispatchEvent(deleteEvent);
@@ -195,7 +195,7 @@ View.prototype.appendItemToList = function (item) {
   this.rootElement.querySelector('#displayArea').appendChild(item);
 }
 
-View.prototype.deleteItemFromList = function(item){
+View.prototype.deleteItemFromView = function(item){
   item.remove();
 }
 
@@ -216,9 +216,10 @@ View.prototype.clearAllTasks = function (element) {
   element.innerHTML = '';
 }
 
-View.prototype.resetInputField = function () {
-  this.rootElement.querySelector('#taskInputField').value = '';
-  this.rootElement.querySelector('#taskInputField').focus();
+View.prototype.resetAndFocusInputField = function () {
+  var inputFieldElement  = this.rootElement.querySelector('#taskInputField')
+  inputFieldElement.value = '';
+  inputFieldElement.focus();
 }
 
 View.prototype.displayItemsCount = function (count) {

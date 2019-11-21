@@ -14,13 +14,15 @@ function SessionStorage(storageKey) {
 function Model(storageKey){
     this.storageKey = storageKey;
 }
-
-Model.prototype.addItemToAnArray = function(item,selectedStorage){
-    var itemId = Date.now().toString();
+//getIdFromArray()
+Model.prototype.addItemToAnArray = function(itemId,item,selectedStorage){
     var storageData = this.getItemsFromStorage(selectedStorage);
     storageData.push({id:itemId,name:item,status:false});
     this.addItemsToStorage(selectedStorage,storageData);
-    return itemId;
+}
+
+Model.prototype.createId = function(){
+    return Date.now().toString();
 }
 
 Model.prototype.addItemsToStorage = function(selectedStorage,storageData){
@@ -71,6 +73,6 @@ Model.prototype.getItemsFromStorage = function(selectedStorage){
     return this.createStorageManagerInstance(selectedStorage).getData();
 }
 
-Model.prototype.createStorageManagerInstance = function(storageType){
-    return new StorageManager(storageType,this.storageKey);
+Model.prototype.createStorageManagerInstance = function(selectedStorage){
+    return new StorageManager(selectedStorage,this.storageKey);
 }
