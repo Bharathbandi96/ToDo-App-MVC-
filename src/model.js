@@ -14,7 +14,7 @@ function SessionStorage(storageKey) {
 function Model(storageKey){
     this.storageKey = storageKey;
 }
-//getIdFromArray()
+
 Model.prototype.addItemToAnArray = function(itemId,item,selectedStorage){
     var storageData = this.getItemsFromStorage(selectedStorage);
     storageData.push({id:itemId,name:item,status:false});
@@ -53,12 +53,21 @@ Model.prototype.getItemsByStatus = function (itemStatus,selectedStorage) {
 
 Model.prototype.updateStorage = function(id,selectedStorage){
     var storageData = this.getItemsFromStorage(selectedStorage);
-    var itemId = id;
+    var updatedArray = this.deleteItemFromArray(id,storageData)
+    this.addItemsToStorage(selectedStorage,updatedArray);
+}
+
+Model.prototype.getUpdatedArray = function(id,storageData){
+    var updatedArray = this.deleteItemFromArray(id,storageData)
+    return updatedArray;
+}
+
+Model.prototype.deleteItemFromArray = function(id,storageData){
     var itemIndex = storageData.findIndex(function(object){
-        return object.id === itemId;
+        return object.id === id;
     });
     storageData.splice(itemIndex,1);
-    this.addItemsToStorage(selectedStorage,storageData);
+    return storageData;
 }
 
 Model.prototype.getItemsCount = function(selectedStorage){

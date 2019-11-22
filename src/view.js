@@ -15,6 +15,7 @@ View.prototype.renderHeader = function () {
   this.renderAppTitle();
   this.renderInputField();
   this.renderAddButton();
+  
 }
 
 View.prototype.renderAppTitle = function () {
@@ -55,13 +56,14 @@ View.prototype.renderFooter = function () {
   this.renderAllTaskButton();
   this.renderCompletedTaskButton();
   this.renderPendingTaskButton();
+  this.renderClearCompletedButton();
   this.renderSelectElement();
 }
 
 View.prototype.renderItemCountView = function () {
   var countMessage = this.createAnElement('span', { id: 'countMessage' });
   var taskCount = this.createAnElement('span', { id: 'taskCount' });
-  countMessage.innerText = 'No. of Item(s) left: ';
+  countMessage.innerText = 'Item(s) left: ';
   taskCount.innerText = 0;
   countMessage.appendChild(taskCount);
   this.appendElementToFooter(countMessage);
@@ -100,11 +102,25 @@ View.prototype.renderPendingTaskButton = function () {
   });
 }
 
+View.prototype.renderClearCompletedButton = function(){
+  var me = this;
+  var deleteAll = me.createAnElement('button', { id: 'deleteAll' });
+  deleteAll.innerText = 'clear Completed';
+  me.appendElementToFooter(deleteAll);
+  var deleteAllEvent = new Event('clearCompletedEvent');
+  deleteAll.addEventListener('click',function(){
+    me.rootElement.dispatchEvent(deleteAllEvent);
+  });
+}
+
 View.prototype.renderSelectElement = function () {
   var me = this;
   var selectElement = me.createAnElement('select', { id: 'storageDropDown' });
   this.renderOption(selectElement,'Select Storage',{value : 'selectStorage'});
-  this.renderOption(selectElement,'Local Storage',{value : 'localStorage',selected : 'selected'})
+  this.renderOption(selectElement,'Local Storage',{
+    value : 'localStorage',
+    selected : 'selected'
+  })
   this.renderOption(selectElement,'Session Storage',{value : 'sessionStorage'})
   me.appendElementToFooter(selectElement);
   var selectEvent = new Event('onStorageChange');
@@ -189,6 +205,11 @@ View.prototype.createAnElement = function (elementType, attributes) {
     element.setAttribute(key, attributes[key]);
   }
   return element;
+}
+
+
+View.prototype.getItem = function(){
+  return this.rootElement.querySelector('#taskInputField').value;
 }
 
 View.prototype.appendItemToList = function (item) {

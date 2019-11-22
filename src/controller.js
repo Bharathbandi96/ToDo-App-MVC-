@@ -21,22 +21,23 @@ Controller.prototype.attachEvents = function(){
     showCompletedTasks : this.onCompletedClick.bind(this),
     showPendingTasks : this.onPendingClick.bind(this),
     onCheckBoxChange : this.onCheckBoxClick.bind(this),
-    deleteButtonEvent : this.onDeleteClick.bind(this)
+    deleteButtonEvent : this.onDeleteClick.bind(this),
+    clearCompletedEvent : this.onClearCompletedClick.bind(this)
   };
   for(var key in events){
     this.rootElement.addEventListener(key,events[key]);
   }
 }
+
 //need to handel in manager
 Controller.prototype.onStorageSelect = function(){
   var viewInstance = this.viewInstance;
   var modelInstance = this.modelInstance;
-  var storageType = viewInstance.getStorageType();
+  var storageType = this.viewInstance.getStorageType();
   if(storageType !== 'selectStorage'){
     var storageData = modelInstance.getItemsFromStorage(storageType);
-    var itemsCount = modelInstance.getItemsCount(storageType);
     viewInstance.displayStorageItems(storageData);
-    viewInstance.displayItemsCount(itemsCount);
+    this.itemsCount(storageType);
   }else {
     viewInstance.showMessageOnInvalidStorage();
     viewInstance.displayItemsCount(0);
@@ -44,32 +45,44 @@ Controller.prototype.onStorageSelect = function(){
 }
 
 Controller.prototype.onEnter = function(){
+  var viewInstance = this.viewInstance;
   var enterKeyCode = 13;
   if(event.keyCode === enterKeyCode){
-    this.getNewItem();
+    var storageType = viewInstance.getStorageType();
+    var inputElement = viewInstance.getItem();
+    if(inputElement!== '' && storageType !== 'selectStorage'){
+      this.addNewItem(inputElement);
+      this.itemsCount(storageType);
+      viewInstance.resetAndFocusInputField();
+    }
   }
 }
 
 Controller.prototype.onAddClick = function(){
-  this.getNewItem();
-}
-//renderNewItem
-Controller.prototype.getNewItem = function(){
-  var inputElement = this.rootElement.querySelector('#taskInputField').value;
-  var storageType = this.viewInstance.getStorageType();
+  var viewInstance = this.viewInstance;
+  var storageType = viewInstance.getStorageType();
+  var inputElement = viewInstance.getItem();
   if(inputElement!== '' && storageType !== 'selectStorage'){
-    var viewInstance = this.viewInstance;
-    var modelInstance = this.modelInstance;
-    var id = modelInstance.createId();
-    if(this.buttonClicked !== 'completedButton'){
-      viewInstance.createItem(id,inputElement);
-    }
-    modelInstance.addItemToAnArray(id,inputElement,'localStorage');
-    modelInstance.addItemToAnArray(id,inputElement,'sessionStorage');
-    var itemsCount = modelInstance.getItemsCount(storageType);
+    this.addNewItem(inputElement);
+    this.itemsCount(storageType);
     viewInstance.resetAndFocusInputField();
-    viewInstance.displayItemsCount(itemsCount);
   }
+}
+
+Controller.prototype.addNewItem = function(inputElement){
+  var viewInstance = this.viewInstance;
+  var modelInstance = this.modelInstance;
+  var id = modelInstance.createId();
+  if(this.buttonClicked !== 'completedButton'){
+    viewInstance.createItem(id,inputElement);
+  }
+  modelInstance.addItemToAnArray(id,inputElement,'localStorage');
+  modelInstance.addItemToAnArray(id,inputElement,'sessionStorage');
+}
+
+Controller.prototype.itemsCount = function(storageType){
+  var itemsCount = this.modelInstance.getItemsCount(storageType);
+  this.viewInstance.displayItemsCount(itemsCount);
 }
 
 Controller.prototype.onCheckBoxClick = function(e){
@@ -123,5 +136,20 @@ Controller.prototype.getItemsBasedOnStatus = function(status){
     var itemsCount = modelInstance.getItemsCount(storageType)
     viewInstance.displayStorageItems(items);
     viewInstance.displayItemsCount(itemsCount);
+  }
+}
+
+Controller.prototype.onClearCompletedClick = function(){
+  var viewInstance = this.viewInstance;
+  var modelInstance = this.modelInstance;
+  var storageType = viewInstance.getStorageType();
+  var storageData = modelInstance.getItemsFromStorage(storageType);
+  if(storageType !== 'selectStorage'){
+    var items = modelInstance.getItemsByStatus(true,storageType);
+    for(var i in items){
+      storageData = modelInstance.getUpdatedArray(items[i].id,storageData);
+    }
+    modelInstance.addItemsToStorage(storageType,storageData);
+    viewInstance.displayStorageItems(storageData);
   }
 }
