@@ -1,0 +1,29 @@
+<html>
+  <head>
+    <title>Todo App</title>
+    <link rel='stylesheet' href='./CSS_Files/style.css' />
+  </head>
+
+  <body>
+    <div id='app1'></div>
+    <div id='app2'></div>
+    <div id='app3'></div>
+  </body>
+  <script src = './JS_Files/view.js'></script>
+  <script src = './JS_Files/controller.js'></script>
+  <script src= './JS_Files/model.js'></script>
+  <script src = './JS_Files/manager.js'></script>
+  <script>
+    (function() { 
+      function todo(storageKey,rootId) {
+        return new Controller(new View(rootId), new Model(storageKey));
+      }
+
+      todo('newTodo1','#app1').init();
+
+      todo('newTodo2','#app2').init();
+      
+      todo('newTodo3','#app3').init();
+    })();
+  </script>
+</html>

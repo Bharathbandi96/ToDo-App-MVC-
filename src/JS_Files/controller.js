@@ -1,18 +1,21 @@
 
-function Controller(view,model){
+function Controller(view,model) {
   this.rootElement = view.rootElement;
   this.viewInstance = view;
   this.modelInstance = model;
+  this.allTasksValue = 'allTaskButton';
+  this.completedValue = 'completedButton';
+  this.pendingValue = 'pendingButton'
   this.buttonClicked;
 }
 
-Controller.prototype.init = function(){
+Controller.prototype.init = function() {
   this.viewInstance.initialize();
   this.attachEvents();
   this.onStorageSelect();
 }
 
-Controller.prototype.attachEvents = function(){
+Controller.prototype.attachEvents = function() {
   var events = {
     onAddItem : this.onAddClick.bind(this),
     onStorageChange : this.onStorageSelect.bind(this),
@@ -28,14 +31,13 @@ Controller.prototype.attachEvents = function(){
     this.rootElement.addEventListener(key,events[key]);
   }
 }
-
 //need to handel in manager
-Controller.prototype.onStorageSelect = function(){
+Controller.prototype.onStorageSelect = function() {
   var viewInstance = this.viewInstance;
-  var modelInstance = this.modelInstance;
-  var storageType = this.viewInstance.getStorageType();
+  this.buttonClicked = '';
+  var storageType = viewInstance.getStorageType();
   if(storageType !== 'selectStorage'){
-    var storageData = modelInstance.getItemsFromStorage(storageType);
+    var storageData = this.modelInstance.getItemsFromStorage(storageType);
     viewInstance.displayStorageItems(storageData);
     this.itemsCount(storageType);
   }else {
@@ -44,7 +46,7 @@ Controller.prototype.onStorageSelect = function(){
   }
 }
 
-Controller.prototype.onEnter = function(){
+Controller.prototype.onEnter = function() {
   var viewInstance = this.viewInstance;
   var enterKeyCode = 13;
   if(event.keyCode === enterKeyCode){
@@ -58,7 +60,7 @@ Controller.prototype.onEnter = function(){
   }
 }
 
-Controller.prototype.onAddClick = function(){
+Controller.prototype.onAddClick = function() {
   var viewInstance = this.viewInstance;
   var storageType = viewInstance.getStorageType();
   var inputElement = viewInstance.getItem();
@@ -69,35 +71,31 @@ Controller.prototype.onAddClick = function(){
   }
 }
 
-Controller.prototype.addNewItem = function(inputElement){
-  var viewInstance = this.viewInstance;
-  var modelInstance = this.modelInstance;
-  var id = modelInstance.createId();
+Controller.prototype.addNewItem = function(inputElement) {
+  var id = this.modelInstance.addItemToStorage(inputElement);
   if(this.buttonClicked !== 'completedButton'){
-    viewInstance.createItem(id,inputElement);
+    this.viewInstance.createItem(id,inputElement);
   }
-  modelInstance.addItemToAnArray(id,inputElement,'localStorage');
-  modelInstance.addItemToAnArray(id,inputElement,'sessionStorage');
 }
 
-Controller.prototype.itemsCount = function(storageType){
+Controller.prototype.itemsCount = function(storageType) {
   var itemsCount = this.modelInstance.getItemsCount(storageType);
   this.viewInstance.displayItemsCount(itemsCount);
 }
 
-Controller.prototype.onCheckBoxClick = function(e){
+Controller.prototype.onCheckBoxClick = function(e) {
   var viewInstance = this.viewInstance;
   var modelInstance = this.modelInstance;
   var itemsCount;
   if(this.buttonClicked === 'completedButton' || this.buttonClicked === 'pendingButton'){
     viewInstance.deleteItemFromView(e.detail.currentElement);
   }
-  modelInstance.setItemStatus(e.detail.id,e.detail.storageType);
+  modelInstance.updateItemStatus(e.detail.id,e.detail.storageType);
   itemsCount = modelInstance.getItemsCount(e.detail.storageType);
   viewInstance.displayItemsCount(itemsCount);
 }
 
-Controller.prototype.onDeleteClick = function(e){
+Controller.prototype.onDeleteClick = function(e) {
   var viewInstance = this.viewInstance;
   var modelInstance = this.modelInstance;
   var itemsCount;
@@ -107,7 +105,7 @@ Controller.prototype.onDeleteClick = function(e){
   viewInstance.displayItemsCount(itemsCount);
 }
 
-Controller.prototype.onAllTasksClick = function(){
+Controller.prototype.onAllTasksClick = function() {
   var viewInstance = this.viewInstance;
   var storageType = viewInstance.getStorageType();
   if(storageType !== 'selectStorage'){
@@ -117,17 +115,17 @@ Controller.prototype.onAllTasksClick = function(){
   }
 }
 
-Controller.prototype.onCompletedClick= function(){
+Controller.prototype.onCompletedClick= function() {
   this.buttonClicked = 'completedButton';
   this.getItemsBasedOnStatus(true);
 }
 
-Controller.prototype.onPendingClick = function(){
+Controller.prototype.onPendingClick = function() {
   this.buttonClicked = 'pendingButton';
   this.getItemsBasedOnStatus(false);
 }
 
-Controller.prototype.getItemsBasedOnStatus = function(status){
+Controller.prototype.getItemsBasedOnStatus = function(status) {
   var viewInstance = this.viewInstance;
   var modelInstance = this.modelInstance;
   var storageType = viewInstance.getStorageType();
@@ -147,9 +145,9 @@ Controller.prototype.onClearCompletedClick = function(){
   if(storageType !== 'selectStorage'){
     var items = modelInstance.getItemsByStatus(true,storageType);
     for(var i in items){
-      storageData = modelInstance.getUpdatedArray(items[i].id,storageData);
+      storageData = modelInstance.updateArray(items[i].id,storageData);
     }
-    modelInstance.addItemsToStorage(storageType,storageData);
+    modelInstance.setItemsToStorage(storageType,storageData);
     viewInstance.displayStorageItems(storageData);
   }
 }
