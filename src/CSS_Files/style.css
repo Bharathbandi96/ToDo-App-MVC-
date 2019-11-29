@@ -193,7 +193,8 @@ ul li:hover {
   background: #ddd;
 }
 
-ul li span.checked + span {
+ul li span.checked + input {
+/* ul li span.checked + span { */
   color: rgb(0, 0, 0);
   text-decoration : line-through;
 }
@@ -211,6 +212,15 @@ ul li span.checked::before {
   width: 7px;
 }
 
+#editContent{
+  width:550px;
+  height: 30px;
+  font-size: 22px;
+  border: none;
+  background: transparent;
+  border-color:none;
+  outline: none;
+}
 
 .close {
   cursor: pointer;
@@ -218,7 +228,8 @@ ul li span.checked::before {
   position: absolute;
   right: 0;
   top: 0;
-  padding: 12px 16px 12px 16px;
+  padding: 8px 16px;
+  font-size: 20px;
 }
 
 .close:hover {

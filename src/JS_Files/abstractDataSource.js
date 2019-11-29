@@ -1,15 +1,15 @@
 
-function AbstractDataSource(storageType, callback, key) {
+function AbstractDataSource(storageType, key) {
     this.storageType = storageType;
     this.key = key;
-    this.callback = callback;
+    // this.storageInstance = getStorageInstance(this.storageType,this.key,this.callback)
 
-    this.setData = function (data) {
-        getStorageInstance(this.storageType, this.key, this.callback).setData(data);
+    this.setData = function (data, callback) {
+        getStorageInstance(this.storageType, this.key).setData(data, callback);
     };
 
-    this.getData = function () {
-        return getStorageInstance(this.storageType, this.key, this.callback).getData();
+    this.getData = function (callback) {
+        return getStorageInstance(this.storageType, this.key).getData(callback);
     };
 
     this.deleteItem = function (id) {
@@ -21,7 +21,7 @@ function AbstractDataSource(storageType, callback, key) {
     };
 }
 
-function getStorageInstance(storageType, key, callback) {
+function getStorageInstance(storageType, key) {
     var storage = {
         'localStorage': function () {
             return new LocalStorage(key);
@@ -31,8 +31,8 @@ function getStorageInstance(storageType, key, callback) {
             return new SessionStorage(key);
         },
 
-        'webApi': function () {
-            return new WebApi(callback);
+        'webAPI': function () {
+            return new webAPI();
         }
     }
     return storage[storageType]();
