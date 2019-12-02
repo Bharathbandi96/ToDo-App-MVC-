@@ -187,7 +187,7 @@ View.prototype.createTextContent = function (li, item) {
 View.prototype.createDeleteButton = function (li, itemId) {
   var me = this;
   var deleteButton = me.createAnElement('SPAN', { class: 'close' });
-  deleteButton.innerText = '\u2718';//2717-8
+  deleteButton.innerText = '\u2718';
   li.appendChild(deleteButton);
   var deleteEvent = new CustomEvent('deleteButtonEvent', {
     detail: {

@@ -2,7 +2,6 @@
 function AbstractDataSource(storageType, key) {
     this.storageType = storageType;
     this.key = key;
-    // this.storageInstance = getStorageInstance(this.storageType,this.key,this.callback)
 
     this.setData = function (data, callback) {
         getStorageInstance(this.storageType, this.key).setData(data, callback);

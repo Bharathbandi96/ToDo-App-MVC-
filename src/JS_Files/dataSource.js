@@ -72,10 +72,8 @@ DataSource.prototype.addItemToStorage = function (item, callback) {
         if (this.storageTypes[key] !== 'webAPI') {
             data = this.getItemsFromStorage(this.storageTypes[key]);
             data.push({ id: itemId, title: item, completed: false });
-            // this.setItemsToStorage(this.storageTypes[key], storageData);
         } else {
             data = { 'title': item, 'order': null, 'completed': '', 'url': '' };
-            // this.setItemsToStorage(this.storageTypes[key], data, callback);
         }
         this.setItemsToStorage(this.storageTypes[key], data, callback);
     }
@@ -114,7 +112,7 @@ DataSource.prototype.updateStorage = function (id, selectedStorage) {
     var updatedArray = this.updateArray(id, storageData);
     this.setItemsToStorage(selectedStorage, updatedArray);
 }
-//deleteItemFromArray
+
 DataSource.prototype.updateArray = function (id, storageData) {
     return storageData.filter(function (item) {
         return item.id !== id;

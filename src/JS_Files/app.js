@@ -53,23 +53,6 @@ App.prototype.onStorageSelect = function () {
   }
 }
 
-App.prototype.onResponse = function (data) {
-  var storageType = this.viewInstance.getStorageType();
-  if (storageType === this.storageTypes.webAPI) {
-    if (this.buttonClicked !== this.buttonValues.completed) {
-      this.displayItems(data);
-    }
-    this.modelInstance.getItemsFromStorage(storageType, this.itemsCount.bind(this));
-  }
-}
-
-App.prototype.displayItems = function (data) {
-  for (var i in data) {
-    var id = this.modelInstance.getId(data[i].url);
-    this.viewInstance.createItem(id, data[i].title, data[i].completed);
-  }
-}
-//can be optimized
 App.prototype.onEnter = function () {
   var viewInstance = this.viewInstance;
   if (event.keyCode === 13) {
@@ -99,6 +82,23 @@ App.prototype.addNewItem = function (inputElement, storageType) {
       this.viewInstance.createItem(id, inputElement);
     }
     this.itemsCount(this.modelInstance.getItemsFromStorage(storageType));
+  }
+}
+
+App.prototype.onResponse = function (data) {
+  var storageType = this.viewInstance.getStorageType();
+  if (storageType === this.storageTypes.webAPI) {
+    if (this.buttonClicked !== this.buttonValues.completed) {
+      this.displayItems(data);
+    }
+    this.modelInstance.getItemsFromStorage(storageType, this.itemsCount.bind(this));
+  }
+}
+
+App.prototype.displayItems = function (data) {
+  for (var i in data) {
+    var id = this.modelInstance.getId(data[i].url);
+    this.viewInstance.createItem(id, data[i].title, data[i].completed);
   }
 }
 
@@ -143,7 +143,7 @@ App.prototype.onAllTasksClick = function () {
   var storageType = viewInstance.getStorageType();
   if (storageType !== 'selectStorage') {
     this.buttonClicked = this.buttonValues.allTasks;
-    var storageData = this.modelInstance.getItemsFromStorage(storageType, this.onButtonClick.bind(this));
+    var storageData = this.modelInstance.getItemsFromStorage(storageType, this.onButtonClickResponse.bind(this));
     viewInstance.displayStorageItems(storageData);
   }
 }
@@ -163,14 +163,14 @@ App.prototype.getItemsBasedOnStatus = function (status) {
   var modelInstance = this.modelInstance;
   var storageType = viewInstance.getStorageType();
   if (storageType !== 'selectStorage') {
-    var items = modelInstance.getItems(status, storageType, this.onButtonClick.bind(this));
+    var items = modelInstance.getItems(status, storageType, this.onButtonClickResponse.bind(this));
     var itemsCount = (storageType !== this.storageTypes.webAPI) ? modelInstance.getItemsCount(storageType) : null;
     viewInstance.displayStorageItems(items);
     viewInstance.displayItemsCount(itemsCount);
   }
 }
 
-App.prototype.onButtonClick = function (data) {
+App.prototype.onButtonClickResponse = function (data) {
   var items;
   var modelInstance = this.modelInstance;
   var storageType = this.viewInstance.getStorageType();
@@ -201,7 +201,7 @@ App.prototype.onClearCompletedClick = function () {
   var storageType = this.viewInstance.getStorageType();
   if (storageType !== 'selectStorage') {
     this.buttonClicked = this.buttonValues.clearCompleted;
-    (storageType === this.storageTypes.webAPI) ? this.modelInstance.getItemsFromStorage(storageType, this.onButtonClick.bind(this)) : this.clearCompletedTasks(storageType);
+    (storageType === this.storageTypes.webAPI) ? this.modelInstance.getItemsFromStorage(storageType, this.onButtonClickResponse.bind(this)) : this.clearCompletedTasks(storageType);
   }
 }
 
