@@ -30,7 +30,6 @@ body>div{
 #taskInputField{
   position: relative;
   padding-left:5px;
-  /* top: 0px; */
   padding: 10px;
   border: none;
   width:525px;
@@ -70,12 +69,7 @@ body>div{
   top: 80px;
   width: 620px;
   float: left;
-  /* border-top: 2px solid gray; */
   padding-left: 2px;
-  /* background-color: rgb(102, 101, 102); */
-  /* background-color: coral; */
-  /* border-top: 1px solid gray;
-  border-bottom: 1px solid gray; */
 }  
 
 #countMessage{
@@ -167,7 +161,6 @@ ul li {
 
 ul {
   margin: 0px;
-  /* padding: 0px; */
 }
 
 ul li:nth-child(odd) {
@@ -196,16 +189,6 @@ ul li span.checked::before {
   height: 15px;
   width: 7px;
 }
-
-/* #editContent{
-  width:550px;
-  height: 30px;
-  font-size: 22px;
-  border: none;
-  background: transparent;
-  border-color:none;
-  outline: none;
-} */
 
 .close {
   cursor: pointer;
