@@ -1,8 +1,10 @@
 
-function App(view, DataSource) {
-  this.rootElement = view.rootElement;
-  this.viewInstance = view;
+// var App = (function () {
+function App(View, DataSource) {
+  this.rootElement = View.rootElement;
+  this.viewInstance = View;
   this.modelInstance = DataSource;
+  this.storageTypes = this.modelInstance.storageTypes;
   this.buttonValues = {
     allTasks: 'allTaskButton',
     completed: 'completedButton',
@@ -10,7 +12,7 @@ function App(view, DataSource) {
     clearCompleted: 'clearCompleted'
   };
   this.buttonClicked;
-  this.storageTypes = this.modelInstance.storageTypes;
+  this.storageType;
 }
 
 App.prototype.init = function () {
@@ -39,13 +41,13 @@ App.prototype.attachEvents = function () {
 App.prototype.onStorageSelect = function () {
   var viewInstance = this.viewInstance;
   this.buttonClicked = '';
-  var storageType = viewInstance.getStorageType();
+  this.storageType = viewInstance.getStorageType();
   var storageData;
-  if (storageType !== 'selectStorage') {
+  if (this.storageType !== 'selectStorage') {
     this.viewInstance.clearAllTasks();
-    storageData = this.modelInstance.getItemsFromStorage(storageType, this.onResponse.bind(this));
+    storageData = this.modelInstance.getItemsFromStorage(this.storageType, this.onResponse.bind(this));
     viewInstance.displayStorageItems(storageData);
-    (storageType !== this.storageTypes.webAPI) ? this.itemsCount(storageData) : null;
+    (this.storageType !== this.storageTypes.webAPI) ? this.itemsCount(storageData) : null;
   }
   else {
     viewInstance.showMessageOnInvalidStorage();
@@ -56,10 +58,9 @@ App.prototype.onStorageSelect = function () {
 App.prototype.onEnter = function () {
   var viewInstance = this.viewInstance;
   if (event.keyCode === 13) {
-    var storageType = viewInstance.getStorageType();
     var inputElement = viewInstance.getItem();
-    if (inputElement !== '' && storageType !== 'selectStorage') {
-      this.addNewItem(inputElement, storageType);
+    if (inputElement !== '' && this.storageType !== 'selectStorage') {
+      this.addNewItem(inputElement, this.storageType);
       viewInstance.resetAndFocusInputField();
     }
   }
@@ -67,31 +68,30 @@ App.prototype.onEnter = function () {
 
 App.prototype.onAddClick = function () {
   var viewInstance = this.viewInstance;
-  var storageType = viewInstance.getStorageType();
   var inputElement = viewInstance.getItem();
-  if (inputElement !== '' && storageType !== 'selectStorage') {
-    this.addNewItem(inputElement, storageType);
+  if (inputElement !== '' && this.storageType !== 'selectStorage') {
+    this.addNewItem(inputElement, this.storageType);
     viewInstance.resetAndFocusInputField();
   }
 }
 
 App.prototype.addNewItem = function (inputElement, storageType) {
-  var id = this.modelInstance.addItemToStorage(inputElement, this.onResponse.bind(this));
+  var modelInstance = this.modelInstance;
+  var id = modelInstance.addItemToStorage(inputElement, this.onResponse.bind(this));
   if (storageType !== this.storageTypes.webAPI) {
     if (this.buttonClicked !== this.buttonValues.completed) {
       this.viewInstance.createItem(id, inputElement);
     }
-    this.itemsCount(this.modelInstance.getItemsFromStorage(storageType));
+    this.itemsCount(modelInstance.getItemsFromStorage(storageType));
   }
 }
 
 App.prototype.onResponse = function (data) {
-  var storageType = this.viewInstance.getStorageType();
-  if (storageType === this.storageTypes.webAPI) {
+  if (this.storageType === this.storageTypes.webAPI) {
     if (this.buttonClicked !== this.buttonValues.completed) {
       this.displayItems(data);
     }
-    this.modelInstance.getItemsFromStorage(storageType, this.itemsCount.bind(this));
+    this.modelInstance.getItemsFromStorage(this.storageType, this.itemsCount.bind(this));
   }
 }
 
@@ -140,10 +140,9 @@ App.prototype.onDeleteClick = function (e) {
 
 App.prototype.onAllTasksClick = function () {
   var viewInstance = this.viewInstance;
-  var storageType = viewInstance.getStorageType();
-  if (storageType !== 'selectStorage') {
+  if (this.storageType !== 'selectStorage') {
     this.buttonClicked = this.buttonValues.allTasks;
-    var storageData = this.modelInstance.getItemsFromStorage(storageType, this.onButtonClickResponse.bind(this));
+    var storageData = this.modelInstance.getItemsFromStorage(this.storageType, this.onButtonClickResponse.bind(this));
     viewInstance.displayStorageItems(storageData);
   }
 }
@@ -161,10 +160,9 @@ App.prototype.onPendingClick = function () {
 App.prototype.getItemsBasedOnStatus = function (status) {
   var viewInstance = this.viewInstance;
   var modelInstance = this.modelInstance;
-  var storageType = viewInstance.getStorageType();
-  if (storageType !== 'selectStorage') {
-    var items = modelInstance.getItems(status, storageType, this.onButtonClickResponse.bind(this));
-    var itemsCount = (storageType !== this.storageTypes.webAPI) ? modelInstance.getItemsCount(storageType) : null;
+  if (this.storageType !== 'selectStorage') {
+    var items = modelInstance.getItems(status, this.storageType, this.onButtonClickResponse.bind(this));
+    var itemsCount = (this.storageType !== this.storageTypes.webAPI) ? modelInstance.getItemsCount(this.storageType) : null;
     viewInstance.displayStorageItems(items);
     viewInstance.displayItemsCount(itemsCount);
   }
@@ -173,8 +171,8 @@ App.prototype.getItemsBasedOnStatus = function (status) {
 App.prototype.onButtonClickResponse = function (data) {
   var items;
   var modelInstance = this.modelInstance;
-  var storageType = this.viewInstance.getStorageType();
-  this.viewInstance.clearAllTasks();
+  var viewInstance = this.viewInstance;
+  viewInstance.clearAllTasks();
   if (this.buttonClicked === this.buttonValues.allTasks) {
     this.displayItems(data);
   }
@@ -190,18 +188,17 @@ App.prototype.onButtonClickResponse = function (data) {
     items = modelInstance.getItemsUsingStatus(data, true);
     for (var i in items) {
       var id = modelInstance.getId(items[i].url);
-      modelInstance.deleteItemFromStorage(storageType, id);
+      modelInstance.deleteItemFromStorage(this.storageType, id);
     }
-    modelInstance.getItemsFromStorage(storageType, this.onResponse.bind(this));
+    modelInstance.getItemsFromStorage(this.storageType, this.onResponse.bind(this));
   }
-  modelInstance.getItemsFromStorage(storageType, this.itemsCount.bind(this));
+  modelInstance.getItemsFromStorage(this.storageType, this.itemsCount.bind(this));
 }
 
 App.prototype.onClearCompletedClick = function () {
-  var storageType = this.viewInstance.getStorageType();
-  if (storageType !== 'selectStorage') {
+  if (this.storageType !== 'selectStorage') {
     this.buttonClicked = this.buttonValues.clearCompleted;
-    (storageType === this.storageTypes.webAPI) ? this.modelInstance.getItemsFromStorage(storageType, this.onButtonClickResponse.bind(this)) : this.clearCompletedTasks(storageType);
+    (this.storageType === this.storageTypes.webAPI) ? this.modelInstance.getItemsFromStorage(this.storageType, this.onButtonClickResponse.bind(this)) : this.clearCompletedTasks(this.storageType);
   }
 }
 
@@ -215,3 +212,6 @@ App.prototype.clearCompletedTasks = function (storageType) {
   modelInstance.setItemsToStorage(storageType, storageData);
   this.viewInstance.displayStorageItems(storageData);
 }
+
+//   return new App(view, model)
+// })();

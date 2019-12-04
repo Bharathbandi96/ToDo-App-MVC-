@@ -1,4 +1,6 @@
 
+// var View = (function () {
+
 function View(rootId) {
   this.rootElement = document.querySelector(rootId);
 }
@@ -252,3 +254,6 @@ View.prototype.displayItemsCount = function (count) {
 View.prototype.getStorageType = function () {
   return this.rootElement.querySelector('#storageDropDown').value;
 }
+
+//   return new View(rootId);
+// })();

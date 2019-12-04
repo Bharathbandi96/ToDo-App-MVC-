@@ -1,61 +1,64 @@
 
 function LocalStorage(storageKey) {
     this.key = storageKey;
-    this.getData = function () {
-        return JSON.parse(localStorage.getItem(this.key)) || [];
-    };
-    this.setData = function (data) {
-        localStorage.setItem(this.key, JSON.stringify(data));
-    };
 }
+
+LocalStorage.prototype.getData = function () {
+    return JSON.parse(localStorage.getItem(this.key)) || [];
+};
+
+LocalStorage.prototype.setData = function (data) {
+    localStorage.setItem(this.key, JSON.stringify(data));
+};
 
 function SessionStorage(storageKey) {
     this.key = storageKey;
-    this.getData = function () {
-        return JSON.parse(sessionStorage.getItem(this.key)) || [];
-    };
-    this.setData = function (data) {
-        sessionStorage.setItem(this.key, JSON.stringify(data));
-    };
 }
 
-function webAPI() {
+SessionStorage.prototype.getData = function () {
+    return JSON.parse(sessionStorage.getItem(this.key)) || [];
+};
+
+SessionStorage.prototype.setData = function (data) {
+    sessionStorage.setItem(this.key, JSON.stringify(data));
+};
+
+function WebAPI() {
     this.xhr = new XMLHttpRequest();
     this.url = 'https://todo-backend-express.herokuapp.com/';
-    this.getData = function (callback) {
-        this.xhr.open('GET', this.url, true);
-        this.xhr.setRequestHeader('Content-Type', 'application/JSON');
-        this.xhr.send(null);
-        this.xhr.onreadystatechange = function () {
-            if (this.readyState === 4) {
-                callback(JSON.parse(this.response));
-            }
-        };
-    };
+}
 
-    this.setData = function (data, callback) {
-        this.xhr.open('POST', this.url, true);
-        this.xhr.setRequestHeader('Content-Type', 'application/JSON');
-        this.xhr.send(JSON.stringify(data));
-        this.xhr.onreadystatechange = function () {
-            if (this.readyState === 4) {
-                callback([JSON.parse(this.response)]);
-            }
-        };
-    };
+WebAPI.prototype.getData = function (callback) {
+    this.sendRequest('GET', null, callback);
+};
 
-    this.deleteItem = function (id) {
-        this.xhr.open('DELETE', this.url + id, true);
-        this.xhr.send(null);
-    };
-
-    this.updateItem = function (id, status) {
-        this.xhr.open('PATCH', this.url + id, true);
-        this.xhr.setRequestHeader('Content-type', 'application/json');
-        this.xhr.send(JSON.stringify({ 'completed': status }));
+WebAPI.prototype.setData = function (data, callback) {
+    this.sendRequest('POST', data, callback);
+};
+//prepareData
+WebAPI.prototype.sendRequest = function (method, data, callback) {
+    this.xhr.open(method, this.url, true);
+    this.xhr.setRequestHeader('Content-Type', 'application/JSON');
+    this.xhr.send(JSON.stringify(data));
+    this.xhr.onreadystatechange = function () {
+        if (this.readyState === 4) {
+            (method === 'POST') ? callback([JSON.parse(this.response)]) : callback(JSON.parse(this.response));
+        }
     };
 }
 
+WebAPI.prototype.deleteItem = function (id) {
+    this.xhr.open('DELETE', this.url + id, true);
+    this.xhr.send(null);
+};
+
+WebAPI.prototype.updateItem = function (id, status) {
+    this.xhr.open('PATCH', this.url + id, true);
+    this.xhr.setRequestHeader('Content-type', 'application/json');
+    this.xhr.send(JSON.stringify({ 'completed': status }));
+};
+
+// var DataSource = (function () {
 function DataSource(storageKey) {
     this.storageKey = storageKey;
     this.storageTypes = {
@@ -63,11 +66,12 @@ function DataSource(storageKey) {
         sessionStorage: 'sessionStorage',
         webAPI: 'webAPI'
     };
+    this.storageInstance = new AbstractDataSource(this.storageKey);
 }
 
 DataSource.prototype.addItemToStorage = function (item, callback) {
     var itemId = this.createId();
-    var data
+    var data;
     for (var key in this.storageTypes) {
         if (this.storageTypes[key] !== 'webAPI') {
             data = this.getItemsFromStorage(this.storageTypes[key]);
@@ -83,13 +87,13 @@ DataSource.prototype.addItemToStorage = function (item, callback) {
 DataSource.prototype.createId = function () {
     return Date.now().toString();
 }
-
-DataSource.prototype.getId = function (URL) {
-    return URL.slice(42);
+////
+DataSource.prototype.getId = function (url) {
+    return url.slice(42);
 }
 
 DataSource.prototype.setItemsToStorage = function (selectedStorage, storageData, callback) {
-    this.createStorageManagerInstance(selectedStorage).setData(storageData, callback);
+    this.storageInstance.setData(selectedStorage, storageData, callback);
 }
 
 DataSource.prototype.updateItemStatus = function (id, selectedStorage) {
@@ -128,24 +132,22 @@ DataSource.prototype.getItemsCount = function (selectedStorage) {
 }
 
 DataSource.prototype.getItemsFromStorage = function (selectedStorage, callback) {
-    return this.createStorageManagerInstance(selectedStorage).getData(callback);
+    return this.storageInstance.getData(selectedStorage, callback);
 }
 
 DataSource.prototype.deleteItemFromStorage = function (selectedStorage, id) {
-    this.createStorageManagerInstance(selectedStorage).deleteItem(id);
+    this.storageInstance.deleteItem(selectedStorage, id);
 }
 
 DataSource.prototype.updateStorageItem = function (selectedStorage, id, status) {
-    this.createStorageManagerInstance(selectedStorage).updateItem(id, status)
+    this.storageInstance.updateItem(selectedStorage, id, status);
 }
-
-DataSource.prototype.createStorageManagerInstance = function (selectedStorage) {
-    return new AbstractDataSource(selectedStorage, this.storageKey);
-}
-
 DataSource.prototype.getItemsUsingStatus = function (data, status) {
     var items = data.filter(function (item) {
         return item.completed === status;
     });
     return items;
 }
+
+//     return new DataSource(key)
+// })()
