@@ -1,16 +1,9 @@
 
-// var App = (function () {
 function App(View, DataSource) {
-  this.rootElement = View.rootElement;
   this.viewInstance = View;
   this.modelInstance = DataSource;
   this.storageTypes = this.modelInstance.storageTypes;
-  this.buttonValues = {
-    allTasks: 'allTaskButton',
-    completed: 'completedButton',
-    pending: 'pendingButton',
-    clearCompleted: 'clearCompleted'
-  };
+  this.buttonValues = this.viewInstance.buttonValues;
   this.buttonClicked;
   this.storageType;
 }
@@ -34,9 +27,9 @@ App.prototype.attachEvents = function () {
     clearCompletedEvent: this.onClearCompletedClick.bind(this),
   };
   for (var key in events) {
-    this.rootElement.addEventListener(key, events[key]);
+    this.viewInstance.rootElement.addEventListener(key, events[key]);
   }
-}
+};
 
 App.prototype.onStorageSelect = function () {
   var viewInstance = this.viewInstance;
@@ -44,7 +37,7 @@ App.prototype.onStorageSelect = function () {
   this.storageType = viewInstance.getStorageType();
   var storageData;
   if (this.storageType !== 'selectStorage') {
-    this.viewInstance.clearAllTasks();
+    viewInstance.clearAllTasks();
     storageData = this.modelInstance.getItemsFromStorage(this.storageType, this.onResponse.bind(this));
     viewInstance.displayStorageItems(storageData);
     (this.storageType !== this.storageTypes.webAPI) ? this.itemsCount(storageData) : null;
@@ -113,13 +106,13 @@ App.prototype.onCheckBoxClick = function (e) {
   if (this.buttonClicked === this.buttonValues.completed || this.buttonClicked === this.buttonValues.pending) {
     viewInstance.deleteItemFromView(e.detail.currentElement);
   }
-  if (e.detail.storageType === this.storageTypes.webAPI) {
+  if (this.storageType === this.storageTypes.webAPI) {
     var status = (e.detail.checkBox.classList.value === 'checked') ? true : false;
-    modelInstance.updateStorageItem(e.detail.storageType, e.detail.id, status);
-    modelInstance.getItemsFromStorage(e.detail.storageType, this.itemsCount.bind(this));
+    modelInstance.updateStorageItem(this.storageType, e.detail.id, status);
+    modelInstance.getItemsFromStorage(this.storageType, this.itemsCount.bind(this));
   } else {
-    modelInstance.updateItemStatus(e.detail.id, e.detail.storageType);
-    var itemsCount = modelInstance.getItemsCount(e.detail.storageType);
+    modelInstance.updateItemStatus(e.detail.id, this.storageType);
+    var itemsCount = modelInstance.getItemsCount(this.storageType);
     viewInstance.displayItemsCount(itemsCount);
   }
 }
@@ -128,22 +121,21 @@ App.prototype.onDeleteClick = function (e) {
   var viewInstance = this.viewInstance;
   var modelInstance = this.modelInstance;
   viewInstance.deleteItemFromView(e.detail.currentElement);
-  if (e.detail.storageType === this.storageTypes.webAPI) {
-    modelInstance.deleteItemFromStorage(e.detail.storageType, e.detail.id);
-    modelInstance.getItemsFromStorage(e.detail.storageType, this.itemsCount.bind(this));
+  if (this.storageType === this.storageTypes.webAPI) {
+    modelInstance.deleteItemFromStorage(this.storageType, e.detail.id);
+    modelInstance.getItemsFromStorage(this.storageType, this.itemsCount.bind(this));
   } else {
-    modelInstance.updateStorage(e.detail.id, e.detail.storageType);
-    var itemsCount = modelInstance.getItemsCount(e.detail.storageType);
+    modelInstance.updateStorage(e.detail.id, this.storageType);
+    var itemsCount = modelInstance.getItemsCount(this.storageType);
     viewInstance.displayItemsCount(itemsCount);
   }
 }
 
 App.prototype.onAllTasksClick = function () {
-  var viewInstance = this.viewInstance;
   if (this.storageType !== 'selectStorage') {
     this.buttonClicked = this.buttonValues.allTasks;
     var storageData = this.modelInstance.getItemsFromStorage(this.storageType, this.onButtonClickResponse.bind(this));
-    viewInstance.displayStorageItems(storageData);
+    this.viewInstance.displayStorageItems(storageData);
   }
 }
 
@@ -171,8 +163,7 @@ App.prototype.getItemsBasedOnStatus = function (status) {
 App.prototype.onButtonClickResponse = function (data) {
   var items;
   var modelInstance = this.modelInstance;
-  var viewInstance = this.viewInstance;
-  viewInstance.clearAllTasks();
+  this.viewInstance.clearAllTasks();
   if (this.buttonClicked === this.buttonValues.allTasks) {
     this.displayItems(data);
   }
@@ -212,6 +203,3 @@ App.prototype.clearCompletedTasks = function (storageType) {
   modelInstance.setItemsToStorage(storageType, storageData);
   this.viewInstance.displayStorageItems(storageData);
 }
-
-//   return new App(view, model)
-// })();

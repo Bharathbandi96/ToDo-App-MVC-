@@ -3,6 +3,12 @@
 
 function View(rootId) {
   this.rootElement = document.querySelector(rootId);
+  this.buttonValues = {
+    allTasks: 'allTaskButton',
+    completed: 'completedButton',
+    pending: 'pendingButton',
+    clearCompleted: 'clearCompleted'
+  };
 }
 
 View.prototype.initialize = function () {
@@ -127,7 +133,7 @@ View.prototype.renderSelectElement = function () {
     selected: 'selected'
   });
   this.renderOption(selectElement, 'Session Storage', { value: 'sessionStorage' });
-  this.renderOption(selectElement, 'Web Api', { value: 'webAPI' });
+  this.renderOption(selectElement, 'Web API', { value: 'webAPI' });
   me.appendElementToFooter(selectElement);
   var selectEvent = new Event('onStorageChange');
   selectElement.addEventListener('change', function () {
@@ -170,7 +176,6 @@ View.prototype.createCheckButton = function (li, status, itemId) {
       id: itemId,
       currentElement: li,
       checkBox: checkBox,
-      storageType: this.getStorageType()
     }
   });
   checkBox.addEventListener('click', function () {
@@ -195,7 +200,6 @@ View.prototype.createDeleteButton = function (li, itemId) {
     detail: {
       id: itemId,
       currentElement: li,
-      storageType: this.getStorageType()
     }
   });
   deleteButton.addEventListener('click', function () {

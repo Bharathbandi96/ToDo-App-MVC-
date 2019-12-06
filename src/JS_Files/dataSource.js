@@ -87,9 +87,12 @@ DataSource.prototype.addItemToStorage = function (item, callback) {
 DataSource.prototype.createId = function () {
     return Date.now().toString();
 }
-
+////
 DataSource.prototype.getId = function (url) {
-    return url.slice(42);
+    // return url.slice(42);
+    return url.match(/\d+$/);
+    // return url.substring(url.lastIndexOf('/')+1);
+    // return url.split('/').pop();
 }
 
 DataSource.prototype.setItemsToStorage = function (selectedStorage, storageData, callback) {
