@@ -1,150 +1,204 @@
 
 h2{
-  font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
-}
-#name{
+  align-content: center;
+  background-color:coral ;
+  width: 100%;
   text-align: center;
-  position: relative;
 }
 
-body>div{
-  height: 520px;
-  width: 675px;
-  padding: 1px;
-  border:1px solid gray;
+body{
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  /* display: flex; */
+  /* justify-content: center; */
+  /* align-items: center; */
+  /* flex-wrap: wrap; */
+  transform: translate(-50%, -50%);
+  width: 40%;
+  height: 50%;
+  margin-right: -50%;
+  /* width: auto;
+  height: auto; */
+}
+
+#app1,#app2,#app3{
+  display: flex;
+  flex-direction: column;
+  position: relative;
+  width: 50%;
+  height: 100%;
+  padding: 0.5%;
+  border:0.2vw solid gray;
+  font-size: 2vw;
 }
 
 #header{
   position: relative;
-  padding:3px;
-  height:60px;
-  width:660px;
-  float: left;
-  top: 15px;
-  left: 5px;
-  background-color: coral;
+  padding:0.5vw;
+  height:10%;
+  width:auto;
+  /* float: left; */
+  background : linear-gradient(to bottom, coral 60%, white 40%);
   color: white;
-  text-align: center;
+  display: flex;
+  flex-wrap: wrap;
+  /* flex-direction: row; */
+  justify-content: center;
+  /* align-items: center; */
+  font-size: 2vw;
 }
 
 #taskInputField{
   position: relative;
-  padding-left:5px;
-  /* top: 0px; */
-  padding: 10px;
+  /* top: 7%; */
+  padding: 2px;
   border: none;
-  width:525px;
+  height: 3vw;
+  outline: none;
+  width:80%;
   float: left;
-  font-size: 16px;
-  border-bottom: 2px solid black;
+  border-bottom: 0.3vw solid black;
   caret-color: coral;
+  font-size: 1.2vw;
 }
 
 #addButton {
   position: relative;
-  left:8px;
-  /* top : 0px; */
-  padding: 10px;
-  width: 130px;
+  padding: 1%;
+  /* top: 7%; */
+  left:1%;
+  width: 19%;
+  height: 3vw;
   background: #999;
   color: #000;
   float: left;
   text-align: center;
-  font-size: 16px;
+  font-size: 1.2vw;
+  border: none;
 }
 
 #displayArea{
   position: relative;
   overflow-y: scroll;
-  float: left;
-  left: 5px;
-  height: 320px;
-  top:70px;
-  width:660px;
-  padding:2px;
+  display: flex;
+  flex-direction: column;
+  height: 25vw;
+  top:10%;
+  width:98%;
+  padding:1%;
 }
 
  #footer{
   position: relative;
-  height: 50px;
-  top: 80px;
-  width: 620px;
-  float: left;
-  /* border-top: 2px solid gray; */
-  padding-left: 2px;
-  /* background-color: rgb(102, 101, 102); */
-  /* background-color: coral; */
-  /* border-top: 1px solid gray;
-  border-bottom: 1px solid gray; */
+  height: auto; /*10% */
+  /* top: 7%; */
+  width: auto;
+  /* float: left; */
+  padding: 1%;
+  display: flex;
+  justify-content: space-evenly;
+  /* align-items: center; */
+  flex-wrap: nowrap;
+  font-size: 0.9vw;
 }  
 
+/* #header{
+  position: relative;
+  padding:0.5vw;
+  height:10%;
+  width:auto;
+  background : linear-gradient(to bottom, coral 60%, white 40%);
+  color: white;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  font-size: 2vw;
+} */
+
 #countMessage{
-  position: absolute;
-  left: 5px;
-  top: 10px;
-  width: 150px;
-  float: left;
-  font-size: 16px;
+  position: relative;
+  /* top: 30%; */
+  width: 15%;
+  font-size: 1.2vw;
 }
 
 #allTaskButton{
-  position: absolute;
-  padding:5px;
-  width:100px;
-  left: 110px;
-  top: 5px;
+  /* position: relative; */
+  cursor: pointer;
+  padding: 1%;
+  width:15%;
+  height: 75%;
+  /* top: 20%; */
   background: #bdbcbc;
   color: #000;
-  text-align: center;
-  font-size: 15px;
+  /* text-align: center; */
+  font-size: 0.9vw;
+  border: none;
 }
 
 #completedTaskButton{
-  position: absolute;
-  padding:5px;
-  width:100px;
-  left: 213px;
-  top: 5px;
+  /* position: relative; */
+  padding: 1%;
+  width:15%;
+  height: 75%;
+  /* top: 20%; */
   background: #bdbcbc;
   color: #000;
-  text-align: center;
-  font-size: 15px;
+  /* text-align: center; */
+  font-size: 0.9vw;
+  border: none;
 }
 
 #pendingTaskButton{
-  position: absolute;
-  padding:5px;
-  width:100px;
-  left: 315px;
-  top: 5px;
+  /* position: relative; */
+  padding: 1%;
+  width:15%;
+  height: 75%;
+  /* top: 20%; */
   background: #bdbcbc;
   color: #000;
-  text-align: center;
-  font-size: 15px;
+  /* text-align: center; */
+  font-size: 0.9vw;
+  border: none;
 }
 
 #clearCompleted{
-  position: absolute;
-  padding:5px;
-  width:110px;
-  height: 31px;
-  left: 417px;
-  top: 5px;
+  /* position: relative; */
+  padding: 1%;
+  width:17%;
+  height: 75%;
+  /* top: 20%; */
   background: #bdbcbc;
   color: #000;
-  text-align: center;
-  font-size: 12px;
+  /* text-align: center; */
+  font-size: 0.9vw;
+  border: none;
 }
 
 #storageDropDown{
-  position: absolute;
-  padding:5px;
-  width:140px;
-  left: 530px;
-  top: 5px;
+  /* position: relative; */
+  width: 8vw;
+  /* height: 2vw; */
+  padding-left: 0.1vh;
   text-align: center;
-  font-size: 16px;
+  font-size: 0.9vw;
+  box-sizing: border-box;
+  outline: none;
+  appearance: none;
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  border: 0.1vw solid gray;
+
+  background-image:url('./1.png');
+  background-position: 90% 50%;
+  background-size: 10% 50%;
+  background-repeat: no-repeat;
 }
+
+/* #storageDropDown:after{
+
+} */
 
 #addButton:hover,#pendingTaskButton:hover,#allTaskButton:hover,#completedTaskButton:hover,#clearCompleted:hover{
   background-color:rgb(148, 143, 143);
@@ -158,16 +212,15 @@ body>div{
 
 ul li {
   position: relative;
-  padding: 12px 8px 12px 40px;
+  padding: 4% 10% 4% 10%;
   list-style-type: none;
   background: #eee;
   transition: 0.2s;
-  font-size: 26px;
-}
-
-ul {
-  margin: 0px;
-  /* padding: 0px; */
+  font-size: 2vw;
+  width: auto;
+  height: 10%;
+  display: flex;
+  align-items: center;
 }
 
 ul li:nth-child(odd) {
@@ -178,7 +231,6 @@ ul li:hover {
   background: #ddd;
 }
 
-/* ul li span.checked + input { */
 ul li span.checked + span {
   color: rgb(0, 0, 0);
   text-decoration : line-through;
@@ -189,48 +241,25 @@ ul li span.checked::before {
   position: absolute;
   border-color: rgb(0, 0, 0);
   border-style: solid;
-  border-width: 0 2px 2px 0;
-  top: 2px;
-  left: 8px;
+  border-width: 0 0.3vh 0.3vh 0;
+  top: 15%;
+  left: 33%;
   transform: rotate(45deg);
-  height: 15px;
-  width: 7px;
-}
-
-/* #editContent{
-  width:550px;
-  height: 30px;
-  font-size: 22px;
-  border: none;
-  background: transparent;
-  border-color:none;
-  outline: none;
-} */
-
-.close {
-  cursor: pointer;
-  border-collapse: collapse;
-  position: absolute;
-  height: 38px;
-  right: 0px;
-  top: 0px;
-  padding: 8px 16px;
-  font-size: 20px;
-}
-
-.close:hover {
-  background-color: #f44336;
-  color: white;
+  height: 50%;
+  width: 25%;
 }
 
 #check {
   position: absolute;
   cursor: pointer;
-  left: 5px;
-  top: 12px;
-  padding: 12px 12px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  left: 2%;
+  top: 25%;
+  padding: 3% 3%;
   background-color: white;
-  border: 2px solid gray;
+  border: 0.1vw solid gray;
 }
 
 #check:hover {
@@ -242,3 +271,23 @@ ul li span.checked::before {
   display: table;
   clear: both;
 }
+
+.close {
+  cursor: pointer;
+  border-collapse: collapse;
+  position: absolute;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 10%;
+  height: 100%;
+  right: 0px;
+  top: 1%;
+  font-size: 2vw;
+}
+
+.close:hover {
+  background-color: #f44336;
+  color: white;
+}
+
