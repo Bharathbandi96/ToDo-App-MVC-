@@ -2,5 +2,13 @@
   "name": "js-muejdv",
   "version": "0.0.0",
   "private": true,
-  "dependencies": {}
+  "type": "module",
+  "scripts": {
+    "dev": "vite",
+    "build": "vite build",
+    "preview": "vite preview"
+  },
+  "devDependencies": {
+    "vite": "^6.0.3"
+  }
 }
